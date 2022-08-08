@@ -18,6 +18,7 @@ import com.movetoplay.presentation.component_widgets.CustomLoadingButton
 import com.movetoplay.presentation.vm.session_creation.EventSessionCreation
 import com.movetoplay.presentation.vm.session_creation.SessionCreationVM
 
+
 @Composable
 fun FirstTimeWidget(
     signInViaGoogle: () -> Unit,
