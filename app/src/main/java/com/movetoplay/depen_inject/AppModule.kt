@@ -1,5 +1,8 @@
 package com.movetoplay.depen_inject
 
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +20,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
     private const val urlServer = ""
+    private const val keySharedPreferences = "keySharedPreferences"
     @Provides
     @Singleton
     fun provideHttpClient() : HttpClient {
@@ -35,5 +39,10 @@ object AppModule {
                 url(urlServer)
             }
         }
+    }
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(app: Application) : SharedPreferences {
+        return app.getSharedPreferences(keySharedPreferences, Context.MODE_PRIVATE)
     }
 }

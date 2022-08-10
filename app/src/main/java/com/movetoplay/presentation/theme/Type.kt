@@ -34,12 +34,3 @@ val Typography = Typography(
     )
     */
 )
-
-val fontFamilyApp = FontFamily(
-    Font(R.font.comfortaa_light, FontWeight.Light),
-    Font(R.font.comfortaa_regular, FontWeight.W400),
-    Font(R.font.comfortaa_medium, FontWeight.Medium),
-    Font(R.font.comfortaa_semi_bold, FontWeight.W600),
-    Font(R.font.comfortaa_bold, FontWeight.Bold),
-    Font(R.font.comfortaa_variable_font_wght)
-)

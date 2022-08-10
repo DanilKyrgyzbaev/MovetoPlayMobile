@@ -1,22 +1,16 @@
 package com.movetoplay
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.movetoplay.presentation.starting.StartingNav
+import com.movetoplay.presentation.children_main_nav.ContentNav
+import com.movetoplay.presentation.starting_nav.StartingNav
 import com.movetoplay.presentation.theme.MoveToPlayTheme
-import com.movetoplay.presentation.ui.first_time_widget.FirstTimeWidget
-import com.movetoplay.presentation.ui.splash_widget.SplashWidget
-import com.movetoplay.presentation.ui.splash_widget.StateSplashWidget
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 
 @AndroidEntryPoint
@@ -30,9 +24,9 @@ class MainActivity : ComponentActivity() {
             val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
             ActivityCompat.requestPermissions(this, permissions,0)
         }
-        setContent {
-            MoveToPlayTheme {
-                StartingNav()
+        setContent{
+            MoveToPlayTheme(false){
+                ContentNav()
             }
         }
     }

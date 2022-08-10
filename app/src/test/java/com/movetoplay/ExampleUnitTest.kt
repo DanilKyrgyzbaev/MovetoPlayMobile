@@ -1,5 +1,8 @@
 package com.movetoplay
 
+import android.util.Log
+import com.movetoplay.domain.use_case.RegularExpressionsUseCase
+import com.movetoplay.domain.utils.TypesRegularExpressions
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -12,6 +15,9 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        val useCase = RegularExpressionsUseCase()
+        println(useCase("jdwda@wdad.dw", TypesRegularExpressions.Email).toString())
+        println(useCase("jdwda@wdad", TypesRegularExpressions.Email).toString())
+        println(useCase("jdwda#wdad.dw", TypesRegularExpressions.Email).toString())
     }
 }
