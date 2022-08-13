@@ -11,7 +11,9 @@ import com.movetoplay.presentation.ui.sign_up.SignUp
 
 
 @Composable
-fun StartingNav() {
+fun StartingNav(
+    sessionCreated: ()->Unit
+) {
     val nav = rememberNavController()
     NavHost(navController = nav, startDestination = StartRoute.FirstTime.route){
         composable(StartRoute.FirstTime.route){
@@ -21,11 +23,12 @@ fun StartingNav() {
             )
         }
         composable(StartRoute.SignUp.route){
-            SignUp()
+            SignUp(sessionCreated = sessionCreated)
         }
         composable(StartRoute.SignIn.route){
             SignIn(
-                retrievePassword = {nav.navigate(StartRoute.RestorePassword.route)}
+                retrievePassword = {nav.navigate(StartRoute.RestorePassword.route)},
+                sessionCreated = sessionCreated
             )
         }
         composable(StartRoute.RestorePassword.route){

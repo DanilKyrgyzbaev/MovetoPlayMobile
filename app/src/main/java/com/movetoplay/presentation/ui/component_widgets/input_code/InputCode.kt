@@ -1,4 +1,4 @@
-package com.movetoplay.presentation.ui.restore_password
+package com.movetoplay.presentation.ui.component_widgets.input_code
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

@@ -1,4 +1,4 @@
-package com.movetoplay.presentation.children_main_nav
+package com.movetoplay.presentation.child_main_nav
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,10 +22,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.movetoplay.presentation.ui.component_widgets.BottomNavItem
+import com.movetoplay.presentation.ui.child_home.Home
+import com.movetoplay.presentation.ui.child_my_achievements.MyAchievements
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContentNav() {
+fun ContentNav(
+    openCameraForExercise: ()->Unit
+) {
     val nav= rememberNavController()
     Scaffold(
         bottomBar = {
@@ -34,10 +38,12 @@ fun ContentNav() {
     ){ paddingValues ->
         NavHost(nav, ContentRoute.Home.route, Modifier.padding(paddingValues)){
             composable(ContentRoute.Home.route){
-
+                Home(
+                    openCameraForExercise = openCameraForExercise
+                )
             }
             composable(ContentRoute.MyAccomplishments.route){
-
+                MyAchievements()
             }
         }
     }

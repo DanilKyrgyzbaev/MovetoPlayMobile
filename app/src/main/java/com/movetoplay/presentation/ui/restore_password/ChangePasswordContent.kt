@@ -28,7 +28,7 @@ fun ChangePasswordContent(
     EditText(
         text = newPassword.value,
         onValueChange = newPassword.component2(),
-        label = stringResource(R.string.email),
+        label = stringResource(R.string.new_password),
         size = sizeButtonAndEditText,
         visualTransformation =  PasswordVisualTransformation(),
     )
@@ -36,7 +36,7 @@ fun ChangePasswordContent(
     EditText(
         text = repeatPassword.value,
         onValueChange = repeatPassword.component2(),
-        label = stringResource(R.string.email),
+        label = stringResource(R.string.repeat_password),
         size = sizeButtonAndEditText,
         visualTransformation =  PasswordVisualTransformation(),
     )

@@ -15,7 +15,7 @@ class RegularExpressionsUseCase {
                 }
             }
             TypesRegularExpressions.Password -> {
-                field.length > 6
+                field.length >= 6
             }
             is TypesRegularExpressions.RepeatPassword -> {
                 type.whatToCompareWith == field

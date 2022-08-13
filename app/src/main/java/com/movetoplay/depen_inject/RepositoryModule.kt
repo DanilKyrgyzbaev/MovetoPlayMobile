@@ -2,8 +2,11 @@ package com.movetoplay.depen_inject
 
 import android.content.SharedPreferences
 import com.movetoplay.data.repository.AuthRepositoryImpl
-import com.movetoplay.data.repository.TokenRepositoryImpl
+import com.movetoplay.data.repository.ProfileRepositoryImpl
+import com.movetoplay.data.repository.ProfilesRepositoryImpl
 import com.movetoplay.domain.repository.AuthRepository
+import com.movetoplay.domain.repository.ProfileRepository
+import com.movetoplay.domain.repository.ProfilesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,17 +19,24 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Singleton
     @Provides
-    fun provideTokenRepositoryImpl(
+    fun provideProfileRepositoryImpl(
         sp : SharedPreferences
-    ) : TokenRepositoryImpl {
-        return TokenRepositoryImpl(sp)
+    ) : ProfileRepository {
+        return ProfileRepositoryImpl(sp)
     }
 
     @Provides
     fun provideAuthRepository(
-        repository : TokenRepositoryImpl,
+        repository : ProfileRepository,
         client : HttpClient
     ) : AuthRepository {
         return AuthRepositoryImpl(repository,client)
+    }
+    @Provides
+    fun provideProfilesRepository(
+        client : HttpClient,
+        repository : ProfileRepository,
+    ) : ProfilesRepository {
+        return ProfilesRepositoryImpl(client,repository)
     }
 }

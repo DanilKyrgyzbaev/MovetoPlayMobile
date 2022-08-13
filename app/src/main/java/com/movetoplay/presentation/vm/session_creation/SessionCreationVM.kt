@@ -1,13 +1,15 @@
 package com.movetoplay.presentation.vm.session_creation
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.movetoplay.domain.model.Role
+import com.movetoplay.domain.repository.ProfileRepository
 import com.movetoplay.domain.use_case.CreateSessionUseCase
 import com.movetoplay.domain.utils.RequestStatus
-import com.movetoplay.domain.utils.StateSessionCreation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -17,47 +19,54 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SessionCreationVM @Inject constructor(
+    private val profileRepository: ProfileRepository,
     private val createSessionUseCase : CreateSessionUseCase
 ) : ViewModel() {
     private var createSessionJob: Job?=null
-    private val _state : MutableState<StateSessionCreation> = mutableStateOf(StateSessionCreation())
+    private val _state : MutableState<StateSessionCreation> = mutableStateOf(StateSessionCreation.InputData)
     val state : State<StateSessionCreation> get() = _state
-    private val _status : MutableState<RequestStatus> = mutableStateOf(RequestStatus.Null)
-    val status : State<RequestStatus> get()= _status
+    private val _message: MutableState<String?> = mutableStateOf(null)
+    val message: State<String?> get() = _message
+
     fun onEvent(event: EventSessionCreation){
+        createSessionJob?.cancel()
         when(event){
             is EventSessionCreation.SignIn ->{
-                _status.value = RequestStatus.Loading<Any>()
-                createSession(event.email,event.password, null)
-            }
-            is EventSessionCreation.SignUp ->{
-                _status.value = RequestStatus.Loading<Any>()
-                createSession(event.email,event.password, event.repeatPassword)
-            }
-            EventSessionCreation.SignInViaGoogle ->{
-                _status.value = RequestStatus.Loading<Any>()
-            }
-            EventSessionCreation.StopSignInViaGoogle -> {
-                _status.value = RequestStatus.Null
-            }
-        }
-    }
-    private fun createSession(email: String,
-                              password: String,
-                              repeatPassword: String?){
-        createSessionJob?.cancel()
-        createSessionJob  = viewModelScope.async(Dispatchers.IO){
-            val answer = createSessionUseCase(email, password, repeatPassword)
-            withContext(Dispatchers.Main){
-                _status.value = answer
-                when(answer){
-                    is RequestStatus.Error<*> ->{
-                        if(answer.data is StateSessionCreation){
-                            _state.value = answer.data
+                createSessionJob  = viewModelScope.async(Dispatchers.IO){
+                    val answer = event.run { createSessionUseCase(email,password, null) }
+                    withContext(Dispatchers.Main){
+                        when(answer){
+                            is RequestStatus.Error<*> -> {
+                                _message.value = answer.message
+                            }
+                            is RequestStatus.Success<*> -> {
+                                profileRepository.role = event.role
+                                _state.value = StateSessionCreation.Success
+                            }
+                            else -> {}
                         }
                     }
-                    else -> {}
                 }
+            }
+            is EventSessionCreation.SignUp ->{
+                createSessionJob  = viewModelScope.async(Dispatchers.IO){
+                    val answer = event.run { createSessionUseCase(email,password, age) }
+                    withContext(Dispatchers.Main){
+                        when(answer){
+                            is RequestStatus.Error<*> -> {
+                                _message.value = answer.message
+                            }
+                            is RequestStatus.Success<*> -> {
+                                profileRepository.role = Role.Parent
+                                _state.value = StateSessionCreation.Success
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+            }
+            EventSessionCreation.StopSignInViaGoogle -> {
+                _state.value = StateSessionCreation.InputData
             }
         }
     }

@@ -19,13 +19,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    private const val urlServer = ""
+    private const val urlServer = "http://94.228.112.119:3001"
     private const val keySharedPreferences = "keySharedPreferences"
     @Provides
     @Singleton
     fun provideHttpClient() : HttpClient {
         return HttpClient(CIO){
-            install(Resources)
             install(HttpRequestRetry) {
                 retryOnServerErrors(maxRetries = 5)
                 exponentialDelay()
@@ -34,7 +33,6 @@ object AppModule {
             install(ContentNegotiation) {
                 json()
             }
-            expectSuccess = true
             defaultRequest{
                 url(urlServer)
             }

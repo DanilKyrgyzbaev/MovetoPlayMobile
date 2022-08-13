@@ -7,7 +7,7 @@
     <string name="sign_in_via_mail">Войти по эл. почте</string>
     <string name="email">Электронная почта</string>
     <string name="password">Пароль</string>
-    <string name="repeat_password">Повтор пароля</string>
+    <string name="repeat_password">Повторение пароля</string>
     <string name="sing_up">Зарегистрироваться</string>
     <string name="i_accept">Я принимаю</string>
     <string name="privacy_policy">политику конфиденциальности</string>
@@ -23,4 +23,23 @@
     <string name="save">Сохранить</string>
     <string name="input_email">* Введите эл. почту к который был привязан Ваш аккаунт, на неё прийдёт письмо с кодом подтверждения</string>
     <string name="an_email_with_confirmation_code">* На указанную почту было отправлено письмо с кодом подтверждения, введите его, чтобы продолжить</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="available_for_day">Доступно на день</string>
+    <string name="remainder">осталось</string>
+    <string name="exercises_performed_on_day">Выполнено упражнений за день</string>
+    <string name="perform_exercise">Выполнить упражнение</string>
+    <string name="my_achievements">Мои достижения</string>
+    <string name="exercises_performed">Выполнено упражнений</string>
+    <string name="select_type_exercise">Выберите вид упражнения</string>
+    <string name="stop">Остановить</string>
+    <string name="wrong_email">Неправильная эл. почта</string>
+    <string name="password_must_be_greater_than_five_chars">Пароль должен быть больше 5 символов</string>
+    <string name="no_user_found">Пользователь не найден</string>
+    <string name="such_user_is_registered">Такой пользователь зарегистрирован</string>
+    <string name="choose_child_profile">Выберите профиль ребенка</string>
+    <string name="create_new">Создать новый</string>
+    <string name="child_name">Имя ребенка</string>
+    <string name="male">Мужской</string>
+    <string name="female">Женский</string>
+    <string name="does_your_child_play_sports">Занимается ли ребенок спортом?</string>
 </resources>

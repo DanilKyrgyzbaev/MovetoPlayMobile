@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme.colorScheme
@@ -47,8 +48,13 @@ fun Button(
                 .size(size)
                 .clip(shape)
                 .background(colorBackground)
-                .border(BorderStroke(1.5.dp, colorScheme.primary),shape)
+                .border(
+                    BorderStroke(1.5.dp,
+                        if(enabled) colorScheme.primary
+                        else colorScheme.primary.copy(0.8f)
+                    ),shape)
                 .clickable(enabled = enabled, onClick = onClick)
+                .padding(8.dp)
         }
         TypeButton.Pouring -> {
             Modifier
@@ -60,6 +66,7 @@ fun Button(
                     else
                         colorBackground.copy(0.8f)
                 ).clickable(enabled = enabled, onClick = onClick)
+                .padding(8.dp)
         }
     }
     Box(

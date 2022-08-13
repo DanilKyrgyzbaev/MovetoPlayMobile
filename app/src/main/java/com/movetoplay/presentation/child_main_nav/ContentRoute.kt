@@ -1,4 +1,4 @@
-package com.movetoplay.presentation.children_main_nav
+package com.movetoplay.presentation.child_main_nav
 
 import androidx.annotation.DrawableRes
 import com.movetoplay.R

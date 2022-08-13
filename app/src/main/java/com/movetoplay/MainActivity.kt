@@ -7,9 +7,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.movetoplay.presentation.children_main_nav.ContentNav
-import com.movetoplay.presentation.starting_nav.StartingNav
+import com.movetoplay.domain.model.Child
+import com.movetoplay.presentation.app_nav.AppNav
 import com.movetoplay.presentation.theme.MoveToPlayTheme
+import com.movetoplay.presentation.ui.select_profile_child.SelectProfileChild
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
         }
         setContent{
             MoveToPlayTheme(false){
-                ContentNav()
+                AppNav()
             }
         }
     }
@@ -35,5 +36,5 @@ class MainActivity : ComponentActivity() {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
     private val REQUEST_CODE_PERMISSIONS = 10
-    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA,Manifest.permission.RECEIVE_BOOT_COMPLETED)
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 }

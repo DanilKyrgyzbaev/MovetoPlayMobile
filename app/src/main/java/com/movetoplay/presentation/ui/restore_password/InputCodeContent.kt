@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.movetoplay.R
 import com.movetoplay.presentation.ui.component_widgets.Button
+import com.movetoplay.presentation.ui.component_widgets.input_code.InputCode
 
 @Composable
 fun InputCodeContent(
