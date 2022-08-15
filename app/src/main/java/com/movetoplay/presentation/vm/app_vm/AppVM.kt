@@ -1,5 +1,6 @@
 package com.movetoplay.presentation.vm.app_vm
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -20,7 +21,11 @@ class AppVM @Inject constructor(
     private fun initializingState(){
         when(profileRepository.role){
             Role.Parent -> _stateUserApp.value = StateUserApp.Parent
-            Role.Children -> _stateUserApp.value = StateUserApp.Children
+            Role.Children ->{
+                _stateUserApp.value = StateUserApp.Children(
+                    selectedProfileChild = profileRepository.child != null
+                )
+            }
             null -> _stateUserApp.value = StateUserApp.NotAuthorized
         }
     }

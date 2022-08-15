@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,11 +19,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.movetoplay.R
 import com.movetoplay.domain.model.Exercise
+import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 
 @Composable
-fun MyAchievements() {
+fun MyAchievements(
+    viewModel: ProfileChildVM
+) {
     val sizeButtonAndIndicators = DpSize(300.dp, 40.dp)
     Column(
         modifier = Modifier
@@ -41,11 +46,7 @@ fun MyAchievements() {
         Spacer(modifier = Modifier.height(20.dp))
         ExercisesPerformedInTotal(
             sizeButtonAndIndicators,
-            listExercise = listOf(
-                Exercise("Прыжки", 12,null),
-                Exercise("Отжимания", 8,null),
-                Exercise("Приседания", 50,null)
-            )
+            listExercise = viewModel.listExerciseFRemainingTime
         )
     }
 }

@@ -42,4 +42,7 @@
     <string name="male">Мужской</string>
     <string name="female">Женский</string>
     <string name="does_your_child_play_sports">Занимается ли ребенок спортом?</string>
+    <string name="jumps">Прыжки</string>
+    <string name="squats">Приседания</string>
+    <string name="pushups">Отжимания</string>
 </resources>

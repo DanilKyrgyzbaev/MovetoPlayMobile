@@ -1,30 +1,30 @@
-package com.movetoplay.domain.use_case
+package com.movetoplay.domain.use_case.analysis_exercise
 
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
-import com.movetoplay.domain.utils.StateStarJump
+import com.movetoplay.domain.utils.StateExercise
 import kotlin.math.abs
 
 class DeterminePoseStarJumpUseCase {
 
     operator fun invoke(
         pose: Pose
-    ) : StateStarJump {
-        val leftAnkle = pose.getPoseLandmark(PoseLandmark.LEFT_ANKLE) ?: return StateStarJump.Undefined
-        val rightAnkle = pose.getPoseLandmark(PoseLandmark.RIGHT_ANKLE) ?: return StateStarJump.Undefined
-        val leftHip = pose.getPoseLandmark(PoseLandmark.LEFT_HIP) ?: return StateStarJump.Undefined
-        val rightHip = pose.getPoseLandmark(PoseLandmark.RIGHT_HIP) ?: return StateStarJump.Undefined
+    ) : StateExercise {
+        val leftAnkle = pose.getPoseLandmark(PoseLandmark.LEFT_ANKLE) ?: return StateExercise.Undefined
+        val rightAnkle = pose.getPoseLandmark(PoseLandmark.RIGHT_ANKLE) ?: return StateExercise.Undefined
+        val leftHip = pose.getPoseLandmark(PoseLandmark.LEFT_HIP) ?: return StateExercise.Undefined
+        val rightHip = pose.getPoseLandmark(PoseLandmark.RIGHT_HIP) ?: return StateExercise.Undefined
         if(
             leftAnkle.inFrameLikelihood < 0.75 ||
             rightAnkle.inFrameLikelihood < 0.75 ||
             leftHip.inFrameLikelihood< 0.75 ||
             rightHip.inFrameLikelihood < 0.75
-        ) return StateStarJump.Undefined
+        ) return StateExercise.Undefined
 
         if(
             calculateBottomPose(leftAnkle, rightAnkle, leftHip, rightHip)
-        ) return StateStarJump.Star
-        return StateStarJump.Passive
+        ) return StateExercise.StateStarJump.Star
+        return StateExercise.StateStarJump.Passive
     }
 
 

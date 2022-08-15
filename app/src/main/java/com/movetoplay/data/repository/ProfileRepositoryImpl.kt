@@ -19,7 +19,7 @@ class ProfileRepositoryImpl(sp: SharedPreferences) : ProfileRepository {
     private var stringChild by sp.stringNullable()
     override var child: Child?
         get() = stringChild?.let { Json.decodeFromString(it) }
-        set(value) { Json.encodeToString(value) }
+        set(value) { stringChild =  Json.encodeToString(value) }
 
     override var email: String? by sp.stringNullable()
     override var password: String? by sp.stringNullable()

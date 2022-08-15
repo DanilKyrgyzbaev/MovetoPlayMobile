@@ -1,5 +1,6 @@
 package com.movetoplay.domain.use_case.select_profile_child
 
+import android.util.Log
 import com.movetoplay.domain.model.Child
 import com.movetoplay.domain.repository.ProfileRepository
 import com.movetoplay.domain.repository.ProfilesRepository

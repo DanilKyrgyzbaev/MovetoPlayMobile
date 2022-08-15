@@ -1,14 +1,15 @@
 package com.movetoplay.depen_inject
 
 import android.content.Context
-import com.movetoplay.App
 import com.movetoplay.domain.repository.AuthRepository
 import com.movetoplay.domain.repository.ProfileRepository
 import com.movetoplay.domain.repository.ProfilesRepository
-import com.movetoplay.domain.use_case.AnalysisImageUseCase
+import com.movetoplay.domain.use_case.analysis_exercise.AnalysisImageUseCase
 import com.movetoplay.domain.use_case.CreateSessionUseCase
-import com.movetoplay.domain.use_case.DeterminePoseStarJumpUseCase
+import com.movetoplay.domain.use_case.analysis_exercise.DeterminePoseStarJumpUseCase
 import com.movetoplay.domain.use_case.RegularExpressionsUseCase
+import com.movetoplay.domain.use_case.analysis_exercise.DeterminePosePushups
+import com.movetoplay.domain.use_case.analysis_exercise.DeterminePoseSquats
 import com.movetoplay.domain.use_case.select_profile_child.CreateProfileChildUseCase
 import com.movetoplay.domain.use_case.select_profile_child.GetListChildUseCase
 import com.movetoplay.domain.use_case.select_profile_child.SaveProfileChildUseCase
@@ -38,7 +39,9 @@ object UseCaseModule {
     @Provides
     fun provideAnalysisImageUseCase(): AnalysisImageUseCase {
         return AnalysisImageUseCase(
-            DeterminePoseStarJumpUseCase()
+            DeterminePoseStarJumpUseCase(),
+            DeterminePoseSquats(),
+            DeterminePosePushups()
         )
     }
 

@@ -1,4 +1,4 @@
-package com.movetoplay.presentation.ui.select_profile_child
+package com.movetoplay.presentation.ui.component_widgets
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

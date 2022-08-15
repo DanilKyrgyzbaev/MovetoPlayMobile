@@ -8,11 +8,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import com.movetoplay.domain.model.Exercise
+import com.movetoplay.domain.model.TypeExercise
+import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 
 @Composable
 fun Home(
-    openCameraForExercise: ()->Unit
+    viewModel: ProfileChildVM,
+    openCameraForExercise: (TypeExercise)->Unit
 ) {
     val sizeButtonAndIndicators= DpSize(300.dp, 40.dp)
     val stateScroll = rememberScrollState()
@@ -35,11 +37,7 @@ fun Home(
         Spacer(modifier = Modifier.height(20.dp))
         ExercisesPerformedOnDay(
             sizeButtonAndIndicators,
-            listExercise = listOf(
-                Exercise("Прыжки", 0,30),
-                Exercise("Отжимания", 0,30),
-                Exercise("Приседания", 0,30)
-            ),
+            listExercise = viewModel.listExerciseForDay,
             performExercise = {visibleDialog = true}
         )
     }
@@ -47,11 +45,11 @@ fun Home(
         SelectExercise(
             onDismiss = {visibleDialog = false},
             chose = {
-                openCameraForExercise()
+                openCameraForExercise(it)
                 visibleDialog = false
             },
             sizeButtonAndIndicators,
-            listExercise = listOf("Прыжки", "Отжимания", "Приседания")
+            listExercise = TypeExercise.values().toList()
         )
     }
 }

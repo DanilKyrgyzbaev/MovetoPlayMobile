@@ -1,5 +1,6 @@
 package com.movetoplay.presentation.app_nav
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -23,10 +24,10 @@ fun AppNav(
     val nav = rememberNavController()
     LaunchedEffect(viewModel.stateUserApp.value){
         when(viewModel.stateUserApp.value){
-            StateUserApp.Children -> nav.navigate(AppRoute.ChildrenContent.route)
             StateUserApp.NotAuthorized -> nav.navigate(AppRoute.Starting.route)
             StateUserApp.Parent -> nav.navigate(AppRoute.ParentContent.route)
             StateUserApp.Definition -> {}
+            is StateUserApp.Children -> nav.navigate(AppRoute.ChildrenContent.route)
         }
     }
     with(LocalContext.current as ComponentActivity){
@@ -42,7 +43,8 @@ fun AppNav(
             }
         }
         composable(AppRoute.ChildrenContent.route){
-            ChildMainNav()
+            val selected = viewModel.stateUserApp.value as StateUserApp.Children
+            ChildMainNav(selected.selectedProfileChild)
         }
         composable(AppRoute.ParentContent.route){
 

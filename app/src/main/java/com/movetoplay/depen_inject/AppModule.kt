@@ -14,6 +14,7 @@ import io.ktor.client.plugins.cache.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -31,7 +32,10 @@ object AppModule {
             }
             install(HttpCache)
             install(ContentNegotiation) {
-                json()
+                json(Json {
+                    ignoreUnknownKeys = true
+                })
+
             }
             defaultRequest{
                 url(urlServer)

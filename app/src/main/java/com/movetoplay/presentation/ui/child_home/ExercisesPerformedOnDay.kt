@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,6 +27,9 @@ fun ExercisesPerformedOnDay(
     listExercise: List<Exercise>,
     performExercise:()->Unit
 ) {
+    val list = remember {
+        listExercise
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth(0.9f)
@@ -41,7 +45,7 @@ fun ExercisesPerformedOnDay(
             fontWeight = FontWeight.W600
         )
         Spacer(modifier = Modifier.height(26.dp))
-        for (exercise in listExercise){
+        for (exercise in list){
             ExercisesPerformedIndicator(
                 exercise = exercise,
                 size = sizeButtonAndIndicators

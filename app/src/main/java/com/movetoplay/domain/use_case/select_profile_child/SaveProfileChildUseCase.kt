@@ -8,10 +8,10 @@ class SaveProfileChildUseCase(
     private val profileRepository: ProfileRepository
 ){
     suspend operator fun invoke(child: Child){
-        if (child.parentAccountId.isEmpty()){
-            profileRepository.child = createProfileChildUseCase(child)
+        profileRepository.child = if (child.parentAccountId.isEmpty()){
+            createProfileChildUseCase(child)
         }else{
-            profileRepository.child = child
+            child
         }
     }
 }

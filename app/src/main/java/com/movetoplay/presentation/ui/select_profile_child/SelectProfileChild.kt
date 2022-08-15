@@ -13,16 +13,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.movetoplay.R
+import com.movetoplay.presentation.ui.component_widgets.LoadingContent
 import com.movetoplay.presentation.vm.select_profile_child.EventSelectProfileChild
 import com.movetoplay.presentation.vm.select_profile_child.SelectProfileChildVM
 
 @Composable
 fun SelectProfileChild(
+    showContent: ()-> Unit,
     viewModel: SelectProfileChildVM = hiltViewModel()
 ) {
     val sizeWidgets = DpSize(300.dp, 40.dp)
     val state by remember {
         viewModel.state
+    }
+    LaunchedEffect(viewModel.isSelectedProfileChild.value){
+        if (viewModel.isSelectedProfileChild.value)
+            showContent()
     }
     Column(
         modifier = Modifier

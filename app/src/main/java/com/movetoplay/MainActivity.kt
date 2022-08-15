@@ -7,10 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.movetoplay.domain.model.Child
 import com.movetoplay.presentation.app_nav.AppNav
 import com.movetoplay.presentation.theme.MoveToPlayTheme
-import com.movetoplay.presentation.ui.select_profile_child.SelectProfileChild
 import dagger.hilt.android.AndroidEntryPoint
 
 

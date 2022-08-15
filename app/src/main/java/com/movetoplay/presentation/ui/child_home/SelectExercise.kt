@@ -16,14 +16,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.movetoplay.R
+import com.movetoplay.domain.model.TypeExercise
 import com.movetoplay.presentation.ui.component_widgets.Button
 
 @Composable
 fun SelectExercise(
     onDismiss: () -> Unit,
-    chose: (String) -> Unit,
+    chose: (TypeExercise) -> Unit,
     sizeButton: DpSize,
-    listExercise: List<String>,
+    listExercise: List<TypeExercise>,
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Column(
@@ -41,10 +42,14 @@ fun SelectExercise(
                 fontWeight = FontWeight.W600
             )
             Spacer(modifier = Modifier.height(26.dp))
-            for (exercise in listExercise){
+            for (type in listExercise){
                 Button(
-                    label = exercise,
-                    onClick = {chose(exercise)},
+                    label = when(type){
+                        TypeExercise.StarJump -> stringResource(R.string.jumps)
+                        TypeExercise.Squats -> stringResource(R.string.squats)
+                        TypeExercise.Pushups -> stringResource(R.string.pushups)
+                    },
+                    onClick = {chose(type)},
                     size = sizeButton
                 )
                 Spacer(modifier = Modifier.height(12.dp))
