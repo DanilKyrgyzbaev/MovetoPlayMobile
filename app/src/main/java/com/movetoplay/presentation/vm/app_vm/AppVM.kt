@@ -1,39 +1,25 @@
 package com.movetoplay.presentation.vm.app_vm
 
-import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.movetoplay.domain.model.Role
-import com.movetoplay.domain.repository.ProfileRepository
+import androidx.lifecycle.viewModelScope
+import com.movetoplay.domain.manager.StateUserApp
+import com.movetoplay.domain.manager.StateUserAppManager
+import com.movetoplay.domain.use_case.session.RestoreSessionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
 class AppVM @Inject constructor(
-    private val profileRepository: ProfileRepository
+    private val stateUserAppManager: StateUserAppManager,
+    private val restoreSessionUseCase: RestoreSessionUseCase
 ) : ViewModel() {
-    private val _stateUserApp = mutableStateOf<StateUserApp>(StateUserApp.Definition)
-    val stateUserApp: State<StateUserApp> get() = _stateUserApp
+    val stateUserApp: Flow<StateUserApp> get() = stateUserAppManager.stateUserApp
     init {
-        initializingState()
-    }
-    private fun initializingState(){
-        when(profileRepository.role){
-            Role.Parent -> _stateUserApp.value = StateUserApp.Parent
-            Role.Children ->{
-                _stateUserApp.value = StateUserApp.Children(
-                    selectedProfileChild = profileRepository.child != null
-                )
-            }
-            null -> _stateUserApp.value = StateUserApp.NotAuthorized
-        }
-    }
-    fun onEvent(event: EventApp){
-        when(event){
-            EventApp.UserAuth ->{
-                initializingState()
-            }
-        }
+        viewModelScope.async(Dispatchers.IO) {
+            restoreSessionUseCase(initializingState = true)
+        }.start()
     }
 }

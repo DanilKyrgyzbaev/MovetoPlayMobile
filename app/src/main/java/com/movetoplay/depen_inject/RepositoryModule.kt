@@ -27,10 +27,9 @@ object RepositoryModule {
 
     @Provides
     fun provideAuthRepository(
-        repository : ProfileRepository,
         client : HttpClient
     ) : AuthRepository {
-        return AuthRepositoryImpl(repository,client)
+        return AuthRepositoryImpl(client)
     }
     @Provides
     fun provideProfilesRepository(

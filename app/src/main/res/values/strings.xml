@@ -45,4 +45,6 @@
     <string name="jumps">Прыжки</string>
     <string name="squats">Приседания</string>
     <string name="pushups">Отжимания</string>
+    <string name="parental_age">Возраст родителя</string>
+    <string name="connection_error">Ошибка соединения</string>
 </resources>

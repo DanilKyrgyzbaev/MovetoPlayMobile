@@ -23,5 +23,12 @@ class ProfileRepositoryImpl(sp: SharedPreferences) : ProfileRepository {
 
     override var email: String? by sp.stringNullable()
     override var password: String? by sp.stringNullable()
+    override fun clear() {
+        token = null
+        role = null
+        child = null
+        email = null
+        password = null
+    }
 
 }

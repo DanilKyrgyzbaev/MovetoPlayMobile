@@ -1,4 +1,4 @@
-package com.movetoplay.presentation.vm.app_vm
+package com.movetoplay.domain.manager
 
 sealed class StateUserApp {
     object Definition : StateUserApp()

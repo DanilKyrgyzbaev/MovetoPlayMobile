@@ -13,33 +13,27 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class ProfilesRepositoryImpl(
     private val client: HttpClient,
     private val profileRepository: ProfileRepository
 ) : ProfilesRepository {
-    override suspend fun getListProfileChild(): RequestStatus {
+    override suspend fun getListProfileChild(): List<Child> {
         val response = client.get("/profiles/getList"){
             headers {
                 header(HttpHeaders.Authorization, "Bearer " +profileRepository.token)
             }
         }
         return when(response.status){
-            HttpStatusCode.OK -> {
-                try {
-                    return RequestStatus.Success<List<Child>>(data = response.body())
-                }catch (e: Exception){
-                    RequestStatus.Error<Nothing>()
-                }
-            }
-            HttpStatusCode.Unauthorized -> {
-                RequestStatus.Error(data = StateProblems.NeedRestoreSession)
-            }
-            else -> { RequestStatus.Error<Nothing>() }
+            HttpStatusCode.OK -> response.body()
+            HttpStatusCode.Unauthorized -> throw StateProblems.NeedRestoreSession
+            else -> throw StateProblems.Contingency
         }
     }
 
-    override suspend fun createProfileChild(child: Child): RequestStatus {
+    override suspend fun createProfileChild(child: Child): Child {
         val response = client.post("/profiles/create"){
             contentType(ContentType.Application.Json)
             setBody(child.run { NewProfileChildBody(name,age,gender.name) })
@@ -48,13 +42,9 @@ class ProfilesRepositoryImpl(
             }
         }
         return when(response.status){
-            HttpStatusCode.Created -> {
-                RequestStatus.Success<Child>(data = response.body())
-            }
-            HttpStatusCode.Unauthorized -> {
-                RequestStatus.Error(data = StateProblems.NeedRestoreSession)
-            }
-            else -> { RequestStatus.Error<Nothing>() }
+            HttpStatusCode.OK -> response.body()
+            HttpStatusCode.Unauthorized -> throw StateProblems.NeedRestoreSession
+            else -> throw StateProblems.Contingency
         }
     }
 

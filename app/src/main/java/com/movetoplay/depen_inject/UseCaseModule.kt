@@ -1,24 +1,26 @@
 package com.movetoplay.depen_inject
 
 import android.content.Context
+import com.movetoplay.domain.manager.StateUserAppManager
 import com.movetoplay.domain.repository.AuthRepository
 import com.movetoplay.domain.repository.ProfileRepository
 import com.movetoplay.domain.repository.ProfilesRepository
-import com.movetoplay.domain.use_case.analysis_exercise.AnalysisImageUseCase
-import com.movetoplay.domain.use_case.CreateSessionUseCase
-import com.movetoplay.domain.use_case.analysis_exercise.DeterminePoseStarJumpUseCase
+import com.movetoplay.domain.use_case.HasConnectionUseCase
+import com.movetoplay.domain.use_case.session.CreateSessionUseCase
 import com.movetoplay.domain.use_case.RegularExpressionsUseCase
-import com.movetoplay.domain.use_case.analysis_exercise.DeterminePosePushups
-import com.movetoplay.domain.use_case.analysis_exercise.DeterminePoseSquats
+import com.movetoplay.domain.use_case.analysis_exercise.*
 import com.movetoplay.domain.use_case.select_profile_child.CreateProfileChildUseCase
 import com.movetoplay.domain.use_case.select_profile_child.GetListChildUseCase
 import com.movetoplay.domain.use_case.select_profile_child.SaveProfileChildUseCase
 import com.movetoplay.domain.use_case.select_profile_child.SelectProfileChildUseCase
+import com.movetoplay.domain.use_case.session.LoginUseCase
+import com.movetoplay.domain.use_case.session.RestoreSessionUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -28,7 +30,7 @@ object UseCaseModule {
     fun provideCreateSessionUseCase(
         @ApplicationContext appContext: Context,
         authRepository: AuthRepository
-    ) : CreateSessionUseCase{
+    ) : CreateSessionUseCase {
         return CreateSessionUseCase(
             appContext,
             authRepository,
@@ -39,22 +41,42 @@ object UseCaseModule {
     @Provides
     fun provideAnalysisImageUseCase(): AnalysisImageUseCase {
         return AnalysisImageUseCase(
-            DeterminePoseStarJumpUseCase(),
-            DeterminePoseSquats(),
-            DeterminePosePushups()
+            DeterminePoseUseCase()
         )
     }
 
     @Provides
-    fun provideSelectProfileChildUseCase(
+    fun provideHasConnectionUseCase(@ApplicationContext appContext: Context,): HasConnectionUseCase{
+        return HasConnectionUseCase(appContext)
+    }
+    @Singleton
+    @Provides
+    fun provideRestoreSessionUseCase(
         profileRepository: ProfileRepository,
+        stateUserAppManager: StateUserAppManager,
+        authRepository: AuthRepository,
+        hasConnectionUseCase: HasConnectionUseCase
+    ) : RestoreSessionUseCase {
+        return RestoreSessionUseCase(profileRepository, stateUserAppManager, authRepository)
+    }
+
+    @Provides
+    fun provideLoginUseCase(
+        profileRepository: ProfileRepository,
+        stateUserAppManager: StateUserAppManager
+    ) : LoginUseCase {
+        return LoginUseCase(profileRepository, stateUserAppManager)
+    }
+
+    @Provides
+    fun provideSelectProfileChildUseCase(
         profilesRepository: ProfilesRepository,
-        createSession: CreateSessionUseCase
+        restoreSessionUseCase: RestoreSessionUseCase,
+        profileRepository: ProfileRepository
     ) : SelectProfileChildUseCase {
         val createProfileChild = CreateProfileChildUseCase(
-            profileRepository = profileRepository,
             profilesRepository= profilesRepository,
-            createSessionUseCase = createSession
+            restoreSessionUseCase = restoreSessionUseCase
         )
         return  SelectProfileChildUseCase(
             saveProfileChild = SaveProfileChildUseCase(
@@ -62,9 +84,8 @@ object UseCaseModule {
                 createProfileChildUseCase = createProfileChild
             ),
             getListChild = GetListChildUseCase(
-                profileRepository = profileRepository,
-                profilesRepository= profilesRepository,
-                createSessionUseCase = createSession
+                restoreSessionUseCase = restoreSessionUseCase,
+                profilesRepository= profilesRepository
             )
         )
     }

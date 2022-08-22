@@ -9,4 +9,5 @@ interface ProfileRepository {
     var child : Child?
     var email: String?
     var password: String?
+    fun clear()
 }

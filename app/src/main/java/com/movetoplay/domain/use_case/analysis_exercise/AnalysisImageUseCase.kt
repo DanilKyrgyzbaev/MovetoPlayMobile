@@ -13,9 +13,7 @@ import java.util.concurrent.Executors
 
 
 class AnalysisImageUseCase(
-    private val determinePoseStarJumpUseCase: DeterminePoseStarJumpUseCase,
-    private val determinePoseSquats : DeterminePoseSquats,
-    private val determinePosePushups : DeterminePosePushups
+    private val determinePoseStarJumpUseCase: DeterminePoseUseCase
 ){
     private val executor = Executors.newSingleThreadExecutor()
     private val options = PoseDetectorOptions.Builder()
@@ -25,15 +23,11 @@ class AnalysisImageUseCase(
 
 
     @SuppressLint("UnsafeExperimentalUsageError", "UnsafeOptInUsageError")
-    fun processImageProxy(image: ImageProxy, typeExercise: TypeExercise, onChangeState: (StateExercise)-> Unit) {
+    fun processImageProxy(image: ImageProxy, typeExercise: TypeExercise) {
         image.image?.let {
             poseDetector.process(InputImage.fromMediaImage(it, image.imageInfo.rotationDegrees))
                 .addOnSuccessListener(executor) { results: Pose ->
-                    when(typeExercise){
-                        TypeExercise.StarJump -> onChangeState(determinePoseStarJumpUseCase(results))
-                        TypeExercise.Squats -> onChangeState(determinePoseSquats(results))
-                        TypeExercise.Pushups -> onChangeState(determinePosePushups(results))
-                    }
+
                 }
                 .addOnFailureListener(executor) { e: Exception ->
                     Log.e("Camera", "Error detecting pose", e)

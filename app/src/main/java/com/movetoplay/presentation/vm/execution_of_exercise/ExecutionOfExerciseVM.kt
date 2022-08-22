@@ -18,7 +18,6 @@ import javax.inject.Inject
 class ExecutionOfExerciseVM @Inject constructor(
     private val analysisImageUseCase : AnalysisImageUseCase
 ): ViewModel() {
-    private  var lastStateExercise: StateExercise = StateExercise.Undefined
     private lateinit var _exercise : MutableState<Exercise>
     val exercise : State<Exercise> get() = _exercise
     private val _isInit = mutableStateOf(false)
@@ -28,26 +27,7 @@ class ExecutionOfExerciseVM @Inject constructor(
         val builder = ImageAnalysis.Builder()
         analysisImage = builder.build()
         analysisImage.setAnalyzer(TaskExecutors.MAIN_THREAD){ imageProxy ->
-            analysisImageUseCase.processImageProxy(imageProxy, _exercise.value.type){
-                when(_exercise.value.type){
-                    TypeExercise.StarJump -> {
-                        if(it== StateExercise.StateStarJump.Passive && lastStateExercise == StateExercise.StateStarJump.Star)
-                            _exercise.value = _exercise.value.copy(count = _exercise.value.count+1)
-                        lastStateExercise = it
-                    }
-                    TypeExercise.Squats -> {
-                        if(it== StateExercise.StateSquats.Passive && lastStateExercise == StateExercise.StateSquats.Bottom)
-                            _exercise.value = _exercise.value.copy(count = _exercise.value.count+1)
-                        lastStateExercise = it
-                    }
-                    TypeExercise.Pushups -> {
-                        if(it== StateExercise.StatePushups.Passive && lastStateExercise == StateExercise.StatePushups.Bottom)
-                            _exercise.value = _exercise.value.copy(count = _exercise.value.count+1)
-                        lastStateExercise = it
-                    }
-                }
-
-            }
+//            analysisImageUseCase.processImageProxy(imageProxy, _exercise.value.type)
         }
     }
 

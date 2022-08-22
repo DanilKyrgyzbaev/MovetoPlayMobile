@@ -1,13 +1,17 @@
 package com.movetoplay
 
 import android.Manifest
+import android.app.admin.DevicePolicyManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.movetoplay.presentation.app_nav.AppNav
+import com.movetoplay.presentation.child_main_nav.ChildMainNav
 import com.movetoplay.presentation.theme.MoveToPlayTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +29,8 @@ class MainActivity : ComponentActivity() {
         }
         setContent{
             MoveToPlayTheme(false){
-                AppNav()
+////                AppNav()
+//                ChildMainNav(selectedProfileChild = true)
             }
         }
     }

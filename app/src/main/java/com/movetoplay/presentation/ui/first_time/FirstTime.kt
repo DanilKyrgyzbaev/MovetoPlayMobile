@@ -25,6 +25,7 @@ fun FirstTime(
     signUp : ()-> Unit,
     signIn: ()-> Unit,
 ) {
+    val sizeButton = DpSize(300.dp, 40.dp)
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -44,13 +45,13 @@ fun FirstTime(
         Button(
             label = stringResource(R.string.sign_in_via_google) ,
             onClick = {  },
-            size = DpSize(300.dp, 40.dp)
+            size = sizeButton
         )
         Spacer(modifier = Modifier.height(12.dp))
         Button(
             label = stringResource(R.string.sign_in_via_mail) ,
             onClick = signIn,
-            size = DpSize(300.dp, 40.dp),
+            size = sizeButton,
             typeButton = TypeButton.Outline
         )
         Spacer(modifier = Modifier.height(16.dp))

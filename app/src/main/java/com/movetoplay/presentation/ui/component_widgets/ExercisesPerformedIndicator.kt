@@ -1,10 +1,7 @@
 package com.movetoplay.presentation.ui.component_widgets
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,36 +23,47 @@ import com.movetoplay.domain.model.TypeExercise
 fun ExercisesPerformedIndicator(
     exercise : Exercise,
     size: DpSize,
-    showMax: Boolean = true,
     shape : RoundedCornerShape = RoundedCornerShape(10.dp)
 ) {
-    Row(
+    Box(
         modifier = Modifier
             .size(size)
             .clip(shape)
             .background(MaterialTheme.colorScheme.primary)
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = when(exercise.type){
-                TypeExercise.StarJump -> stringResource(R.string.jumps)
-                TypeExercise.Squats -> stringResource(R.string.squats)
-                TypeExercise.Pushups -> stringResource(R.string.pushups)
-            },
-            fontSize = 18.sp,
-            color = Color.White,
-            fontWeight = FontWeight.W600
-        )
-        Text(
-            text = if(showMax)
-                "${exercise.count}/${exercise.max}"
-            else
-                exercise.count.toString(),
-            fontSize = 18.sp,
-            color = Color.White,
-            fontWeight = FontWeight.W600
-        )
+    ){
+        exercise.max?.let {
+            val coefficient = 1f / (if(it == 0) 1 else it)
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(coefficient * exercise.count)
+                    .background(Color(0xFF1790D4))
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxSize().padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = when(exercise.type){
+                    TypeExercise.StarJump -> stringResource(R.string.jumps)
+                    TypeExercise.Squats -> stringResource(R.string.squats)
+                    TypeExercise.Pushups -> stringResource(R.string.pushups)
+                },
+                fontSize = 18.sp,
+                color = Color.White,
+                fontWeight = FontWeight.W600
+            )
+            Text(
+                text = exercise.max?.let {
+                    "${exercise.count}/$it"
+                } ?: exercise.count.toString(),
+                fontSize = 18.sp,
+                color = Color.White,
+                fontWeight = FontWeight.W600
+            )
+        }
     }
 }

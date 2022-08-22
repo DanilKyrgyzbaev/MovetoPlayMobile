@@ -3,8 +3,7 @@ package com.movetoplay.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RegBody(
-    val email: String,
-    val password : String,
-    val age: Byte
+data class ErrorBody(
+    val statusCode: Int? = null,
+    val message: String? = null
 )

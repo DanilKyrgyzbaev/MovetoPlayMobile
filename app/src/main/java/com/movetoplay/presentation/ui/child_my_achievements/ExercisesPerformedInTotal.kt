@@ -45,8 +45,7 @@ fun ExercisesPerformedInTotal(
         for (exercise in list){
             ExercisesPerformedIndicator(
                 exercise = exercise,
-                size = sizeButtonAndIndicators,
-                showMax = false
+                size = sizeButtonAndIndicators
             )
             Spacer(modifier = Modifier.height(12.dp))
         }

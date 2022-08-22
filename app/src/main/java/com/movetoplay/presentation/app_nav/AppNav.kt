@@ -1,6 +1,5 @@
 package com.movetoplay.presentation.app_nav
 
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -14,20 +13,21 @@ import com.movetoplay.presentation.child_main_nav.ChildMainNav
 import com.movetoplay.presentation.starting_nav.StartingNav
 import com.movetoplay.presentation.ui.splash_screen.SplashScreen
 import com.movetoplay.presentation.vm.app_vm.AppVM
-import com.movetoplay.presentation.vm.app_vm.EventApp
-import com.movetoplay.presentation.vm.app_vm.StateUserApp
+import com.movetoplay.domain.manager.StateUserApp
 
 @Composable
 fun AppNav(
     viewModel : AppVM = hiltViewModel()
 ) {
     val nav = rememberNavController()
-    LaunchedEffect(viewModel.stateUserApp.value){
-        when(viewModel.stateUserApp.value){
+    val stateUserApp by viewModel.stateUserApp.collectAsState(null)
+    LaunchedEffect(stateUserApp){
+        when(stateUserApp){
             StateUserApp.NotAuthorized -> nav.navigate(AppRoute.Starting.route)
             StateUserApp.Parent -> nav.navigate(AppRoute.ParentContent.route)
             StateUserApp.Definition -> {}
             is StateUserApp.Children -> nav.navigate(AppRoute.ChildrenContent.route)
+            null -> {}
         }
     }
     with(LocalContext.current as ComponentActivity){
@@ -38,12 +38,10 @@ fun AppNav(
             SplashScreen()
         }
         composable(AppRoute.Starting.route){
-            StartingNav {
-                viewModel.onEvent(EventApp.UserAuth)
-            }
+            StartingNav()
         }
         composable(AppRoute.ChildrenContent.route){
-            val selected = viewModel.stateUserApp.value as StateUserApp.Children
+            val selected = stateUserApp as StateUserApp.Children
             ChildMainNav(selected.selectedProfileChild)
         }
         composable(AppRoute.ParentContent.route){

@@ -1,8 +1,7 @@
 package com.movetoplay.domain.repository
 
-import com.movetoplay.domain.utils.RequestStatus
 
 interface AuthRepository {
-    suspend fun signIn(email: String, password: String) : RequestStatus
-    suspend fun signUp(email: String, password: String, age: Int) : RequestStatus
+    suspend fun signIn(email: String, password: String) : String
+    suspend fun signUp(email: String, password: String, age: Byte) : String
 }

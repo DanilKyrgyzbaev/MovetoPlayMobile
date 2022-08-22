@@ -31,34 +31,26 @@ import com.movetoplay.presentation.ui.component_widgets.CheckButton
 import com.movetoplay.presentation.ui.component_widgets.EditText
 import com.movetoplay.presentation.vm.session_creation.EventSessionCreation
 import com.movetoplay.presentation.vm.session_creation.SessionCreationVM
-import com.movetoplay.presentation.vm.session_creation.StateSessionCreation
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignIn(
     viewModel: SessionCreationVM = hiltViewModel(),
     retrievePassword : ()-> Unit,
-    sessionCreated: ()->Unit
 ) {
     val sizeButtonAndEditText = DpSize(300.dp, 40.dp)
-    var email by remember {
-        mutableStateOf("")
+    val form = remember {
+        viewModel.form
     }
-    var password by remember {
-        mutableStateOf("")
-    }
-    var role by remember {
-        mutableStateOf(Role.Children)
+    var message by remember {
+        viewModel.message
     }
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    LaunchedEffect(viewModel.message.value){
+    LaunchedEffect(message){
         viewModel.message.value?.let {
             scaffoldState.snackbarHostState.showSnackbar(it)
+            message = null
         }
-    }
-    LaunchedEffect(viewModel.state.value){
-        if(viewModel.state.value == StateSessionCreation.Success)
-            sessionCreated()
     }
     Scaffold(scaffoldState = scaffoldState) {
         Column(
@@ -86,16 +78,16 @@ fun SignIn(
                 Spacer(modifier = Modifier.weight(0.2f))
             }
             EditText(
-                text = email,
-                onValueChange = {email = it},
+                text = form.email,
+                onValueChange = {form.email = it},
                 label = stringResource(R.string.email),
                 size = sizeButtonAndEditText,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             )
             Spacer(modifier = Modifier.height(12.dp))
             EditText(
-                text = password,
-                onValueChange = {password = it},
+                text = form.password,
+                onValueChange = {form.password = it},
                 label = stringResource(R.string.password),
                 size = sizeButtonAndEditText,
                 visualTransformation =  PasswordVisualTransformation(),
@@ -106,8 +98,8 @@ fun SignIn(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CheckButton(
-                    value = role == Role.Children,
-                    onValueChange = {role = if(it) Role.Children else Role.Parent},
+                    value = form.role == Role.Children,
+                    onValueChange = {form.role = if(it) Role.Children else Role.Parent},
                     size = DpSize(30.dp,30.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
@@ -117,7 +109,7 @@ fun SignIn(
             Spacer(modifier = Modifier.height(20.dp))
             Button(
                 label =  stringResource(R.string.sign_in),
-                onClick = { viewModel.onEvent(EventSessionCreation.SignIn(email, password, role)) },
+                onClick = { viewModel.onEvent(EventSessionCreation.SignIn) },
                 size = sizeButtonAndEditText,
             )
             Spacer(modifier = Modifier.height(8.dp))

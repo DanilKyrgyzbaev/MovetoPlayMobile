@@ -27,37 +27,29 @@ import com.movetoplay.presentation.ui.component_widgets.CheckButton
 import com.movetoplay.presentation.ui.component_widgets.EditText
 import com.movetoplay.presentation.vm.session_creation.EventSessionCreation
 import com.movetoplay.presentation.vm.session_creation.SessionCreationVM
-import com.movetoplay.presentation.vm.session_creation.StateSessionCreation
 import kotlin.math.abs
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignUp(
     viewModel: SessionCreationVM = hiltViewModel(),
-    sessionCreated: ()->Unit
 ) {
     val sizeButtonAndEditText = DpSize(300.dp, 40.dp)
-    var email by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
-    var age by remember {
-        mutableStateOf("")
+    val form = remember {
+        viewModel.form
     }
     var iAcceptPrivacyPolicy by remember {
         mutableStateOf(true)
     }
+    var message by remember {
+        viewModel.message
+    }
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    LaunchedEffect(viewModel.message.value){
+    LaunchedEffect(message){
         viewModel.message.value?.let {
             scaffoldState.snackbarHostState.showSnackbar(it)
+            message = null
         }
-    }
-    LaunchedEffect(viewModel.state.value){
-        if(viewModel.state.value == StateSessionCreation.Success)
-            sessionCreated()
     }
     Scaffold(scaffoldState = scaffoldState) {
         Column(
@@ -85,29 +77,30 @@ fun SignUp(
                 Spacer(modifier = Modifier.weight(0.2f))
             }
             EditText(
-                text = email,
-                onValueChange = {email = it},
+                text = form.email,
+                onValueChange = {form.email = it},
                 label = stringResource(R.string.email),
                 size = sizeButtonAndEditText,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             )
             Spacer(modifier = Modifier.height(12.dp))
             EditText(
-                text = password,
-                onValueChange = {password = it},
+                text = form.password,
+                onValueChange = {form.password = it},
                 label = stringResource(R.string.password),
                 size = sizeButtonAndEditText,
                 visualTransformation =  PasswordVisualTransformation(),
             )
             Spacer(modifier = Modifier.height(12.dp))
             EditText(
-                text = age,
+                text = form.age?.toString() ?: "",
                 onValueChange = {
-                    it.toByteOrNull()?.let { value ->
-                        age = abs(value.toInt()).toString()
-                    }
+                    form.age = if(it.isEmpty())
+                        null
+                    else
+                        it.toByteOrNull()?.let { v-> abs(v.toInt()).toByte() } ?: form.age
                 },
-                label = stringResource(R.string.age),
+                label = stringResource(R.string.parental_age),
                 size = sizeButtonAndEditText,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             )
@@ -127,9 +120,9 @@ fun SignUp(
             Spacer(modifier = Modifier.height(20.dp))
             Button(
                 label =  stringResource(R.string.sing_up),
-                onClick = { viewModel.onEvent(EventSessionCreation.SignUp(email, password, age.toInt()))},
+                onClick = { viewModel.onEvent(EventSessionCreation.SignUp)},
                 size = sizeButtonAndEditText,
-                enabled = iAcceptPrivacyPolicy && age.isNotEmpty()
+                enabled = iAcceptPrivacyPolicy && form.age != null
             )
         }
     }
