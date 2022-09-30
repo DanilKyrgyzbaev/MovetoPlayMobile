@@ -14,11 +14,13 @@ import com.movetoplay.computer_vision.mlkit_utils.*
 import java.io.IOException
 import java.util.ArrayList
 
-class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener{
+class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
     private var cameraSource: CameraSource? = null
     private var preview: CameraSourcePreview? = null
     private var graphicOverlay: GraphicOverlay? = null
     private var selectedModel = POSE_DETECTION
+    private var btnStopCamera: Button? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,7 +42,17 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
         val facingSwitch = findViewById<ToggleButton>(R.id.facing_switch)
         facingSwitch.setOnCheckedChangeListener(this)
 
+        btnStopCamera = findViewById<Button>(R.id.btn_stop)
+
+        initListeners()
         createCameraSource(selectedModel)
+    }
+
+    private fun initListeners() {
+        btnStopCamera?.setOnClickListener {
+            preview?.stop()
+            onBackPressed();
+        }
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
@@ -165,7 +177,10 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
     }
 
     private fun isPermissionGranted(context: Context, permission: String): Boolean {
-        if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             Log.i(TAG, "Permission granted: $permission")
             return true

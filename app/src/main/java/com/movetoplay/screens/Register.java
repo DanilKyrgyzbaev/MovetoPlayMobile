@@ -67,7 +67,7 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Поля пусты", Toast.LENGTH_LONG).show();
                 }else{
                     //process to backend
-                    startActivity(new Intent(getApplicationContext(), Setup_profile.class));
+                    startActivity(new Intent(getApplicationContext(), SetupProfileActivity.class));
                     finish();
                 }
 

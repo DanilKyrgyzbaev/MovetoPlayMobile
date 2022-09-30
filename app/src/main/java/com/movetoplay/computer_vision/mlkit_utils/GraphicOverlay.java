@@ -150,6 +150,8 @@ public class GraphicOverlay extends View {
             this.isImageFlipped = isFlipped;
             needUpdateTransformation = true;
         }
+
+
         postInvalidate();
     }
 
