@@ -4,95 +4,121 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.Setup_profile">
+    android:paddingHorizontal="38dp"
+    android:background="@color/white"
+    tools:context=".screens.SetupProfileActivity">
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="386dp"
-        android:layout_height="92dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="19dp"
-        android:text="Выберите профиль ребенка"
-        android:textColor="@color/main_value"
-        android:textSize="30dp"
+        android:id="@+id/tv_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/setup_profile_title"
+        android:textColor="#21A8F4"
+        android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/spinner2"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/sp_status"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner3"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_marginTop="32dp"
+        android:spinnerMode="dropdown"
+        android:padding="6dp"
+        android:background="@drawable/bg_child_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner2" />
+        app:layout_constraintTop_toBottomOf="@id/tv_profile"
+        tools:listitem="@layout/spin_status_item" />
+
+    <EditText
+        android:id="@+id/et_child_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_child_profile"
+        android:hint="@string/setup_profile_name"
+        android:padding="10dp"
+        android:textColorHint="#21A8F4"
+        android:textColor="#21A8F4"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sp_status"
+        android:autofillHints="name"
+        android:inputType="text" />
 
     <Spinner
-        android:id="@+id/spinner3"
+        android:id="@+id/sp_child_gender"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner4"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_child_profile"
+        android:padding="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@id/et_child_name"
+        tools:listitem="@layout/spin_status_item" />
 
-    <Spinner
-        android:id="@+id/spinner4"
+    <EditText
+        android:id="@+id/et_child_age"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="14dp"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox3"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_child_profile"
+        android:hint="@string/setup_profile_age"
+        android:padding="10dp"
+        android:textColorHint="#21A8F4"
+        android:textColor="#21A8F4"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner3" />
-
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@id/sp_child_gender"
+        android:autofillHints="name"
+        android:inputType="number" />
 
     <CheckBox
-        android:id="@+id/checkBox3"
+        android:id="@+id/check_sport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="41dp"
-        android:text="Занимается ли ребенок спортом?"
-        app:layout_constraintBottom_toTopOf="@+id/google"
+        android:layout_marginTop="14dp"
+        android:buttonTint="#21A8F4"
+        android:paddingStart="8dp"
+        android:text="@string/setup_profile_check_sport"
+        android:textColor="#21A8F4"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner4" />
+        app:layout_constraintTop_toBottomOf="@id/et_child_age"
+        tools:ignore="RtlSymmetry" />
 
+    <TextView
+        android:id="@+id/tv_limitations"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF3636"
+        android:text="@string/select_limitation_apps"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/check_sport"
+        android:layout_marginTop="16dp"/>
 
     <Button
-        android:id="@+id/google"
-        android:layout_width="213dp"
-        android:layout_height="0dp"
+        android:id="@+id/btn_continue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
         android:layout_marginBottom="311dp"
         android:background="@drawable/btn_bg_colored"
-        android:text="Продолжить"
+        android:text="@string/setup_profile_continue"
+        android:textAllCaps="false"
         android:textColor="@color/ic_launcher_background"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox3" />
+        app:layout_constraintTop_toBottomOf="@id/tv_limitations" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
