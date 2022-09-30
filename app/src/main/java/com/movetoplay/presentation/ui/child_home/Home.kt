@@ -1,15 +1,21 @@
 package com.movetoplay.presentation.ui.child_home
 
+import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
+import com.movetoplay.computer_vision.ComputerVisionActivity
 import com.movetoplay.domain.model.TypeExercise
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
+import io.ktor.client.engine.*
+import kotlin.coroutines.coroutineContext
 
 @Composable
 fun Home(
@@ -21,6 +27,7 @@ fun Home(
     var visibleDialog by remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +52,8 @@ fun Home(
         SelectExercise(
             onDismiss = {visibleDialog = false},
             chose = {
-                openCameraForExercise(it)
+//                openCameraForExercise(it)
+                context.startActivity(Intent(context, ComputerVisionActivity::class.java))
                 visibleDialog = false
             },
             sizeButtonAndIndicators,

@@ -23,7 +23,7 @@ fun ChildMainNav(
         else MainRoute.SelectProfileChild.route
     ){
         composable(MainRoute.ContentWithBottomNavBar.route){
-            ContentNav(){
+            ContentNav{
                 nav.navigate(MainRoute.CameraExercisePerformance.allRoute(it.name))
             }
         }
