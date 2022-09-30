@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "319143794605",
+    "project_id": "movetoplay-29bd0",
+    "storage_bucket": "movetoplay-29bd0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319143794605:android:8ee6c7f75ef81fc3b8f324",
+        "android_client_info": {
+          "package_name": "com.movetoplay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319143794605-4t0t43i8sb1tlkksthfrqo8irngnv9f0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYVRZ0xEhywHD9WKkxKOZfcCzyjvcldak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319143794605-4t0t43i8sb1tlkksthfrqo8irngnv9f0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

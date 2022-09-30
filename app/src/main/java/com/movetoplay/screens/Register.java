@@ -24,8 +24,8 @@ public class Register extends AppCompatActivity {
     // Идентификатор канала
     private static String CHANNEL_ID = "MoveToPlay";
 
-    @Override
-    protected void onStart() {
+
+    public void create_notification(){
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
@@ -37,10 +37,8 @@ public class Register extends AppCompatActivity {
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(getApplicationContext());
         notificationManager.notify(NOTIFY_ID, builder.build());
-
-
-        super.onStart();
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
