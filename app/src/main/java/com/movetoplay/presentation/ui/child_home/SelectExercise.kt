@@ -47,10 +47,16 @@ fun SelectExercise(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
+                    .padding(4.dp)
             ) {
-                Box(modifier = Modifier.height(45.dp).width(120.dp)) {
+                Box(
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(120.dp)
+                ) {
                     Text(
                         text = stringResource(R.string.jumps),
+                        Modifier.padding(5.dp),
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = 19.sp,
                         textAlign = TextAlign.Left,
@@ -70,10 +76,16 @@ fun SelectExercise(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
+                    .padding(4.dp)
             ) {
-                Box(modifier = Modifier.height(45.dp).width(120.dp)) {
+                Box(
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(120.dp)
+                ) {
                     Text(
                         text = stringResource(R.string.squats),
+                        Modifier.padding(5.dp),
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = 19.sp,
                         textAlign = TextAlign.Left,
@@ -92,11 +104,16 @@ fun SelectExercise(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
+                    .padding(4.dp)
             ) {
-
-                Box(modifier = Modifier.height(45.dp).width(120.dp)) {
+                Box(
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(120.dp)
+                ) {
                     Text(
                         text = stringResource(R.string.pushups),
+                        Modifier.padding(5.dp),
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = 19.sp,
                         textAlign = TextAlign.Left,
