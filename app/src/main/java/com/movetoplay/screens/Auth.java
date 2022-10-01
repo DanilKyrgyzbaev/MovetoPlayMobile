@@ -38,7 +38,7 @@ public class Auth extends AppCompatActivity {
         btn_g.setOnClickListener(view -> Toast.makeText(getApplicationContext(), "Пока что это функция недоступна", Toast.LENGTH_LONG).show());
 
         btn_e.setOnClickListener(view -> {
-            startActivity(new Intent(getApplicationContext(), Sign_in.class));
+            startActivity(new Intent(getApplicationContext(), SignInActivity.class));
             finish();
         });
     }

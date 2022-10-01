@@ -6,7 +6,7 @@
     android:gravity="left"
     android:padding="6dp"
     android:text="@string/create_new"
-    android:textColor="#21A8F4"
-    android:textSize="20sp"
+    android:textColor="@color/main_value"
+    android:textSize="18sp"
     tools:ignore="RtlHardcoded" />
 

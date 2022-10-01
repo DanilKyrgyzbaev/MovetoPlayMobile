@@ -202,7 +202,7 @@
     <string name="setup_profile_title">Выберите профиль ребенка</string>
     <string name="setup_profile_name">Имя ребенка</string>
     <string name="setup_profile_age">Возраст</string>
-    <string name="setup_profile_check_sport">Занимается ли ребенок спортом?</string>
+    <string name="setup_profile_check_sport">Занимается ли ребенок \nспортом?</string>
     <string name="setup_profile_continue">Продолжить</string>
     <string name="select_gender">Выберите пол</string>
     <string name="enter">Вход</string>

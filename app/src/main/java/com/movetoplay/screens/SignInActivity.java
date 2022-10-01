@@ -7,16 +7,18 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.movetoplay.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-public class Sign_in extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private CheckBox checkStatus;
     private Button btnEnter;
+    private TextView tvForgotPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +39,17 @@ public class Sign_in extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), SetupProfileActivity.class));
                     finish();
                 } else {
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), LimitationAppActivity.class));
                     finish();
                 }
             } else {
                 Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
             }
+        });
+
+        tvForgotPassword.setOnClickListener(v->{
+            startActivity(new Intent(getApplicationContext(), ResetPass.class));
+            finish();
         });
     }
 
@@ -51,5 +58,7 @@ public class Sign_in extends AppCompatActivity {
         etPassword = findViewById(R.id.password);
         checkStatus = findViewById(R.id.checkBox);
         btnEnter = findViewById(R.id.btn_enter);
+        tvForgotPassword = findViewById(R.id.tv_forgot_password);
+
     }
 }
