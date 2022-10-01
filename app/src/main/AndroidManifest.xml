@@ -40,16 +40,20 @@
         <activity
             android:name=".screens.LimitationAppActivity"
             android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar"/>
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+
         <activity
-            android:name=".GetListAllApps"
-            android:exported="false">
+            android:name=".screens.GetListAllApps"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".GraphUI"
+            android:name=".screens.GraphUI"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -71,7 +75,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.Setup_profile"
+            android:name=".screens.SetupProfileActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
@@ -79,7 +83,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.Sign_in"
+            android:name=".screens.SignInActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
@@ -103,7 +107,7 @@
         </activity>
 
         <service
-            android:name=".func.AutoClickService"
+            android:name=".screens.AutoClickService"
             android:exported="false" />
     </application>
 

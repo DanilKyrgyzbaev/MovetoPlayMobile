@@ -1,14 +1,14 @@
 package com.movetoplay.screens;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -37,7 +37,6 @@ public class Auth extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -45,7 +44,6 @@ public class Auth extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -108,9 +106,6 @@ public class Auth extends AppCompatActivity {
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-
-
-
         btn_e = findViewById(R.id.email_btn);
         btn_g = findViewById(R.id.btn_enter);
         txt = findViewById(R.id.no_acc);
@@ -131,7 +126,6 @@ public class Auth extends AppCompatActivity {
             finish();
         });
     }
-
     private void updateUI(FirebaseUser user) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();

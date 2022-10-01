@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
 
-class LimitationsAppsAdapter(private var listOfApps: ArrayList<String>) :
+class LimitationsAppsAdapter(private var listOfApps: Array<String?>) :
     RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,8 +27,8 @@ class LimitationsAppsAdapter(private var listOfApps: ArrayList<String>) :
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var title = itemView.findViewById<TextView>(R.id.tv_limitations)
 
-        fun bind(get: String) {
-            title.text = get
+        fun bind(get: String?) {
+            title.text = get.toString()
         }
     }
 
