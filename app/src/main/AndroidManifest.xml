@@ -53,12 +53,13 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".screens.GraphUI"
+            android:name=".GraphUI"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+>>>>>>>>> Temporary merge branch 2
         <activity
             android:name=".ParrentSettings"
             android:exported="false" />
@@ -83,7 +84,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.SignInActivity"
+            android:name=".screens.Sign_in"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity

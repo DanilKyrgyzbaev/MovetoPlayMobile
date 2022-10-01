@@ -21,10 +21,10 @@ import com.movetoplay.presentation.utils.timeFormat
 
 @Composable
 fun TimeUse(
-    availableForDayMinutes : Int,
-    remainderMinutes : Int,
-    addTime: ()-> Unit,
-    sizeButton: DpSize,
+    availableForDayMinutes: Int,
+    remainderMinutes: Int,
+    addTime: () -> Unit,
+    sizeButton: DpSize
 ) {
     Column(
         modifier = Modifier
@@ -34,7 +34,11 @@ fun TimeUse(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "${stringResource(R.string.available_for_day)}: ${timeFormat(availableForDayMinutes)}",
+            text = "${stringResource(R.string.available_for_day)}: ${
+            timeFormat(
+                availableForDayMinutes
+            )
+            }",
             color = Color.Gray,
             fontSize = 18.sp,
             textAlign = TextAlign.Center
@@ -54,9 +58,9 @@ fun TimeUse(
         )
         Spacer(modifier = Modifier.height(26.dp))
         Button(
-            label =  "+ 10 минут",
+            label = "+ 10 минут",
             onClick = addTime,
-            size = sizeButton,
+            size = sizeButton
         )
     }
 }

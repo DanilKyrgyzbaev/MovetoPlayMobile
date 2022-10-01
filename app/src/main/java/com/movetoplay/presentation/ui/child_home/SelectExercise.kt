@@ -47,64 +47,86 @@ fun SelectExercise(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
-                    .padding(18.dp)
+                    .padding(4.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.jumps),
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Left,
-                    fontWeight = FontWeight.W600
-                )
-                Spacer(modifier = Modifier.height(26.dp))
+                Box(
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(120.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.jumps),
+                        Modifier.padding(5.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Left,
+                        fontWeight = FontWeight.W600
+                    )
+                }
 
-                Button(
-                    label = "Начать",
-                    onClick = { chose( TypeExercise.StarJump)  },
-                    size = sizeButton
-                )
+                Box(modifier = Modifier.height(50.dp).width(90.dp)) {
+                    Button(
+                        label = "Начать",
+                        onClick = { chose(TypeExercise.StarJump) },
+                        size = sizeButton
+                    )
+                }
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
-                    .padding(18.dp)
+                    .padding(4.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.squats),
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Left,
-                    fontWeight = FontWeight.W600
-                )
-                Spacer(modifier = Modifier.height(26.dp))
-
-                Button(
-                    label = "Начать",
-                    onClick = { chose(TypeExercise.Squats) },
-                    size = sizeButton
-                )
+                Box(
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(120.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.squats),
+                        Modifier.padding(5.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Left,
+                        fontWeight = FontWeight.W600
+                    )
+                }
+                Box(modifier = Modifier.height(50.dp).width(90.dp)) {
+                    Button(
+                        label = "Начать",
+                        onClick = { chose(TypeExercise.Squats) },
+                        size = sizeButton
+                    )
+                }
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
-                    .padding(18.dp)
+                    .padding(4.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.pushups),
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Left,
-                    fontWeight = FontWeight.W600
-                )
-                Spacer(modifier = Modifier.height(26.dp))
-
-                Button(
-                    label = "Начать",
-                    onClick = { chose(TypeExercise.Pushups) },
-                    size = sizeButton
-                )
+                Box(
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(120.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.pushups),
+                        Modifier.padding(5.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Left,
+                        fontWeight = FontWeight.W600
+                    )
+                }
+                Box(modifier = Modifier.height(50.dp).width(90.dp)) {
+                    Button(
+                        label = "Начать",
+                        onClick = { chose(TypeExercise.Pushups) },
+                        size = sizeButton
+                    )
+                }
             }
         }
     }
