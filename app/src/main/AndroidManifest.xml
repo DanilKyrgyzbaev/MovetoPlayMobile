@@ -42,6 +42,20 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar"/>
         <activity
+            android:name=".GetListAllApps"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".GraphUI"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ParrentSettings"
             android:exported="false" />
         <activity
@@ -57,7 +71,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.SetupProfileActivity"
+            android:name=".screens.Setup_profile"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
@@ -65,7 +79,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.SignInActivity"
+            android:name=".screens.Sign_in"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
@@ -89,7 +103,7 @@
         </activity>
 
         <service
-            android:name=".screens.AutoClickService"
+            android:name=".func.AutoClickService"
             android:exported="false" />
     </application>
 
