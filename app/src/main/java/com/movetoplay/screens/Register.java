@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import com.movetoplay.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Register extends AppCompatActivity {
 
     Button btn;
@@ -23,6 +26,13 @@ public class Register extends AppCompatActivity {
 
     // Идентификатор канала
     private static String CHANNEL_ID = "MoveToPlay";
+
+
+    public void startTimer(){
+        Timer timer = new Timer();
+        timer.schedule(new UpdateTimeTask(), 0, 1000); //установленно в данный момент на 1 секунду
+
+    }
 
 
     public void create_notification(){
@@ -71,5 +81,12 @@ public class Register extends AppCompatActivity {
 
             }
         });
+    }
+
+    class UpdateTimeTask extends TimerTask {
+        public void run() {
+            //создание уведомления
+            create_notification();
+        }
     }
 }
