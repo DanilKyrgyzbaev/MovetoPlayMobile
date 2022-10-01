@@ -35,33 +35,14 @@ public class SetupProfileActivity extends AppCompatActivity {
     }
 
     private void initListeners() {
-        limitations.setOnClickListener(view -> {
-            openLimitationAppsActivityForResult();
-        });
-
         cont.setOnClickListener(view -> {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         });
     }
 
-    public void openLimitationAppsActivityForResult() {
-        Intent intent = new Intent(this, LimitationAppActivity.class);
-        someActivityResultLauncher.launch(intent);
-    }
-
-    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-              
-                }
-            });
-
-
     private void initViews() {
         cont = findViewById(R.id.btn_continue);
-        limitations = findViewById(R.id.tv_limitations);
         Spinner status = findViewById(R.id.sp_status);
         Spinner gender = findViewById(R.id.sp_child_gender);
 

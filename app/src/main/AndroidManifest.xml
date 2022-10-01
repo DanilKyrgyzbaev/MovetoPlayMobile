@@ -75,7 +75,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.Sign_in"
+            android:name=".screens.SignInActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
