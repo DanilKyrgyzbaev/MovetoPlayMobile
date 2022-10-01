@@ -67,7 +67,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.Setup_profile"
+            android:name=".screens.SetupProfileActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity

@@ -109,7 +109,7 @@ fun ExercisesPerformedOnDay(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        MyBeautifulProgressBar(text = "Приседания", 10, 9)
+//        MyBeautifulProgressBar(text = "Приседания", 10, 9)
 
         Column(
             modifier = Modifier

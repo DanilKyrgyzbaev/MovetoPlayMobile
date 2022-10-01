@@ -43,8 +43,8 @@ public class Auth extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        finish();
+//        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//        finish();
     }
 
 
@@ -113,7 +113,7 @@ public class Auth extends AppCompatActivity {
 
 
         btn_e = findViewById(R.id.email_btn);
-        btn_g = findViewById(R.id.google);
+        btn_g = findViewById(R.id.btn_enter);
         txt = findViewById(R.id.no_acc);
 
         txt.setOnClickListener(new View.OnClickListener() {
