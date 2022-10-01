@@ -3,10 +3,10 @@ package com.movetoplay.computer_vision
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.movetoplay.R
@@ -31,12 +31,12 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
 
         preview = findViewById(R.id.preview_view)
         if (preview == null) {
-            Log.d(TAG, "Preview is null")
+            Log.d(TAG, "Preview is null") // Предварительный просмотр пуст
         }
 
         graphicOverlay = findViewById(R.id.graphic_overlay)
         if (graphicOverlay == null) {
-            Log.d(TAG, "graphicOverlay is null")
+            Log.d(TAG, "graphicOverlay is null") // графическое наложение равно null
         }
 
         val facingSwitch = findViewById<ToggleButton>(R.id.facing_switch)
@@ -51,12 +51,12 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
     private fun initListeners() {
         btnStopCamera?.setOnClickListener {
             preview?.stop()
-            onBackPressed();
+            onBackPressed()
         }
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
-        Log.d(TAG, "Set facing")
+        Log.d(TAG, "Set facing") // Установить лицом
         if (cameraSource != null) {
             if (isChecked) {
                 cameraSource?.setFacing(CameraSource.CAMERA_FACING_FRONT)
@@ -70,12 +70,13 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
 
     private fun createCameraSource(model: String) {
         // If there's no existing cameraSource, create one.
+        // Если нет существующего cameraSource, создайте его.
         if (cameraSource == null) {
             cameraSource = CameraSource(this, graphicOverlay)
         }
         try {
             val poseDetectorOptions = PreferenceUtils.getPoseDetectorOptionsForLivePreview(this)
-            Log.i(TAG, "Using Pose Detector with options $poseDetectorOptions")
+            Log.i(TAG, "Using Pose Detector with options $poseDetectorOptions") // Использование детектора позы с параметрами
             val shouldShowInFrameLikelihood =
                 PreferenceUtils.shouldShowPoseDetectionInFrameLikelihoodLivePreview(this)
             val visualizeZ = PreferenceUtils.shouldPoseDetectionVisualizeZ(this)
@@ -93,10 +94,10 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
                 )
             )
         } catch (e: Exception) {
-            Log.e(TAG, "Can not create image processor: $model", e)
+            Log.e(TAG, "Can not create image processor: $model", e) // Не могу создать процессор изображений
             Toast.makeText(
                 applicationContext,
-                "Can not create image processor: " + e.message,
+                "Can not create image processor: " + e.message, // Не могу создать процессор изображений
                 Toast.LENGTH_LONG
             )
                 .show()
@@ -108,18 +109,23 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
      * (e.g., because onResume was called before the camera source was created), this will be called
      * again when the camera source is created.
      */
+    /**
+     * Запускает или перезапускает источник камеры, если он существует. Если источник камеры еще не существует
+     * (например, поскольку onResume был вызван до того, как был создан источник камеры), это будет вызвано
+     * снова, когда источник камеры создан.
+     */
     private fun startCameraSource() {
         if (cameraSource != null) {
             try {
                 if (preview == null) {
-                    Log.d(TAG, "resume: Preview is null")
+                    Log.d(TAG, "resume: Preview is null") // резюме: Предварительный просмотр является нулевым
                 }
                 if (graphicOverlay == null) {
-                    Log.d(TAG, "resume: graphOverlay is null")
+                    Log.d(TAG, "resume: graphOverlay is null") // резюме: graphOverlay имеет значение null
                 }
                 preview!!.start(cameraSource, graphicOverlay)
             } catch (e: IOException) {
-                Log.e(TAG, "Unable to start camera source.", e)
+                Log.e(TAG, "Unable to start camera source.", e) // Не удалось запустить источник камеры.
                 cameraSource!!.release()
                 cameraSource = null
             }
@@ -134,6 +140,7 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
     }
 
     /** Stops the camera. */
+    /** Останавливает камеру. */
     override fun onPause() {
         super.onPause()
         preview?.stop()
@@ -182,13 +189,12 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
                 permission
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            Log.i(TAG, "Permission granted: $permission")
+            Log.i(TAG, "Permission granted: $permission") // Разрешение получено:
             return true
         }
-        Log.i(TAG, "Permission NOT granted: $permission")
+        Log.i(TAG, "Permission NOT granted: $permission") // Разрешение НЕ предоставлено:
         return false
     }
-
 
     companion object {
         private const val PERMISSION_REQUESTS = 1
