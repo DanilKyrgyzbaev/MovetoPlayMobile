@@ -24,7 +24,7 @@ fun SelectExercise(
     onDismiss: () -> Unit,
     chose: (TypeExercise) -> Unit,
     sizeButton: DpSize,
-    listExercise: List<TypeExercise>,
+    listExercise: List<TypeExercise>
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Column(
@@ -42,17 +42,69 @@ fun SelectExercise(
                 fontWeight = FontWeight.W600
             )
             Spacer(modifier = Modifier.height(26.dp))
-            for (type in listExercise){
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
+                    .padding(18.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.jumps),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Left,
+                    fontWeight = FontWeight.W600
+                )
+                Spacer(modifier = Modifier.height(26.dp))
+
                 Button(
-                    label = when(type){
-                        TypeExercise.StarJump -> stringResource(R.string.jumps)
-                        TypeExercise.Squats -> stringResource(R.string.squats)
-                        TypeExercise.Pushups -> stringResource(R.string.pushups)
-                    },
-                    onClick = {chose(type)},
+                    label = "Начать",
+                    onClick = { chose( TypeExercise.StarJump)  },
                     size = sizeButton
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
+                    .padding(18.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.squats),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Left,
+                    fontWeight = FontWeight.W600
+                )
+                Spacer(modifier = Modifier.height(26.dp))
+
+                Button(
+                    label = "Начать",
+                    onClick = { chose(TypeExercise.Squats) },
+                    size = sizeButton
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
+                    .padding(18.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.pushups),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Left,
+                    fontWeight = FontWeight.W600
+                )
+                Spacer(modifier = Modifier.height(26.dp))
+
+                Button(
+                    label = "Начать",
+                    onClick = { chose(TypeExercise.Pushups) },
+                    size = sizeButton
+                )
             }
         }
     }
