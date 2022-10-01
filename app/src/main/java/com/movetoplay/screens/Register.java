@@ -47,7 +47,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        btn = findViewById(R.id.google);
+        btn = findViewById(R.id.btn_enter);
         email = findViewById(R.id.email);
         pass = findViewById(R.id.password);
         age = findViewById(R.id.password2);

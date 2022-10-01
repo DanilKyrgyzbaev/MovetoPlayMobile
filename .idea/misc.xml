@@ -8,6 +8,7 @@
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/bg_button_stop.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/bg_child_profile.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/btn_bg_colored.xml" value="0.1" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/btn_bg_white.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_baseline_cameraswitch_24.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_baseline_switch_camera_24.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_auth.xml" value="0.25677083333333334" />
@@ -19,7 +20,7 @@
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_reset_pass.xml" value="0.25677083333333334" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_settings.xml" value="0.176" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_setup_profile.xml" value="0.176" />
-        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_sign_in.xml" value="0.25677083333333334" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_sign_in.xml" value="0.16799999999999998" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_test_block.xml" value="0.25677083333333334" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/limitations_item.xml" value="0.22327898550724637" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/spin_gender_item.xml" value="0.25677083333333334" />

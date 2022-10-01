@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".screens.Auth"
+    android:background="@color/white"
     android:keepScreenOn="true">
 
     <ImageView
@@ -13,11 +14,25 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="85dp"
         android:layout_marginBottom="36dp"
-        app:layout_constraintBottom_toTopOf="@+id/google"
+        app:layout_constraintBottom_toTopOf="@+id/btn_enter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logotype_1" />
+
+    <Button
+        android:id="@+id/btn_enter"
+        android:layout_width="255dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="17dp"
+        android:background="@drawable/btn_bg_colored"
+        android:text="Войти через Google"
+        android:textColor="@color/ic_launcher_background"
+        app:layout_constraintBottom_toTopOf="@+id/email_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
 
     <Button
         android:id="@+id/email_btn"
@@ -30,20 +45,7 @@
         app:layout_constraintBottom_toTopOf="@+id/no_acc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/google" />
-
-    <Button
-        android:id="@+id/google"
-        android:layout_width="255dp"
-        android:layout_height="31dp"
-        android:layout_marginBottom="17dp"
-        android:background="@drawable/btn_bg_colored"
-        android:text="Войти через Google"
-        android:textColor="@color/ic_launcher_background"
-        app:layout_constraintBottom_toTopOf="@+id/email_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_enter" />
 
     <TextView
         android:id="@+id/no_acc"
@@ -56,4 +58,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_btn" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

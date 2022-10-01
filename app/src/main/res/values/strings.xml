@@ -205,4 +205,8 @@
     <string name="setup_profile_check_sport">Занимается ли ребенок спортом?</string>
     <string name="setup_profile_continue">Продолжить</string>
     <string name="select_gender">Выберите пол</string>
+    <string name="enter">Вход</string>
+    <string name="child_device">Устройство ребенка</string>
+    <string name="enter_now">Войти</string>
+    <string name="todo">TODO</string>
 </resources>
