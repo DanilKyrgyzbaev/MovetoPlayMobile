@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.movetoplay.R;
-import com.rengwuxian.materialedittext.MaterialEditText;
+import com.movetoplay.screens.applock.LimitationAppActivity;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -27,6 +27,12 @@ public class SignInActivity extends AppCompatActivity {
 
         initViews();
         initListeners();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
     }
 
     private void initListeners() {
@@ -47,7 +53,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        tvForgotPassword.setOnClickListener(v->{
+        tvForgotPassword.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), ResetPass.class));
             finish();
         });
