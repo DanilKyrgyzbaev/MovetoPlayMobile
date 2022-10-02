@@ -9,7 +9,7 @@ import com.movetoplay.R
 
 class LimitationsAppsAdapter(private var listOfApps: Array<String?>) :
     RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
-    private val appsList: List<AppsModel> = ArrayList()
+//    private val appsList: List<AppsModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -32,7 +32,6 @@ class LimitationsAppsAdapter(private var listOfApps: Array<String?>) :
 
         fun bind(get: String?) {
             title.text = get
-
         }
     }
 }

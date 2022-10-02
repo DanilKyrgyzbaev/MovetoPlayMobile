@@ -1,12 +1,11 @@
 package com.movetoplay.presentation.ui.child_my_achievements
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,5 +47,24 @@ fun MyAchievements(
             sizeButtonAndIndicators,
             listExercise = viewModel.listExerciseFRemainingTime
         )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Text(
+            text = "Награды",
+            color = MaterialTheme.colorScheme.primary,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.W600
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(10.dp))
+                .padding(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+
+        }
     }
 }
