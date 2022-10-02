@@ -38,28 +38,33 @@
         android:theme="@style/Theme.MoveToPlay"
         tools:targetApi="31">
         <activity
-            android:name=".screens.LimitationAppActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar">
-        </activity>
+            android:name=".screens.applock.LockScreenActivity"
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:exported="false" />
 
+        <!--<activity
+            android:name=".screens.applock.LimitationsActivityJava"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />-->
+        <activity
+            android:name=".screens.applock.LimitationAppActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".screens.GetListAllApps"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".GraphUI"
+            android:name=".screens.GraphUI"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
->>>>>>>>> Temporary merge branch 2
         <activity
             android:name=".ParrentSettings"
             android:exported="false" />
@@ -84,7 +89,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.Sign_in"
+            android:name=".screens.SignInActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity

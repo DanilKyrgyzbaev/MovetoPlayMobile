@@ -55,4 +55,9 @@ public class SetupProfileActivity extends AppCompatActivity {
         status.setAdapter(createSpinAdapter);
         gender.setAdapter(genderSpinAdapter);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

@@ -1,16 +1,14 @@
-package com.movetoplay.screens
+package com.movetoplay.screens.applock
 
-import android.app.ActivityManager
-import android.app.ActivityManager.RunningAppProcessInfo
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
-import java.util.*
 
 
 class LimitationAppActivity : AppCompatActivity() {
@@ -25,8 +23,7 @@ class LimitationAppActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-
-//        getAllApps()
+           getAllApps()
 
         findViewById<RecyclerView>(R.id.rv_limitations).apply {
             layoutManager = LinearLayoutManager(context)
@@ -36,7 +33,7 @@ class LimitationAppActivity : AppCompatActivity() {
 
     }
 
-    @Throws(PackageManager.NameNotFoundException::class)
+      @Throws(PackageManager.NameNotFoundException::class)
     fun getAllApps() {
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
@@ -62,6 +59,5 @@ class LimitationAppActivity : AppCompatActivity() {
             }
         }
         adapter = LimitationsAppsAdapter(apps)
-
     }
 }

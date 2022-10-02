@@ -10,22 +10,22 @@
         android:layout_height="50dp"
         android:src="@mipmap/ic_launcher"
         />
+
     <TextView
         android:id="@+id/tv_limitations"
         android:layout_width="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_height="wrap_content"
-        android:text="Instagram"
         android:layout_alignTop="@+id/img_app_icon"
         android:layout_alignBottom="@+id/img_app_icon"
-        android:layout_toRightOf="@+id/img_app_icon"
+        android:layout_marginLeft="10dp"
         android:layout_toStartOf="@+id/toggle_button"
         android:layout_toEndOf="@id/img_app_icon"
-        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/img_app_icon"
         android:gravity="center_vertical"
+        android:text="Instagram"
+        android:textColor="@color/black"
         android:textSize="20sp"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
     <ToggleButton
         android:id="@+id/toggle_button"

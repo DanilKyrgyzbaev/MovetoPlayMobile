@@ -79,7 +79,7 @@
         app:met_textColorHint="@color/main_value" />
 
     <Button
-        android:id="@+id/btn_enter"
+        android:id="@+id/google"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="34dp"
@@ -99,7 +99,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="13dp"
         android:text="Я принимаю политику конфиденциальности"
-        app:layout_constraintBottom_toTopOf="@+id/btn_enter"
+        app:layout_constraintBottom_toTopOf="@+id/google"
         app:layout_constraintStart_toStartOf="@+id/password2"
         app:layout_constraintTop_toBottomOf="@+id/password2" />
 

@@ -29,14 +29,19 @@ public class Register extends AppCompatActivity {
     private static String CHANNEL_ID = "MoveToPlay";
 
 
-    public void startTimer(){
+    public void startTimer() {
         Timer timer = new Timer();
         timer.schedule(new UpdateTimeTask(), 0, 1000); //установленно в данный момент на 1 секунду
 
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+    }
 
-    public void create_notification(){
+    public void create_notification() {
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
@@ -56,7 +61,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        btn = findViewById(R.id.btn_enter);
+        btn = findViewById(R.id.google);
         email = findViewById(R.id.email);
         pass = findViewById(R.id.password);
         age = findViewById(R.id.password2);
@@ -72,9 +77,9 @@ public class Register extends AppCompatActivity {
                 String age_data = age.getText().toString();
 
 
-                if (email_data.isEmpty() || pass_data.isEmpty() || age_data.isEmpty()){
+                if (email_data.isEmpty() || pass_data.isEmpty() || age_data.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Поля пусты", Toast.LENGTH_LONG).show();
-                }else{
+                } else {
                     //process to backend
                     startActivity(new Intent(getApplicationContext(), SetupProfileActivity.class));
                     finish();

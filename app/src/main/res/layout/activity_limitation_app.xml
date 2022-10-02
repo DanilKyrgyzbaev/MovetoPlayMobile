@@ -5,14 +5,30 @@
     android:layout_width="match_parent"
     android:background="@color/white"
     android:layout_height="match_parent"
-    tools:context=".screens.LimitationAppActivity">
+    tools:context=".screens.applock.LimitationAppActivity">
 
 
+    <TextView
+        android:id="@+id/tv_limitations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Какие приложения хотите ограничить?"
+        android:textSize="24dp"
+        android:gravity="center"
+        android:textColor="@color/main_value"
+        android:textStyle="bold"
+
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_limitations"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:listitem="@layout/limitations_item"
+        app:layout_constraintTop_toBottomOf="@id/tv_limitations"
         />
 
 
