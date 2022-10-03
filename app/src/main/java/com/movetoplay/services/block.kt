@@ -1,8 +1,7 @@
-package com.movetoplay.screens;
+package com.movetoplay.screens
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,11 +13,9 @@ import android.os.Build
 import android.util.Log
 import android.view.*
 import android.view.accessibility.AccessibilityEvent
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.movetoplay.R
-import com.movetoplay.services.commandHandler
 
 var autoClickService: AutoClickService? = null
 
@@ -34,7 +31,6 @@ class AutoClickService : AccessibilityService() {
     private var initialTouchX = 0.0f
     private var initialTouchY = 0.0f
     private var moving = false
-
 
     override fun onCreate() {
         super.onCreate()
@@ -82,7 +78,8 @@ class AutoClickService : AccessibilityService() {
         params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            200, 200,
+            200,
+            200,
             layoutFlag,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
@@ -111,7 +108,7 @@ class AutoClickService : AccessibilityService() {
         }
     }
 
-    private fun createNotification() : Notification {
+    private fun createNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Title")
             .setContentText("Text")
@@ -164,9 +161,7 @@ class AutoClickService : AccessibilityService() {
 //        )
 //    }
 
-
     fun click(x: Int, y: Int) {
-
         Toast.makeText(applicationContext, "Click", Toast.LENGTH_SHORT).show()
 
         val path = Path()
@@ -177,7 +172,6 @@ class AutoClickService : AccessibilityService() {
             .build()
         dispatchGesture(gestureDescription, null, null)
     }
-
 
 //    fun run(newEvents: MutableList<Event>) {
 //        events.clear()
@@ -191,7 +185,6 @@ class AutoClickService : AccessibilityService() {
         autoClickService = null
         return super.onUnbind(intent)
     }
-
 
     override fun onDestroy() {
         autoClickService = null

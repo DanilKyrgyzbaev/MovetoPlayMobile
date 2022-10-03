@@ -43,8 +43,8 @@ public class Auth extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        /*startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        finish();*/
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        finish();
     }
 
 

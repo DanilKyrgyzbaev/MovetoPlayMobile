@@ -51,7 +51,7 @@ fun Home(
         SelectExercise(
             onDismiss = { visibleDialog = false },
             chose = {
-//                openCameraForExercise(it)
+                openCameraForExercise(it)
                 context.startActivity(Intent(context, ComputerVisionActivity::class.java))
                 visibleDialog = false
             },
