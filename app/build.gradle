@@ -146,10 +146,12 @@ dependencies {
 
     //room int
 
-    def roomVersion = "2.4.3"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    kapt ("androidx.room:room-compiler:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
+    def room_version = "2.4.2"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    implementation "com.joanzapata.pdfview:android-pdfview:1.0.4@aar"
 
 
 }
