@@ -2,10 +2,8 @@ package com.movetoplay.screens.applock
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import org.checkerframework.checker.units.qual.h
 import java.io.IOException
 
 
@@ -39,23 +37,16 @@ class AccessibilityService : AccessibilityService() {
 
         if (!appPackageName.equals(packageName.toString(), ignoreCase = true)) {
 
-            while (i.hasNext()){
+            while (i.hasNext()) {
                 if (i.next() == appPackageName) {
 
+//                    Log.e("Lock", "onAccessibilityEvent: Locked " + i.next())
                     val time = System.currentTimeMillis()
 
 
                     if (!unlockedApps.containsKey(appPackageName) || time > (unlockedApps[appPackageName]
                             ?: 0)
                     ) {
-
-                        val appName = applicationContext.packageManager.getApplicationLabel(
-                            packageManager.getApplicationInfo(
-                                appPackageName,
-                                PackageManager.GET_META_DATA
-                            )
-                        ).toString()
-
                         callback = object : Callback {
 
                             override fun onSuccess() {
@@ -89,10 +80,6 @@ class AccessibilityService : AccessibilityService() {
             }
         }
     }
-
-    fun <E> HashSet<E>.findByHashCode(other: E): E? =
-        firstOrNull { it.hashCode() == other.hashCode() }
-
 
     override fun onInterrupt() {}
 

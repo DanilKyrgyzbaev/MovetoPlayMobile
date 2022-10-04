@@ -17,5 +17,6 @@
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/main_value</item>
+        <item name="android:textSize">20sp</item>
     </style>
 </resources>

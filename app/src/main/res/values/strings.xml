@@ -222,4 +222,7 @@
         Please note that:\n
         There is a standart confirmation procedure when enabling Accessibility Service on all Android device. If you receive these privacy warnings, just ignore them please.
     </string>
+    <string name="what_apps_block">Какие приложения хотите ограничить?</string>
+    <string name="daily_limit">Дневной лимит</string>
+    <string name="finish">Завершить</string>
 </resources>

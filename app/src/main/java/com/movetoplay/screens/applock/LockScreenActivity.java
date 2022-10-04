@@ -18,9 +18,6 @@ public class LockScreenActivity extends AppCompatActivity {
     private String correctPin = "";
     private Boolean isPinConfirm = false;
     private TextView textView;
-    private Button button;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +25,14 @@ public class LockScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lock_screen);
 
         textView = findViewById(R.id.tv_alert);
-        button = findViewById(R.id.btn_cancel);
+        Button button = findViewById(R.id.btn_cancel);
         mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
         mPinLockView.setPinLockListener(mPinLockListener);
 
-        button.setOnClickListener(view -> {
-            setResult(RESULT_CANCELED);
-        });
+        button.setOnClickListener(view -> setResult(RESULT_CANCELED));
     }
 
-    private PinLockListener mPinLockListener = new PinLockListener() {
+    private final PinLockListener mPinLockListener = new PinLockListener() {
         @Override
         public void onComplete(String pin) {
             Log.d("TAG", "Pin complete: " + pin);

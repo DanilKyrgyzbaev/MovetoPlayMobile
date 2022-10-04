@@ -3,7 +3,6 @@ package com.movetoplay.screens.applock
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
@@ -23,23 +22,24 @@ class LimitationAppActivity : AppCompatActivity() {
     private lateinit var adapter: LimitationsAppsAdapter
     private lateinit var btnFinish: Button
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_limitation_app)
 
         initViews()
         initListeners()
+
     }
 
     private fun initListeners() {
-        btnFinish.setOnClickListener{
+        btnFinish.setOnClickListener {
             sharedPrefs()
             finish()
         }
     }
 
     private fun sharedPrefs() {
-        adapter.notifyDataSetChanged()
         val prefs: SharedPreferences =
             getSharedPreferences("SHARED_PREFS_FILE", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = prefs.edit()
@@ -49,15 +49,31 @@ class LimitationAppActivity : AppCompatActivity() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        adapter.notifyDataSetChanged()
         editor.apply()
+    }
+
+    fun getSharedPrefs(): HashSet<String> {
+        val prefs = getSharedPreferences(
+            "SHARED_PREFS_FILE",
+            MODE_PRIVATE
+        )
+        var blockedAppsList = HashSet<String>()
+        try {
+            blockedAppsList = prefs.getStringSet("LimitApps", HashSet<String>()) as HashSet<String>
+            Log.e("adapter", "getSharedPrefs: $blockedAppsList")
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: ClassNotFoundException) {
+            e.printStackTrace()
+        }
+        return blockedAppsList
     }
 
     private fun initViews() {
 
         adapter = LimitationsAppsAdapter(
             this,
-            ApkInfoExtractor(this).GetAllInstalledApkInfo()
+            ApkInfoExtractor(this).GetAllInstalledApkInfo(), getSharedPrefs()
         )
         btnFinish = findViewById(R.id.btn_finish)
 
@@ -73,7 +89,7 @@ class LimitationAppActivity : AppCompatActivity() {
         }
     }
 
-    fun isAccessibilityGranted(context: Context): Boolean {
+    private fun isAccessibilityGranted(context: Context): Boolean {
 
         var accessibilityEnabled = 0
         val service = context.packageName + "/" + AccessibilityService::class.java.canonicalName
@@ -116,7 +132,7 @@ class LimitationAppActivity : AppCompatActivity() {
                     false
                 )
             )
-            .setPositiveButton("Настройки") { dialog, which ->
+            .setPositiveButton("Настройки") { _, _ ->
                 //Utils.reportEventClick("AppLock Screen", "AppLock_Permission_btn")
                 context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
             }

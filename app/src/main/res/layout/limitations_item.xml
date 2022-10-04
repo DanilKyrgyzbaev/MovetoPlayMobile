@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:padding="16dp"
+    android:paddingVertical="12dp"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -30,10 +30,10 @@
     <ToggleButton
         android:id="@+id/toggle_button"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_alignTop="@id/img_app_icon"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/bg_on_off_toggle"
         android:checked="false"
         android:textColor="@color/white" />

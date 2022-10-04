@@ -60,6 +60,10 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
+            android:name=".screens.applock.LimitationAppActivity2"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
             android:name=".screens.GetListAllApps"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">

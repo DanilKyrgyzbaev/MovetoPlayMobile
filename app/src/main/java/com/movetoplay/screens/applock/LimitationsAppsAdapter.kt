@@ -1,7 +1,6 @@
 package com.movetoplay.screens.applock
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,13 +9,10 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
-import java.io.IOException
 
 
-class LimitationsAppsAdapter(private val context: Context, private val list: List<String?>) :
+class LimitationsAppsAdapter(private val context: Context, private val list: List<String?>, private val blackListApps: HashSet<String>) :
     RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
-
-    private var blackListApps: HashSet<String> = HashSet()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -34,8 +30,13 @@ class LimitationsAppsAdapter(private val context: Context, private val list: Lis
         val drawable: Drawable = apkInfoExtractor.getAppIconByPackageName(applicationPackageName)
 
         holder.title.text = applicationLabelName
-
         holder.image.setImageDrawable(drawable)
+
+        blackListApps.forEach {
+            if (it==applicationPackageName){
+                holder.status.isChecked = true
+            }
+        }
 
         holder.status.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -45,7 +46,7 @@ class LimitationsAppsAdapter(private val context: Context, private val list: Lis
                 Toast.makeText(context, "Added to black list", Toast.LENGTH_SHORT).show()
                 Log.e("Toggle", "onBindViewHolder: $blackListApps")
             } else {
-
+                blackListApps.remove(applicationPackageName)
             }
         }
     }

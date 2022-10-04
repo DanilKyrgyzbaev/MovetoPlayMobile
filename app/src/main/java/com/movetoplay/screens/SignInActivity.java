@@ -43,11 +43,10 @@ public class SignInActivity extends AppCompatActivity {
             if (!email.isEmpty() && !password.isEmpty()) {
                 if (checkStatus.isChecked()) {
                     startActivity(new Intent(getApplicationContext(), SetupProfileActivity.class));
-                    finish();
                 } else {
                     startActivity(new Intent(getApplicationContext(), LimitationAppActivity.class));
-                    finish();
                 }
+                finish();
             } else {
                 Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
             }
