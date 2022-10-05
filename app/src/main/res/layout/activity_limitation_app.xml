@@ -34,6 +34,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_limitations" />
 
+    <TextView
+        android:id="@+id/tv_set_pin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:paddingVertical="12dp"
+        android:text="Установить пин"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_daily_limit" />
+
+
     <ImageView
         android:id="@+id/img_time_settings"
         android:layout_width="wrap_content"
@@ -44,6 +58,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/just_separation2"
         android:contentDescription="@string/todo" />
+
+    <ImageView
+        android:id="@+id/img_set_pin"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_baseline_fiber_pin_24"
+        app:layout_constraintBottom_toTopOf="@id/just_separation3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/just_separation"
+        android:contentDescription="@string/todo" />
+
 
     <View
         android:id="@+id/just_separation"
@@ -58,13 +84,19 @@
         android:layout_height="2dp"
         android:background="#ccc"
         app:layout_constraintTop_toTopOf="@id/tv_daily_limit" />
+    <View
+        android:id="@+id/just_separation3"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#ccc"
+        app:layout_constraintBottom_toBottomOf="@id/tv_set_pin" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_limitations"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/btn_finish"
-        app:layout_constraintTop_toBottomOf="@id/just_separation"
+        app:layout_constraintTop_toBottomOf="@id/tv_set_pin"
         tools:listitem="@layout/limitations_item" />
 
     <Button

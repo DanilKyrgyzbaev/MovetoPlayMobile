@@ -21,6 +21,8 @@
     
     <com.andrognito.pinlockview.PinLockView
         android:id="@+id/pin_lock_view"
+        app:keypadTextSize="30dp"
+        app:keypadDeleteButtonSize="22dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

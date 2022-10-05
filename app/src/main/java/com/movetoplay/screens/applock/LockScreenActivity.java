@@ -2,6 +2,7 @@ package com.movetoplay.screens.applock;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -29,22 +30,33 @@ public class LockScreenActivity extends AppCompatActivity {
         mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
         mPinLockView.setPinLockListener(mPinLockListener);
 
-        button.setOnClickListener(view -> setResult(RESULT_CANCELED));
+        button.setOnClickListener(view -> {
+            setResult(RESULT_CANCELED);
+            finish();
+        });
     }
 
     private final PinLockListener mPinLockListener = new PinLockListener() {
         @Override
         public void onComplete(String pin) {
-            Log.d("TAG", "Pin complete: " + pin);
             if (isPinConfirm) {
                 isPinConfirm = false;
                 if (correctPin.equalsIgnoreCase(pin)) {
                     setResult(RESULT_OK);
+                    String setPin = correctPin;
+
+                    SharedPreferences sharedPreferences = getSharedPreferences("pin_code", MODE_PRIVATE);
+                    SharedPreferences.Editor edit = sharedPreferences.edit();
+                    edit.putString("PIN", setPin);
+                    edit.apply();
+
+                    Log.e("PIN", "onComplete: " + pin);
+
                     finish();
                 } else {
                     textView.setText("Введите пин");
                     mPinLockView.resetPinLockView();
-                    Toast.makeText(LockScreenActivity.this, "Try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LockScreenActivity.this, "Попробуйте ещё раз", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 correctPin = pin;

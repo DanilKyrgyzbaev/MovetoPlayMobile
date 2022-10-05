@@ -1,5 +1,6 @@
 package com.movetoplay.screens.applock
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,11 +10,14 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
+import com.movetoplay.screens.SettingTimeActivity
 import java.io.IOException
 
 
@@ -21,6 +25,8 @@ class LimitationAppActivity : AppCompatActivity() {
 
     private lateinit var adapter: LimitationsAppsAdapter
     private lateinit var btnFinish: Button
+    private lateinit var imgDailyLimit: ImageView
+    private lateinit var imgSetPassword: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,13 +35,22 @@ class LimitationAppActivity : AppCompatActivity() {
 
         initViews()
         initListeners()
-
     }
 
     private fun initListeners() {
         btnFinish.setOnClickListener {
             sharedPrefs()
             finish()
+        }
+
+        imgDailyLimit.setOnClickListener{
+            val intent = Intent(this, SettingTimeActivity::class.java)
+            startActivity(intent)
+        }
+
+        imgSetPassword.setOnClickListener{
+            val intent = Intent(this, LockScreenActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -52,7 +67,7 @@ class LimitationAppActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    fun getSharedPrefs(): HashSet<String> {
+    private fun getSharedPrefs(): HashSet<String> {
         val prefs = getSharedPreferences(
             "SHARED_PREFS_FILE",
             MODE_PRIVATE
@@ -70,6 +85,8 @@ class LimitationAppActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        imgDailyLimit = findViewById(R.id.img_time_settings)
+        imgSetPassword = findViewById(R.id.img_set_pin)
 
         adapter = LimitationsAppsAdapter(
             this,
