@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.movetoplay.R;
+import com.movetoplay.pref.Pref;
 
 public class SetupProfileActivity extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class SetupProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_profile);
 
+        Log.e("Pref", Pref.INSTANCE.getUserLogin());
         initViews();
         initListeners();
     }

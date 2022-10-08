@@ -109,12 +109,19 @@ class AccessibilityService : AccessibilityService() {
         return blackList
     }
 
+
     fun getTimePrefs(): Long {
         val prefs = applicationContext.getSharedPreferences("time_prefs", MODE_PRIVATE)
-        timeDuration = prefs.getString("LimitTime", String()).toString()
+        timeDuration = prefs.getString("LimitTime", "60000").toString()
 
         return timeDuration.toLong()
     }
+//    fun getTimePrefs(): Long {
+//        val prefs = applicationContext.getSharedPreferences("time_prefs", MODE_PRIVATE)
+//        timeDuration = prefs.getString("LimitTime", String()).toString()
+//
+//        return timeDuration.toLong()
+//    }
 
     fun setTimePrefs(millisRemaining: Long) {
         val prefs: SharedPreferences =

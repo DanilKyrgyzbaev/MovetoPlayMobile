@@ -225,4 +225,7 @@
     <string name="what_apps_block">Какие приложения хотите ограничить?</string>
     <string name="daily_limit">Дневной лимит</string>
     <string name="finish">Завершить</string>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

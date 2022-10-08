@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.movetoplay.R;
+import com.movetoplay.pref.Pref;
 
 public class Auth extends AppCompatActivity {
 
@@ -33,6 +34,7 @@ public class Auth extends AppCompatActivity {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
+    private Pref pref;
 
     private FirebaseAuth mAuth;
 

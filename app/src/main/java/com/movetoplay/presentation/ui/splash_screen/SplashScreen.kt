@@ -1,5 +1,6 @@
 package com.movetoplay.presentation.ui.splash_screen
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -20,6 +21,14 @@ fun SplashScreen() {
             contentDescription = null,
             modifier = Modifier.fillMaxSize(0.6f)
         )
+
+//        lifecycleScope.launchWhenCreated {
+//            delay(3000)
+//
+//            val intent = Intent(this@SplashActivity, MainActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
     }
 }
 
