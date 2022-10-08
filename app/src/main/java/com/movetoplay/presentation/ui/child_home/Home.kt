@@ -10,11 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import com.movetoplay.computer_vision.ComputerVisionActivity
 import com.movetoplay.domain.model.TypeExercise
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
-import io.ktor.client.engine.*
 
 @Composable
 fun Home(
@@ -43,15 +41,14 @@ fun Home(
         Spacer(modifier = Modifier.height(20.dp))
         ExercisesPerformedOnDay(
             sizeButtonAndIndicators,
-            listExercise = viewModel.listExerciseForDay,
-            performExercise = { visibleDialog = true }
-        )
+            listExercise = viewModel.listExerciseForDay
+        ) { visibleDialog = true }
     }
     if (visibleDialog) {
         SelectExercise(
             onDismiss = { visibleDialog = false },
             chose = {
-                openCameraForExercise(it)
+//                openCameraForExercise(it)
                 context.startActivity(Intent(context, ComputerVisionActivity::class.java))
                 visibleDialog = false
             },

@@ -46,9 +46,33 @@
         android:theme="@style/Theme.MoveToPlay"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.ui.splash_screen.SplashActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Design.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".SplashScreen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/title_activity_splash_screen"
+            android:theme="@style/Theme.MoveToPlay.Fullscreen" />
+        <activity
             android:name=".screens.ChildLockActivity"
-            android:theme="@style/Theme.Design.NoActionBar"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+
+        <activity
+            android:name=".screens.SignInActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+
         <activity
             android:name=".screens.SettingTimeActivity"
             android:exported="false"
@@ -100,10 +124,6 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.SignInActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar" />
-        <activity
             android:name=".screens.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
@@ -113,14 +133,8 @@
             android:theme="@style/Theme.AppCompat.Light" />
         <activity
             android:name=".screens.Auth"
-            android:exported="true"
-            android:label="@string/app_name"
+            android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service

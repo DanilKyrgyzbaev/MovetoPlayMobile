@@ -123,9 +123,11 @@ public class PoseClassifierProcessor {
                     // Play a fun beep when rep counter updates.
                     ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
                     tg.startTone(ToneGenerator.TONE_PROP_BEEP);
-                    lastRepResult = String.format(
-
-                            Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
+                    lastRepResult = String.format(Locale.US,"%s : %d reps", repCounter.getClassName(), repsAfter);
+                    Log.e("Result",lastRepResult);
+//                    lastRepResult = String.format(
+//
+//                            Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
 
 
                     UserEntity userEntity = new UserEntity();

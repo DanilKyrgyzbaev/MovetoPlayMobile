@@ -1,5 +1,7 @@
 package com.movetoplay.presentation.ui.child_home
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +20,8 @@ import androidx.compose.ui.unit.sp
 import com.movetoplay.R
 import com.movetoplay.presentation.ui.component_widgets.Button
 import com.movetoplay.presentation.utils.timeFormat
+import dagger.hilt.android.internal.Contexts
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Composable
 fun TimeUse(
@@ -33,12 +37,11 @@ fun TimeUse(
             .padding(18.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val applicationContext: Context? = null
+        val prefs = applicationContext?.getSharedPreferences("time_prefs", MODE_PRIVATE)
+        val timeDuration = prefs?.getString("LimitTime", String()).toString()
         Text(
-            text = "${stringResource(R.string.available_for_day)}: ${
-            timeFormat(
-                availableForDayMinutes
-            )
-            }",
+            text = "${stringResource(R.string.available_for_day)}: $timeDuration",
             color = Color.Gray,
             fontSize = 18.sp,
             textAlign = TextAlign.Center
@@ -51,7 +54,7 @@ fun TimeUse(
             fontWeight = FontWeight.W600
         )
         Text(
-            text = timeFormat(remainderMinutes),
+            text = timeDuration,
             color = colorScheme.primary,
             fontSize = 28.sp,
             fontWeight = FontWeight.W600

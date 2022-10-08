@@ -1,5 +1,6 @@
 package com.movetoplay.presentation.ui.child_home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +20,9 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.movetoplay.R
+import com.movetoplay.db.UserEntity
 import com.movetoplay.domain.model.Exercise
+import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.ui.component_widgets.Button
 import com.movetoplay.presentation.ui.component_widgets.ExercisesPerformedIndicator
 import com.movetoplay.presentation.ui.component_widgets.TypeButton
@@ -33,6 +36,7 @@ fun ExercisesPerformedOnDay(
     val list = remember {
         listExercise
     }
+    val userEntity: UserEntity? = null
     Column(
         modifier = Modifier
             .fillMaxWidth(0.9f)
@@ -47,6 +51,7 @@ fun ExercisesPerformedOnDay(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W600
         )
+        Log.e("Pref",Pref.userLogin)
         Spacer(modifier = Modifier.height(26.dp))
         for (exercise in list) {
             ExercisesPerformedIndicator(
@@ -64,6 +69,7 @@ fun ExercisesPerformedOnDay(
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
             val progressJumping = 25
+            Log.e("Pos", "${userEntity?.pos}")
             Box(
                 modifier = Modifier
                     .width(300.dp)
