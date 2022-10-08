@@ -1,20 +1,14 @@
 package com.movetoplay.data.repository
 
-import android.util.Log
-import com.movetoplay.data.model.AuthBody
 import com.movetoplay.data.model.NewProfileChildBody
 import com.movetoplay.domain.model.Child
 import com.movetoplay.domain.repository.ProfileRepository
 import com.movetoplay.domain.repository.ProfilesRepository
-import com.movetoplay.domain.utils.RequestStatus
 import com.movetoplay.domain.utils.StateProblems
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class ProfilesRepositoryImpl(
     private val client: HttpClient,
