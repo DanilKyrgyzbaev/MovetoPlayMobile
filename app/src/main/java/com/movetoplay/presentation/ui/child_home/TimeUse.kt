@@ -37,11 +37,8 @@ fun TimeUse(
             .padding(18.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val applicationContext: Context? = null
-        val prefs = applicationContext?.getSharedPreferences("time_prefs", MODE_PRIVATE)
-        val timeDuration = prefs?.getString("LimitTime", String()).toString()
         Text(
-            text = "${stringResource(R.string.available_for_day)}: $timeDuration",
+            text = "${stringResource(R.string.available_for_day)}: $remainderMinutes",
             color = Color.Gray,
             fontSize = 18.sp,
             textAlign = TextAlign.Center
@@ -54,7 +51,7 @@ fun TimeUse(
             fontWeight = FontWeight.W600
         )
         Text(
-            text = timeDuration,
+            text = availableForDayMinutes.toString(),
             color = colorScheme.primary,
             fontSize = 28.sp,
             fontWeight = FontWeight.W600

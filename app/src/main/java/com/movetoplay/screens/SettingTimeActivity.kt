@@ -35,7 +35,6 @@ class SettingTimeActivity : AppCompatActivity() {
 
     private fun initListeners() {
         btnSetTime.setOnClickListener {
-
             val time: String = etLimit.text.toString()
 
             val timeInMilliseconds = time.toLong() * 60000

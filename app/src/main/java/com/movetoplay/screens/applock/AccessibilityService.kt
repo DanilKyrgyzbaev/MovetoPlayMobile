@@ -1,16 +1,17 @@
 package com.movetoplay.screens.applock
 
 import android.accessibilityservice.AccessibilityService
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityWindowInfo
 import com.movetoplay.screens.ChildLockActivity
+import kotlinx.coroutines.NonCancellable.isActive
 import java.io.IOException
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 
 class AccessibilityService : AccessibilityService() {
@@ -19,6 +20,7 @@ class AccessibilityService : AccessibilityService() {
     private var blackList: HashSet<String> = HashSet()
     private lateinit var timeDuration: String
     private var time: Long = 0
+    private val window: AccessibilityWindowInfo = AccessibilityWindowInfo()
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
 
@@ -33,25 +35,13 @@ class AccessibilityService : AccessibilityService() {
         val appPackageName = event.packageName.toString()
 
         if (!appPackageName.equals(packageName.toString(), ignoreCase = true)) {
-
             while (i.hasNext()) {
                 if (i.next() == appPackageName) {
-                    
-//                    Log.e("Lock", "onAccessibilityEvent: Locked " + i.next())
-
-                    time = System.currentTimeMillis()
-                    Log.e("PackName", "onAccessibilityEvent: " + appPackageName)
-
-
-                    Log.e("EventTime", "Event time: " + time)
-                    Log.e("EventTime", "Event time: " + event.eventTime)
-
-                    if (!unlockedApps.containsKey(appPackageName) || time > (unlockedApps[appPackageName] ?: 0)
+                    if (!unlockedApps.containsKey(appPackageName) || time > (unlockedApps[appPackageName]
+                            ?: 0)
                     ) {
                         callback = object : Callback {
-
                             override fun onSuccess() {
-
 //                            val reLockTime = when(appPrefs.getReLockTime()) {
 //                                AppLock.TIME_30S -> TimeUnit.SECONDS.toMillis(30)
 //                                AppLock.TIME_1M -> TimeUnit.MINUTES.toMillis(1)
@@ -67,33 +57,58 @@ class AccessibilityService : AccessibilityService() {
                                 performGlobalAction(GLOBAL_ACTION_HOME)
                             }
                         }
-                        val timeDuration = getTimePrefs()
-
-                        val timer = object : CountDownTimer(timeDuration, 1000) {
-                            override fun onTick(millisUntilFinished: Long) {
-                                setTimePrefs(millisUntilFinished)
-                            }
-                            override fun onFinish() {
-                                openLockScreen()
-                            }
+                        if (!window.isAccessibilityFocused) {
+                            startTimer(false)
+                            Log.e("Timer", "timer resumed ")
+                        } else {
+                            startTimer(true)
+                            Log.e("Timer", "timer stopped ")
                         }
-                        timer.start()
-
-                        Log.d("ololo", "NOOOOOOOOOOOT")
                     }
                 } else {
                     Log.d("ololo", "onAccessibilityEvent not locked")
-//                Log.d("onAccessibilityEvent not locked")
                 }
             }
         }
+
+        if ("com.android.vending" == packageName) {
+            blockGooglePlay()
+        }
+        /*  if (time == 1L){
+              setTimePrefs()
+          }*/
     }
+
+   /* private fun getCurrentlyRunningApps(): List<*> {
+        val localActivityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val RunningServiceInfoservices: List<*> = localActivityManager.getRunningServices(100)
+        return RunningServiceInfoservices
+    }*/
 
     private fun openLockScreen() {
         val intent = Intent(this, ChildLockActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+    }
+
+    private fun startTimer(exit: Boolean) {
+        val timeDuration = getTimePrefs()
+        var timer: CountDownTimer? = null
+        if (!exit) {
+            timer = object : CountDownTimer(timeDuration, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    setTimePrefs(millisUntilFinished)
+                }
+
+                override fun onFinish() {
+                    openLockScreen()
+                }
+            }
+            timer.start()
+        } else {
+            timer?.cancel()
+        }
     }
 
     private fun getBlackListPrefs(): HashSet<String> {
@@ -116,12 +131,6 @@ class AccessibilityService : AccessibilityService() {
 
         return timeDuration.toLong()
     }
-//    fun getTimePrefs(): Long {
-//        val prefs = applicationContext.getSharedPreferences("time_prefs", MODE_PRIVATE)
-//        timeDuration = prefs.getString("LimitTime", String()).toString()
-//
-//        return timeDuration.toLong()
-//    }
 
     fun setTimePrefs(millisRemaining: Long) {
         val prefs: SharedPreferences =
@@ -134,6 +143,14 @@ class AccessibilityService : AccessibilityService() {
             e.printStackTrace()
         }
         editor.apply()
+    }
+
+    private fun blockGooglePlay() {
+        val intent = Intent(this, LockScreenChildActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+
     }
 
     override fun onInterrupt() {}
