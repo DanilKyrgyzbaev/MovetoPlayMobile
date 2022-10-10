@@ -1,4 +1,4 @@
-package com.movetoplay.screens;
+package com.movetoplay.screens.register;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -6,12 +6,12 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.movetoplay.R;
+import com.movetoplay.screens.create_child_profile.SetupProfileActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -64,28 +64,24 @@ public class Register extends AppCompatActivity {
         btn = findViewById(R.id.google);
         email = findViewById(R.id.email);
         pass = findViewById(R.id.password);
-        age = findViewById(R.id.password2);
+        age = findViewById(R.id.child_age);
 
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //get data
-
-                String email_data = email.getText().toString();
-                String pass_data = pass.getText().toString();
-                String age_data = age.getText().toString();
+        btn.setOnClickListener(view -> {
+            //get data
+            String email_data = email.getText().toString().trim();
+            String pass_data = pass.getText().toString();
+            String age_data = age.getText().toString();
 
 
-                if (email_data.isEmpty() || pass_data.isEmpty() || age_data.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Поля пусты", Toast.LENGTH_LONG).show();
-                } else {
-                    //process to backend
-                    startActivity(new Intent(getApplicationContext(), SetupProfileActivity.class));
-                    finish();
-                }
-
+            if (email_data.isEmpty() || pass_data.isEmpty() || age_data.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "Поля пусты", Toast.LENGTH_LONG).show();
+            } else {
+                //process to backend
+                startActivity(new Intent(getApplicationContext(), SetupProfileActivity.class));
+                finish();
             }
+
         });
     }
 
@@ -95,4 +91,5 @@ public class Register extends AppCompatActivity {
             create_notification();
         }
     }
+
 }

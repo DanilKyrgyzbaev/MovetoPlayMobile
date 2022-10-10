@@ -10,6 +10,7 @@
     <string name="repeat_password">Повторение пароля</string>
     <string name="sing_up">Зарегистрироваться</string>
     <string name="i_accept">Я принимаю</string>
+    <string name="required">Required</string>
     <string name="privacy_policy">политику конфиденциальности</string>
     <string name="child_phone">Устройство ребенка</string>
     <string name="log_in">Вход</string>
@@ -210,6 +211,16 @@
     <string name="enter_now">Войти</string>
     <string name="todo">TODO</string>
 
+    <string-array name="StatusArr">
+        <item>Создать новый</item>
+        <item>Импортировать старый</item>
+    </string-array>
+
+    <string-array name="GenderArr">
+        <item>Мужской</item>
+        <item>Женский</item>
+    </string-array>
+
     <string name="accessibility_description">
         Enable Real Optimizer to:\n
         1. Boost device and cool the phone down\n
@@ -228,4 +239,5 @@
     <string name="title_activity_splash_screen">SplashScreen</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="string_privacy_policy">Я принимаю политику конфиденциальности</string>
 </resources>

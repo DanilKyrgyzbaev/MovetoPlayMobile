@@ -18,6 +18,10 @@ object Pref {
         get() = sheredPreferences.getString("login","").toString()
         set(value) = sheredPreferences.edit().putString("login", value).apply()
 
+    var userLoginPassword: String
+        get() = sheredPreferences.getString("loginPassword","").toString()
+        set(value) = sheredPreferences.edit().putString("loginPassword", value).apply()
+
     var parentsLogin: String
         get() = sheredPreferences.getString("parentsLogin","").toString()
         set(value) = sheredPreferences.edit().putString("parentsLogin", value).apply()
@@ -26,17 +30,22 @@ object Pref {
         get() = sheredPreferences.getString("childName","").toString()
         set(value) = sheredPreferences.edit().putString("childName", value).apply()
 
-    var childAge: Int
-        get() = sheredPreferences.getInt("childAge",0)
-        set(value) = sheredPreferences.edit().putInt("childAge", value).apply()
+    var childAge: String
+        get() = sheredPreferences.getString("childAge","").toString()
+        set(value) = sheredPreferences.edit().putString("childAge", value).apply()
 
     var playingSports: Boolean
-        get() = sheredPreferences.getBoolean("playingSports",true)
+        get() = sheredPreferences.getBoolean("playingSports",false)
         set(value) = sheredPreferences.edit().putBoolean("playingSports",value).apply()
 
-    var gender: Int
-        get() = sheredPreferences.getInt("gender", -1)
-        set(value) = sheredPreferences.edit().putInt("gender", value).apply()
+
+    var gender: String
+        get() = sheredPreferences.getString("gender","").toString()
+        set(value) = sheredPreferences.edit().putString("gender", value).apply()
+
+    var either_new_or_old: String
+        get() = sheredPreferences.getString("either_new_or_old","").toString()
+        set(value) = sheredPreferences.edit().putString("either_new_or_old", value).apply()
 
     //child's name
 

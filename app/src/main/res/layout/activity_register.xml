@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".screens.Register">
+    tools:context=".screens.register.Register">
 
     <ImageView
         android:id="@+id/img_sign_in"
@@ -58,14 +58,14 @@
         android:layout_marginBottom="11dp"
         android:hint="Пароль"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/password2"
+        app:layout_constraintBottom_toTopOf="@+id/child_age"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email"
         app:met_textColorHint="@color/main_value" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/password2"
+        android:id="@+id/child_age"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="33dp"
@@ -73,14 +73,14 @@
         android:layout_marginBottom="10dp"
         android:hint="@string/age_n"
         android:inputType="date"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox2"
+        app:layout_constraintBottom_toTopOf="@+id/checkBox_privacy_policy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
         app:met_textColorHint="@color/main_value" />
 
     <Button
-        android:id="@+id/google"
+        android:id="@+id/register_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="34dp"
@@ -92,16 +92,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_privacy_policy" />
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/checkBox_privacy_policy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="13dp"
-        android:text="Я принимаю политику конфиденциальности"
-        app:layout_constraintBottom_toTopOf="@+id/google"
-        app:layout_constraintStart_toStartOf="@+id/password2"
-        app:layout_constraintTop_toBottomOf="@+id/password2" />
+        android:buttonTint="@color/main_value"
+        android:text="@string/string_privacy_policy"
+        android:textColor="#21A8F4"
+        app:layout_constraintBottom_toTopOf="@+id/register_button"
+        app:layout_constraintStart_toStartOf="@+id/child_age"
+        app:layout_constraintTop_toBottomOf="@+id/child_age" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

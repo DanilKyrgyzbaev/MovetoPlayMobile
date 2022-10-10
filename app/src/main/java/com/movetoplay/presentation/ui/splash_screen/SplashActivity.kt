@@ -29,8 +29,10 @@ class SplashActivity : AppCompatActivity() {
         // to send a message with a delayed time.
     }
 
+    //{"age":5,"email":"test5@mail.ru","password":"qwertyui"}
+
     private fun checkUser() {
-        if (Pref.userLogin.isEmpty()) {
+        if (Pref.userToken.isEmpty()) {
             val intent = Intent(this, Auth::class.java)
             startActivity(intent)
             finish()

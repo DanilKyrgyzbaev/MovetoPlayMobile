@@ -5,11 +5,13 @@ import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.app_nav.AppNav
 import com.movetoplay.presentation.child_main_nav.ChildMainNav
 import com.movetoplay.presentation.theme.MoveToPlayTheme
@@ -37,6 +39,13 @@ class MainActivity : ComponentActivity() {
                 ChildMainNav(selectedProfileChild = true)
             }
         }
+
+        Log.e("PrefChildName", Pref.childName)
+        Log.e("PrefChildAge", Pref.childAge)
+        Log.e("PrefChildGender", Pref.gender )
+        Log.e("PrefChildSport", Pref.playingSports.toString())
+        Log.e("PrefChildEither",Pref.either_new_or_old)
+
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
