@@ -25,22 +25,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.movetoplay.R;
 import com.movetoplay.pref.Pref;
+import com.movetoplay.screens.register.RegisterActivity;
+import com.movetoplay.screens.signin.SignInActivity;
 
 public class Auth extends AppCompatActivity {
-
     Button btn_e;
     Button btn_g;
     TextView txt;
-
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     private Pref pref;
-
     private FirebaseAuth mAuth;
-
     private GoogleSignInClient mGoogleSignInClient;
-
-
     @Override
     public void onStart() {
         super.onStart();
@@ -48,8 +44,6 @@ public class Auth extends AppCompatActivity {
         /*startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();*/
     }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -68,7 +62,6 @@ public class Auth extends AppCompatActivity {
             }
         }
     }
-
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
@@ -90,15 +83,11 @@ public class Auth extends AppCompatActivity {
                 });
     }
     // [END auth_with_google]
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
-
         //add auth
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -106,32 +95,24 @@ public class Auth extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         // [END config_signin]
-
         // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
-
-
-
         btn_e = findViewById(R.id.email_btn);
         btn_g = findViewById(R.id.google);
         txt = findViewById(R.id.no_acc);
-
         txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Register.class));
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
         });
-
         btn_g.setOnClickListener(view -> Toast.makeText(getApplicationContext(), "Пока что это функция недоступна", Toast.LENGTH_LONG).show());
 
         btn_e.setOnClickListener(view -> {
             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
         });
     }
-
     private void updateUI(FirebaseUser user) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
