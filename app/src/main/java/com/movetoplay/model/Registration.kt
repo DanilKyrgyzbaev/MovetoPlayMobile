@@ -5,5 +5,4 @@ data class Registration(
     val password: String,
     val age: Int,
     var token: String? = null
-
 )
