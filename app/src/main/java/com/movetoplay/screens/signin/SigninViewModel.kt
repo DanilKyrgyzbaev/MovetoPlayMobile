@@ -1,5 +1,6 @@
 package com.movetoplay.screens.signin
 
+import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.movetoplay.model.ResponseSucces
 import com.movetoplay.model.User
 import com.movetoplay.network_api.ApiService
 import com.movetoplay.network_api.RetrofitClient
+import com.movetoplay.pref.Pref
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,17 +24,18 @@ class SigninViewModel: ViewModel() {
 
 
     fun sendUser (user: User){
-        api.login(user).enqueue(object : Callback<ResponseSucces>{
-            override fun onResponse(call: Call<ResponseSucces>, response: Response<ResponseSucces>) {
-                val loginResponse = response.body()
-                if (loginResponse?.statusCode == 201){
-                    Log.e("Token", loginResponse.token)
+        api.login(user).enqueue(object : Callback<User>{
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful){
+                    Pref.userToken = response.body()?.token.toString()
+                    Log.e("Token", response.body()?.token.toString() )
                 }else{
                     val error = response.errorBody().toApiError<ErrorResponse>().message
                     Log.e("Error", error.toString())
+                    Pref.toast = error.toString()
                 }
             }
-            override fun onFailure(call: Call<ResponseSucces>, t: Throwable) {
+            override fun onFailure(call: Call<User>, t: Throwable) {
                 errorHandle.postValue(t.message)
                 Log.e("onFailure","${t.message}")
             }

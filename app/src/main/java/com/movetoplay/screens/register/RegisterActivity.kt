@@ -27,10 +27,29 @@ class RegisterActivity : AppCompatActivity() {
 
             if (ValidationUtil.isValidEmail(this, email)|| ValidationUtil.isValidPassword(this, password) || age.isEmpty()) {
                 viewModel.sendUser(Registration(email, password, age.toInt()), this)
-                startActivity(Intent(applicationContext, SetupProfileActivity::class.java))
+                
+//                startActivity(Intent(applicationContext, SetupProfileActivity::class.java))
             }
         }
     }
+
+    //        binding.btnEnter.setOnClickListener{
+    //            val email: String = binding.email.text.toString()
+    //            val password: String = binding.password.text.toString()
+    //            val token = Pref.userToken
+    //            if (ValidationUtil.isValidEmail(this,email) && ValidationUtil.isValidPassword(this,password)){
+    //                viewModel.sendUser(User(email, password))
+    //                if (token.isNotEmpty()){
+    //                    if (binding.checkBox.isChecked){
+    //                        startActivity(Intent(this,SetupProfileActivity::class.java ))
+    //                    } else {
+    //                        startActivity(Intent(this,LimitationAppActivity::class.java ))
+    //                    }
+    //                } else {
+    //                    Toast.makeText(this, Pref.toast, Toast.LENGTH_SHORT).show()
+    //                }
+    //            }
+    //        }
 
     internal class UpdateTimeTask : TimerTask() {
         override fun run() {

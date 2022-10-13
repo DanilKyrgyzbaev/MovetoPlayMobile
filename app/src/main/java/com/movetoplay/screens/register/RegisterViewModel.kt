@@ -3,10 +3,13 @@ package com.movetoplay.screens.register
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
+import com.movetoplay.model.ErrorResponse
 import com.movetoplay.model.Registration
 import com.movetoplay.network_api.ApiService
 import com.movetoplay.network_api.RetrofitClient
 import com.movetoplay.pref.Pref
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,12 +24,11 @@ class RegisterViewModel: ViewModel() {
             override fun onResponse(call: Call<Registration>, response: Response<Registration>) {
                 if (response.isSuccessful){
                     response.body()?.token
-                    Log.e("Token","${response.body()?.token}")
-                    Log.e("ResponseSuccess", response.body().toString())
                     Pref.userToken = response.body()?.token.toString()
                 } else {
-                    response.errorBody()
-                    Log.e("ResponseError","${response.errorBody()}")
+                    val error = response.errorBody().toApiError<ErrorResponse>().message
+                    Pref.toast = error.toString()
+                    Log.e("ResponseError",error.toString())
                 }
             }
 
@@ -35,5 +37,16 @@ class RegisterViewModel: ViewModel() {
                 Log.e("onFailure","${t.message}")
             }
         })
+    }
+
+    protected inline fun <reified ErrorType> ResponseBody?.toApiError(): ErrorType {
+        val errorJson = this?.string()
+        Log.e("retrying", "to api error body $errorJson")
+        val data = Gson().fromJson(
+            errorJson,
+            ErrorType::class.java
+        )
+        Log.e("retrying", "to api error ${Gson().toJson(data)})")
+        return data
     }
 }
