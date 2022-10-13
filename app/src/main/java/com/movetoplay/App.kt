@@ -12,11 +12,11 @@ class App : Application(){
         private var instance: App? = null
 
         fun getInstance(): App = instance!!
-        lateinit var sheredPrefs: SharedPreferences
+        lateinit var sharedPrefs: SharedPreferences
     }
 
     override fun onCreate() {
         super.onCreate()
-        sheredPrefs= getSharedPreferences("com.movetoplay", Context.MODE_PRIVATE)
+        sharedPrefs= getSharedPreferences("com.movetoplay", Context.MODE_PRIVATE)
     }
 }

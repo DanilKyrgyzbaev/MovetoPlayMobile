@@ -1,9 +1,7 @@
 package com.movetoplay.screens.applock
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
@@ -11,12 +9,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
+import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.screens.SettingTimeActivity
 import java.io.IOException
 
@@ -39,48 +37,29 @@ class LimitationAppActivity : AppCompatActivity() {
 
     private fun initListeners() {
         btnFinish.setOnClickListener {
-            sharedPrefs()
+            setLimitedAppsPrefs()
             finish()
         }
 
-        imgDailyLimit.setOnClickListener{
+        imgDailyLimit.setOnClickListener {
             val intent = Intent(this, SettingTimeActivity::class.java)
             startActivity(intent)
         }
 
-        imgSetPassword.setOnClickListener{
+        imgSetPassword.setOnClickListener {
             val intent = Intent(this, LockScreenActivity::class.java)
             startActivity(intent)
         }
     }
 
-    private fun sharedPrefs() {
-        val prefs: SharedPreferences =
-            getSharedPreferences("SHARED_PREFS_FILE", Context.MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = prefs.edit()
-        try {
-            editor.putStringSet("LimitApps", adapter.getBlackListApps())
-            Log.e("LimitApps", "SUCCESS: " + adapter.getBlackListApps())
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        editor.apply()
+    private fun setLimitedAppsPrefs() {
+        AccessibilityPrefs.limitedApps = adapter.getBlackListApps()
     }
 
-    private fun getSharedPrefs(): HashSet<String> {
-        val prefs = getSharedPreferences(
-            "SHARED_PREFS_FILE",
-            MODE_PRIVATE
-        )
-        var blockedAppsList = HashSet<String>()
-        try {
-            blockedAppsList = prefs.getStringSet("LimitApps", HashSet<String>()) as HashSet<String>
-            Log.e("adapter", "getSharedPrefs: $blockedAppsList")
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: ClassNotFoundException) {
-            e.printStackTrace()
-        }
+    private fun getLimitedAppsPrefs(): HashSet<String> {
+        var blockedAppsList: HashSet<String> = AccessibilityPrefs.limitedApps
+        Log.e("adapter", "getSharedPrefs: $blockedAppsList")
+
         return blockedAppsList
     }
 
@@ -90,7 +69,7 @@ class LimitationAppActivity : AppCompatActivity() {
 
         adapter = LimitationsAppsAdapter(
             this,
-            ApkInfoExtractor(this).GetAllInstalledApkInfo(), getSharedPrefs()
+            ApkInfoExtractor(this).GetAllInstalledApkInfo(), getLimitedAppsPrefs()
         )
         btnFinish = findViewById(R.id.btn_finish)
 

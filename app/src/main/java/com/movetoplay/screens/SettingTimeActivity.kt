@@ -10,6 +10,7 @@ import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.movetoplay.R
+import com.movetoplay.pref.AccessibilityPrefs
 import java.io.IOException
 
 
@@ -39,16 +40,7 @@ class SettingTimeActivity : AppCompatActivity() {
 
             val timeInMilliseconds = time.toLong() * 60000
 
-            val prefs: SharedPreferences =
-                getSharedPreferences("time_prefs", Context.MODE_PRIVATE)
-
-            val editor: SharedPreferences.Editor = prefs.edit()
-            try {
-                editor.putString("LimitTime", timeInMilliseconds.toString())
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            editor.apply()
+           AccessibilityPrefs.dailyLimit = timeInMilliseconds
 
             finish()
         }

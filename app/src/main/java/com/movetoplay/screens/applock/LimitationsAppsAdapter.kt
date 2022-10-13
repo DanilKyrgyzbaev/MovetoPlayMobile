@@ -21,8 +21,6 @@ class LimitationsAppsAdapter(private val context: Context, private val list: Lis
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        holder.bind(listOfApps[position])
-
         val apkInfoExtractor = ApkInfoExtractor(context)
 
         val applicationPackageName = list[position]
@@ -32,9 +30,17 @@ class LimitationsAppsAdapter(private val context: Context, private val list: Lis
         holder.title.text = applicationLabelName
         holder.image.setImageDrawable(drawable)
 
-        blackListApps.forEach {
+//        val i: Iterator<String> = blackListApps.iterator()
+//        while (i.hasNext()) {
+//            if (i.next() == applicationPackageName){
+//                holder.status.isChecked = true
+//
+//            }
+//        }
+           blackListApps.forEach {
             if (it==applicationPackageName){
                 holder.status.isChecked = true
+
             }
         }
 
@@ -63,10 +69,5 @@ class LimitationsAppsAdapter(private val context: Context, private val list: Lis
         internal var title = itemView.findViewById<TextView>(R.id.tv_limitations)
         internal var image = itemView.findViewById<ImageView>(R.id.img_app_icon)
         internal var status = itemView.findViewById<ToggleButton>(R.id.toggle_button)
-/*
-        fun bind(get: String?) {
-            title.text = get
-
-        }*/
     }
 }
