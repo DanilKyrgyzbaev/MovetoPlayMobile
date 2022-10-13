@@ -44,24 +44,30 @@ class SignInActivity: AppCompatActivity() {
         super.onBackPressed()
     }
 
-    private fun initListeners(){
+    private fun initListeners() {
         Log.e("Pref", Pref.userLogin)
-        binding.btnEnter.setOnClickListener{
-            val email: String = binding.email.text.toString()
-            val password: String = binding.password.text.toString()
-            val token = Pref.userToken
-            if (ValidationUtil.isValidEmail(this,email) && ValidationUtil.isValidPassword(this,password)){
+        binding.btnEnter.setOnClickListener {
+            val email: String = binding.email.text.toString().trim()
+            val password: String = binding.password.text.toString().trim()
+            if (ValidationUtil.isValidEmail(this, email) && ValidationUtil.isValidPassword(this, password)) {
                 viewModel.sendUser(User(email, password))
-                if (token.isNotEmpty()){
-                    if (binding.checkBox.isChecked){
-                        startActivity(Intent(this,SetupProfileActivity::class.java ))
+            }
+        }
+        viewModel.mutableLiveData.observe(this) {
+            if (it) {
+                if (Pref.userToken.isNotEmpty()) {
+                    if (binding.checkBox.isChecked) {
+                        startActivity(Intent(this, SetupProfileActivity::class.java))
                     } else {
-                        startActivity(Intent(this,LimitationAppActivity::class.java ))
+                        startActivity(Intent(this, LimitationAppActivity::class.java))
                     }
                 } else {
                     Toast.makeText(this, Pref.toast, Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+        viewModel.errorHandle.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
 }

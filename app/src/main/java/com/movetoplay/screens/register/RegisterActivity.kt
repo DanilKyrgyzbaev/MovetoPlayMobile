@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.movetoplay.databinding.ActivityRegisterBinding
 import com.movetoplay.model.Registration
+import com.movetoplay.pref.Pref
 import com.movetoplay.screens.create_child_profile.SetupProfileActivity
 import com.movetoplay.util.ValidationUtil
 import java.util.*
@@ -19,37 +20,35 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
+        initListeners()
 
+    }
+    private fun initListeners() {
         binding.registerButton.setOnClickListener {
-            val email = binding.email.text.toString()
-            val password = binding.password.text.toString()
-            val age = binding.childAge.text.toString()
-
-            if (ValidationUtil.isValidEmail(this, email)|| ValidationUtil.isValidPassword(this, password) || age.isEmpty()) {
-                viewModel.sendUser(Registration(email, password, age.toInt()), this)
-                
-//                startActivity(Intent(applicationContext, SetupProfileActivity::class.java))
+            val email: String = binding.email.text.toString().trim()
+            val password: String = binding.password.text.toString().trim()
+            val age: String = binding.childAge.text.toString().trim()
+            if (ValidationUtil.isValidEmail(this,email)&& ValidationUtil.isValidPassword(this,password)&& age.isNotEmpty()){
+                viewModel.sendUser(Registration(email,password,age.toInt()),this)
+            }
+            viewModel.mutableLiveData.observe(this){
+                if (it){
+                    if (Pref.userToken.isNotEmpty()){
+                        if (binding.checkBoxPrivacyPolicy.isChecked){
+                            startActivity(Intent(this, SetupProfileActivity::class.java))
+                        } else {
+                            Toast.makeText(this, "Примите политику конфиденциальности", Toast.LENGTH_SHORT).show()
+                        }
+                    } else{
+                        Toast.makeText(this, Pref.toast, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
+        viewModel.errorHandle.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
     }
-
-    //        binding.btnEnter.setOnClickListener{
-    //            val email: String = binding.email.text.toString()
-    //            val password: String = binding.password.text.toString()
-    //            val token = Pref.userToken
-    //            if (ValidationUtil.isValidEmail(this,email) && ValidationUtil.isValidPassword(this,password)){
-    //                viewModel.sendUser(User(email, password))
-    //                if (token.isNotEmpty()){
-    //                    if (binding.checkBox.isChecked){
-    //                        startActivity(Intent(this,SetupProfileActivity::class.java ))
-    //                    } else {
-    //                        startActivity(Intent(this,LimitationAppActivity::class.java ))
-    //                    }
-    //                } else {
-    //                    Toast.makeText(this, Pref.toast, Toast.LENGTH_SHORT).show()
-    //                }
-    //            }
-    //        }
 
     internal class UpdateTimeTask : TimerTask() {
         override fun run() {

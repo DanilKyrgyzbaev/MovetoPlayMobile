@@ -17,6 +17,7 @@ import retrofit2.Response
 class RegisterViewModel: ViewModel() {
     val errorHandle = MutableLiveData<String>()
     var api: ApiService = RetrofitClient().getApi()
+    val mutableLiveData = MutableLiveData<Boolean>()
 
     fun sendUser(register: Registration, activity: RegisterActivity){
         val response = api.postUserRegister(register)
@@ -25,20 +26,22 @@ class RegisterViewModel: ViewModel() {
                 if (response.isSuccessful){
                     response.body()?.token
                     Pref.userToken = response.body()?.token.toString()
+                    mutableLiveData.value = true
                 } else {
                     val error = response.errorBody().toApiError<ErrorResponse>().message
                     Pref.toast = error.toString()
                     Log.e("ResponseError",error.toString())
+                    errorHandle.value = error
                 }
             }
 
             override fun onFailure(call: Call<Registration>, t: Throwable) {
                 errorHandle.postValue(t.message)
                 Log.e("onFailure","${t.message}")
+                errorHandle.value = t.message
             }
         })
     }
-
     protected inline fun <reified ErrorType> ResponseBody?.toApiError(): ErrorType {
         val errorJson = this?.string()
         Log.e("retrying", "to api error body $errorJson")

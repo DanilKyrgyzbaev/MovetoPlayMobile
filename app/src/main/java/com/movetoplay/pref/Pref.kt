@@ -53,9 +53,9 @@ object Pref {
 
     //child's name
 
-    var userId: Int
-        get() = sheredPreferences.getInt("id",0)
-        set(value) = sheredPreferences.edit().putInt("id", value).apply()
+    var childId: String
+        get() = sheredPreferences.getString("childId","").toString()
+        set(value) = sheredPreferences.edit().putString("childId", value).apply()
 
     var userToken: String
         get() = sheredPreferences.getString("userToken","").toString()

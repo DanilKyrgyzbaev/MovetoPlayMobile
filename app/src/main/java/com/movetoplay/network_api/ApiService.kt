@@ -10,10 +10,6 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface ApiService {
-
-    @POST("/auth/login")
-    fun postUser(@Body user: User): Call<User>
-
     @POST("/auth/login")
     fun login(@Body user: User): Call<User>
 
@@ -25,10 +21,4 @@ interface ApiService {
         @Header("token") token: String,
         @Body createProfile: CreateProfile
     ): Call<CreateProfile>
-
-    ///  @POST("/api/v2/users/update")
-    //    fun updateUser(
-    //        @Header("token") token: String,
-    //        @Body user: User,
-    //    ): Call<User>
 }

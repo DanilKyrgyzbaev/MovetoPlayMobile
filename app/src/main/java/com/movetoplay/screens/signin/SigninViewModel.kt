@@ -20,7 +20,7 @@ import retrofit2.Response
 class SigninViewModel: ViewModel() {
     val errorHandle = MutableLiveData<String>()
     var api: ApiService = RetrofitClient().getApi()
-    val mutableLiveData = MutableLiveData<User>()
+    val mutableLiveData = MutableLiveData<Boolean>()
 
 
     fun sendUser (user: User){
@@ -29,15 +29,17 @@ class SigninViewModel: ViewModel() {
                 if (response.isSuccessful){
                     Pref.userToken = response.body()?.token.toString()
                     Log.e("Token", response.body()?.token.toString() )
+                    mutableLiveData.value = true
                 }else{
                     val error = response.errorBody().toApiError<ErrorResponse>().message
                     Log.e("Error", error.toString())
-                    Pref.toast = error.toString()
+                    errorHandle.value = error
                 }
             }
             override fun onFailure(call: Call<User>, t: Throwable) {
                 errorHandle.postValue(t.message)
                 Log.e("onFailure","${t.message}")
+                errorHandle.value = t.message
             }
         })
     }
