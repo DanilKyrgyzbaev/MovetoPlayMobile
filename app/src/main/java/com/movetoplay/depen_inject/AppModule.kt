@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    private const val urlServer = "http://94.228.112.119:3001"
+    private const val urlServer = "http://94.228.112.119:4001"
     private const val keySharedPreferences = "keySharedPreferences"
     @Provides
     @Singleton

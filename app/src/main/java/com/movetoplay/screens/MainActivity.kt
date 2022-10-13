@@ -36,15 +36,9 @@ class MainActivity : ComponentActivity() {
         setContent{
             MoveToPlayTheme(false){
                 AppNav()
-                ChildMainNav(selectedProfileChild = true)
+//                ChildMainNav(selectedProfileChild = true)
             }
         }
-
-        Log.e("PrefChildName", Pref.childName)
-        Log.e("PrefChildAge", Pref.childAge)
-        Log.e("PrefChildGender", Pref.gender )
-        Log.e("PrefChildSport", Pref.playingSports.toString())
-        Log.e("PrefChildEither",Pref.either_new_or_old)
 
     }
 

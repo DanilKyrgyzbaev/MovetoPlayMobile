@@ -22,19 +22,18 @@ class RegisterViewModel: ViewModel() {
                 if (response.isSuccessful){
                     response.body()?.token
                     Log.e("Token","${response.body()?.token}")
+                    Log.e("ResponseSuccess", response.body().toString())
                     Pref.userToken = response.body()?.token.toString()
                 } else {
                     response.errorBody()
-                    Log.e("Response","${response.errorBody()}")
+                    Log.e("ResponseError","${response.errorBody()}")
                 }
             }
 
             override fun onFailure(call: Call<Registration>, t: Throwable) {
                 errorHandle.postValue(t.message)
                 Log.e("onFailure","${t.message}")
-
             }
-
         })
     }
 }

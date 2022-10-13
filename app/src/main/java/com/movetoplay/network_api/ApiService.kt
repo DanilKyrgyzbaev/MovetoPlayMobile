@@ -2,6 +2,7 @@ package com.movetoplay.network_api
 
 import com.movetoplay.model.CreateProfile
 import com.movetoplay.model.Registration
+import com.movetoplay.model.ResponseSucces
 import com.movetoplay.model.User
 import retrofit2.Call
 import retrofit2.http.Body
@@ -10,8 +11,11 @@ import retrofit2.http.POST
 
 interface ApiService {
 
-    @POST("/auth/registration")
+    @POST("/auth/login")
     fun postUser(@Body user: User): Call<User>
+
+    @POST("/auth/login")
+    fun login(@Body user: User): Call<ResponseSucces>
 
     @POST("/auth/registration")
     fun postUserRegister(@Body registration: Registration): Call<Registration>
