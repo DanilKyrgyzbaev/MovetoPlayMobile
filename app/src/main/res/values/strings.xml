@@ -39,6 +39,7 @@
     <string name="such_user_is_registered">Такой пользователь зарегистрирован</string>
     <string name="choose_child_profile">Выберите профиль ребенка</string>
     <string name="create_new">Создать новый</string>
+    <string name="import_old">Импортировать старый</string>
     <string name="child_name">Имя ребенка</string>
     <string name="male">Мужской</string>
     <string name="female">Женский</string>

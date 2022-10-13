@@ -8,14 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.movetoplay.databinding.ActivityRegisterBinding
 import com.movetoplay.model.Registration
 import com.movetoplay.screens.create_child_profile.SetupProfileActivity
+import com.movetoplay.util.ValidationUtil
 import java.util.*
 
-class RegisterActivity: AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     lateinit var viewModel: RegisterViewModel
-
-    private val NOTIFY_ID = 101
-    private val CHANNEL_ID = "MoveToPlay"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -26,12 +24,10 @@ class RegisterActivity: AppCompatActivity() {
             val email = binding.email.text.toString()
             val password = binding.password.text.toString()
             val age = binding.childAge.text.toString()
-            if (email.isEmpty()||password.isEmpty()||age.isEmpty()){
-                Toast.makeText(applicationContext, "Поля пусты", Toast.LENGTH_LONG).show()
-            } else {
-                viewModel.sendUser(Registration(email,password,age.toInt()),this)
+
+            if (ValidationUtil.isValidEmail(this, email)|| ValidationUtil.isValidPassword(this, password) || age.isEmpty()) {
+                viewModel.sendUser(Registration(email, password, age.toInt()), this)
                 startActivity(Intent(applicationContext, SetupProfileActivity::class.java))
-                finish()
             }
         }
     }
