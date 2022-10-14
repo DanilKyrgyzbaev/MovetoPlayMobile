@@ -32,7 +32,7 @@ class SetupProfileActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySetupProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this).get(SetupProfileViewModel::class.java)
+        viewModel = ViewModelProvider(this)[SetupProfileViewModel::class.java]
 
         spinner()
         initListeners()

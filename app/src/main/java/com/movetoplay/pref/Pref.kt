@@ -44,8 +44,8 @@ object Pref {
         set(value) = sharedPreferences.edit().putString("gender", value).apply()
 
     var toast: String
-        get() = sheredPreferences.getString("toast","").toString()
-        set(value) = sheredPreferences.edit().putString("toast", value).apply()
+        get() = sharedPreferences.getString("toast","").toString()
+        set(value) = sharedPreferences.edit().putString("toast", value).apply()
 
     var either_new_or_old: String
         get() = sharedPreferences.getString("either_new_or_old","").toString()

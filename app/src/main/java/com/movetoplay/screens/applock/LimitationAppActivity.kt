@@ -9,22 +9,27 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
+import com.movetoplay.data.model.user_apps.AppBody
+import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.screens.SettingTimeActivity
-import java.io.IOException
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class LimitationAppActivity : AppCompatActivity() {
 
     private lateinit var adapter: LimitationsAppsAdapter
     private lateinit var btnFinish: Button
     private lateinit var imgDailyLimit: ImageView
     private lateinit var imgSetPassword: ImageView
+
+    private val vm:LimitationAppViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,6 +88,17 @@ class LimitationAppActivity : AppCompatActivity() {
         } else {
             Log.d("ololo", "ooooooooo")
         }
+
+        vm.sendLimitedApps(getApps())
+    }
+    private fun getApps(): UserAppsBody {
+        val apps = ArrayList<AppBody>()
+        val extractor = ApkInfoExtractor(this)
+
+        extractor.GetAllInstalledApkInfo().forEach {
+            apps.add(AppBody(extractor.GetAppName(it), it))
+        }
+        return UserAppsBody(apps)
     }
 
     private fun isAccessibilityGranted(context: Context): Boolean {

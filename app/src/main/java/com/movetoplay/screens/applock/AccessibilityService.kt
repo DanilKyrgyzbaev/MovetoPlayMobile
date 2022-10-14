@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import com.google.gson.Gson
 import com.movetoplay.pref.AccessibilityPrefs
+import com.movetoplay.pref.Pref
 import com.movetoplay.screens.ChildLockActivity
 import io.ktor.util.date.*
 import java.io.IOException
@@ -22,6 +23,9 @@ class AccessibilityService : AccessibilityService() {
 
     private var blackList: HashSet<String> = HashSet()
     private var timeDuration: Long = 0
+    private var isTimerPaused = false
+    private var timer: CountDownTimer? = null
+
 
     override fun onServiceConnected() {
         Log.e("onServiceConnected", "onServiceConnected: " + AccessibilityPrefs.currentDay)
@@ -42,16 +46,15 @@ class AccessibilityService : AccessibilityService() {
         if (!appPackageName.equals(packageName.toString(), ignoreCase = true)) {
             getLimitedAppsPrefs().forEach {
                 if (it == appPackageName) {
-                    startTimer(false)
+                    startTimer()
+                    isTimerPaused = false
                     Log.e("PackageN", "onAccessibilityEvent: limited list package $it")
                     Log.e("PackageN", "onAccessibilityEvent: package $appPackageName")
+                } else {
+                    isTimerPaused = true
+                    Log.e("TAG", "TIMER STOPPPPED!!!!!!!!!!!!!!!!!!!! " )
                 }
             }
-        }
-
-        if ("com.android.launcher3" == appPackageName) {
-            startTimer(true)
-            Log.e("Timer", "Timer Stopped: "+event.eventType)
         }
         Log.e("eventjopa", "onAccessibilityEvent: $appPackageName")
 
@@ -82,25 +85,22 @@ class AccessibilityService : AccessibilityService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
-
-    var timer: CountDownTimer? = null
-    private fun startTimer(exit: Boolean) {
+    private fun startTimer() {
         val timeDuration = getRemainingTimePrefs()
-        if (!exit) {
-            timer = object : CountDownTimer(timeDuration, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    AccessibilityPrefs.remainingTime = millisUntilFinished
-                }
-
-                override fun onFinish() {
-                    openLockScreen()
-                }
+        timer = object : CountDownTimer(timeDuration, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                AccessibilityPrefs.remainingTime = millisUntilFinished
+                if (isTimerPaused)
+                  cancel()
+                else
+                    start()
             }
-            timer?.start()
-        } else {
-            Log.e("Timer", "remaining time $timer")
-            timer?.cancel()
+
+            override fun onFinish() {
+                openLockScreen()
+            }
         }
+        timer?.start()
     }
 
     private fun getLimitedAppsPrefs(): HashSet<String> {
