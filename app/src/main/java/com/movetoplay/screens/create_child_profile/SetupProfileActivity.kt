@@ -84,8 +84,7 @@ class SetupProfileActivity: AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show()
             }
-            viewModel.sendProfileChild(Pref.userToken, CreateProfile("Ddddd","5"," Мужской",true))
-            //Pref.userToken, CreateProfile(Pref.childName, Pref.childAge, Pref.gender ,Pref.playingSports
+            viewModel.sendProfileChild("Bearer ${Pref.userToken}", CreateProfile(Pref.childName,Pref.childAge,Pref.gender,Pref.playingSports))
         }
         viewModel.mutableLiveData.observe(this){
             if (it){
@@ -101,6 +100,3 @@ class SetupProfileActivity: AppCompatActivity() {
         }
     }
 }
-
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZlNTYwN2E2LTY0NmEtNDJmOC04YTUyLTY4MWQ5MmM4NTc2OCIsImVtYWlsIjoidGFpbGFuNUBtYWlsLnJ1Iiwicm9sZSI6InBhcmVudCIsInByb2ZpbGVJZCI6bnVsbCwiZGV2aWNlSWQiOm51bGwsImlhdCI6MTY2NTY5MDcwMiwiZXhwIjoxNjY1Nzc3MTAyfQ.o7JbRnJWOG4CB0w9Ssrco2UDs95QXdAcdFnf84E7RNk
-//eyJpZCI6ImZlNTYwN2E2LTY0NmEtNDJmOC04YTUyLTY4MWQ5MmM4NTc2OCIsImVtYWlsIjoidGFpbGFuNUBtYWlsLnJ1Iiwicm9sZSI6InBhcmVudCIsInByb2ZpbGVJZCI6bnVsbCwiZGV2aWNlSWQiOm51bGwsImlhdCI6MTY2NTY5MDQyOSwiZXhwIjoxNjY1Nzc2ODI5fQ.JQ8hjnbu4Jucp4YfkspdEnr1p0VlpavXN6DkzxbR5mE

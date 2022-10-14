@@ -18,7 +18,7 @@ interface ApiService {
 
     @POST("/profiles/create")
     fun postChildProfile(
-        @Header("token") token: String,
+        @Header("Authorization") token: String,
         @Body createProfile: CreateProfile
     ): Call<CreateProfile>
 }
