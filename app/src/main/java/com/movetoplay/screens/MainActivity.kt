@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
         setContent{
             MoveToPlayTheme(false){
                 AppNav()
-//                ChildMainNav(selectedProfileChild = true)
+                ChildMainNav(selectedProfileChild = true)
             }
         }
 

@@ -1,16 +1,13 @@
 package com.movetoplay.network_api
 
-import com.movetoplay.data.model.ErrorBody
-import com.movetoplay.data.model.user_apps.UserAppsBody
-import com.movetoplay.domain.model.user_apps.Limited
-import com.movetoplay.domain.model.user_apps.UserApps
 import com.movetoplay.model.CreateProfile
 import com.movetoplay.model.Registration
 import com.movetoplay.model.ResponseSucces
 import com.movetoplay.model.User
 import retrofit2.Call
-import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.Header
+import retrofit2.http.POST
 
 interface ApiService {
 
@@ -25,7 +22,7 @@ interface ApiService {
 
     @POST("/profiles/create")
     fun postChildProfile(
-        @Header("token") token: String,
+        @Header("Authorization") token: String,
         @Body createProfile: CreateProfile
     ): Call<CreateProfile>
 

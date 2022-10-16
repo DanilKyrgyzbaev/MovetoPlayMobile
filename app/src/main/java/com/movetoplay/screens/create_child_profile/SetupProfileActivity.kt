@@ -11,11 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.movetoplay.R
 import com.movetoplay.databinding.ActivitySetupProfileBinding
-import com.movetoplay.databinding.SpinStatusItemBinding
 import com.movetoplay.model.CreateProfile
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.MainActivity
-import com.movetoplay.screens.register.RegisterViewModel
 
 class SetupProfileActivity: AppCompatActivity() {
     private lateinit var binding: ActivitySetupProfileBinding
@@ -77,22 +75,28 @@ class SetupProfileActivity: AppCompatActivity() {
     private fun initListeners() {
         childName = binding.etChildName.text.toString()
         childAge = binding.etChildAge.text.toString()
-        binding.btnContinue.setOnClickListener(View.OnClickListener { view: View? ->
+        binding.btnContinue.setOnClickListener {
             if (childName!!.isBlank()||childAge!!.isBlank()){
-                if (binding.checkSport.isChecked){
-                    child_play_sportsBox = true
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
-                } else{
-                    child_play_sportsBox = false
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
-                }
+                child_play_sportsBox = binding.checkSport.isChecked
                 Pref.playingSports = child_play_sportsBox
                 Pref.childName = binding.etChildName.text.toString()
                 Pref.childAge = binding.etChildAge.text.toString()
             } else {
                 Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show()
             }
-            viewModel.sendProfileChild(Pref.userToken, CreateProfile(Pref.childName, Pref.childAge.toInt(),Pref.gender,Pref.playingSports),this)
-        })
+            viewModel.sendProfileChild("Bearer ${Pref.userToken}", CreateProfile(Pref.childName,Pref.childAge,Pref.gender,Pref.playingSports))
+        }
+        viewModel.mutableLiveData.observe(this){
+            if (it){
+                if (Pref.childId.isNotEmpty()){
+                    startActivity(Intent(this, MainActivity::class.java))
+                } else {
+                    Toast.makeText(this, Pref.toast, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        viewModel.errorHandle.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
     }
 }

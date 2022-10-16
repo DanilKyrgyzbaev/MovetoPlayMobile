@@ -39,7 +39,6 @@ class SignInActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
         initListeners()
     }
-
     override fun onBackPressed() {
         finish()
         super.onBackPressed()
