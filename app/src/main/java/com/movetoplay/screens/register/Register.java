@@ -1,4 +1,4 @@
-package com.movetoplay.screens.register;
+package com.movetoplay.screens;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -6,18 +6,19 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.movetoplay.R;
-import com.movetoplay.screens.create_child_profile.SetupProfileActivity;
+import com.yandex.metrica.YandexMetrica;
+import com.yandex.metrica.YandexMetricaConfig;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Register extends AppCompatActivity {
-
 
     Button btn;
     EditText email, pass, age;
@@ -41,7 +42,7 @@ public class Register extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void create_notification() {
+    public void create_notification(){
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
@@ -61,10 +62,19 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //yandex
+
+        // Creating an extended library configuration.
+        YandexMetricaConfig config = YandexMetricaConfig.newConfigBuilder("e5a90bfc-abfd-4c35-a47b-308effb3c011").build();
+        // Initializing the AppMetrica SDK.
+        YandexMetrica.activate(getApplicationContext(), config);
+        // Automatic tracking of user activity.
+        YandexMetrica.enableActivityAutoTracking(getApplication());
+
         btn = findViewById(R.id.google);
         email = findViewById(R.id.email);
         pass = findViewById(R.id.password);
-        age = findViewById(R.id.child_age);
+        age = findViewById(R.id.password2);
 
 
         btn.setOnClickListener(view -> {
@@ -82,6 +92,7 @@ public class Register extends AppCompatActivity {
                 finish();
             }
 
+            }
         });
     }
 
@@ -91,5 +102,4 @@ public class Register extends AppCompatActivity {
             create_notification();
         }
     }
-
 }
