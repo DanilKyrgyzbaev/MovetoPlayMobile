@@ -37,6 +37,7 @@ public class Auth extends AppCompatActivity {
     private Pref pref;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -44,6 +45,7 @@ public class Auth extends AppCompatActivity {
         /*startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();*/
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -62,6 +64,7 @@ public class Auth extends AppCompatActivity {
             }
         }
     }
+
     // [START auth_with_google]
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
@@ -82,6 +85,7 @@ public class Auth extends AppCompatActivity {
                     }
                 });
     }
+
     // [END auth_with_google]
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +117,7 @@ public class Auth extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), SignInActivity.class));
         });
     }
+
     private void updateUI(FirebaseUser user) {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();

@@ -7,6 +7,7 @@ import com.movetoplay.data.repository.ProfilesRepositoryImpl
 import com.movetoplay.domain.repository.AuthRepository
 import com.movetoplay.domain.repository.ProfileRepository
 import com.movetoplay.domain.repository.ProfilesRepository
+import com.movetoplay.network_api.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,15 +28,17 @@ object RepositoryModule {
 
     @Provides
     fun provideAuthRepository(
-        client : HttpClient
+        client : HttpClient,
+        api: ApiService
     ) : AuthRepository {
-        return AuthRepositoryImpl(client)
+        return AuthRepositoryImpl(client,api)
     }
     @Provides
     fun provideProfilesRepository(
         client : HttpClient,
         repository : ProfileRepository,
+        api:ApiService
     ) : ProfilesRepository {
-        return ProfilesRepositoryImpl(client,repository)
+        return ProfilesRepositoryImpl(client,repository,api)
     }
 }

@@ -1,6 +1,8 @@
 package com.movetoplay.depen_inject
 
+import com.movetoplay.data.repository.DeviceRepositoryImpl
 import com.movetoplay.data.repository.UserAppsRepositoryImpl
+import com.movetoplay.domain.repository.DeviceRepository
 import com.movetoplay.domain.repository.UserAppsRepository
 import dagger.Binds
 import dagger.Module
@@ -15,4 +17,9 @@ abstract class RemoteRepositoryModule {
     abstract fun provideLimitedRepository(
         repositoryImpl: UserAppsRepositoryImpl,
     ): UserAppsRepository
+
+    @Binds
+    abstract fun provideDeviceRepository(
+        repoImpl: DeviceRepositoryImpl
+    ): DeviceRepository
 }

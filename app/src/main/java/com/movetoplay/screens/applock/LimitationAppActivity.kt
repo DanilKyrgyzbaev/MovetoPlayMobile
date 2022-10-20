@@ -1,153 +1,126 @@
 package com.movetoplay.screens.applock
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings
-import android.text.TextUtils
-import android.util.Log
-import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.movetoplay.R
-import com.movetoplay.data.model.user_apps.AppBody
-import com.movetoplay.data.model.user_apps.UserAppsBody
-import com.movetoplay.pref.AccessibilityPrefs
+import com.google.gson.Gson
+import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.screens.SettingTimeActivity
+import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
+import com.movetoplay.databinding.ActivityLimitationAppBinding
+import com.movetoplay.domain.model.Child
+import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.pref.Pref
 
 @AndroidEntryPoint
 class LimitationAppActivity : AppCompatActivity() {
 
     private lateinit var adapter: LimitationsAppsAdapter
-    private lateinit var btnFinish: Button
-    private lateinit var imgDailyLimit: ImageView
-    private lateinit var imgSetPassword: ImageView
+    private lateinit var binding: ActivityLimitationAppBinding
+    private var userApps = ArrayList<UserApp>()
+    private var child = Child()
 
-    private val vm:LimitationAppViewModel by viewModels()
-
+    private val vm: LimitationAppViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_limitation_app)
+        binding = ActivityLimitationAppBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         initViews()
         initListeners()
     }
 
-    private fun initListeners() {
-        btnFinish.setOnClickListener {
-            setLimitedAppsPrefs()
-            finish()
-        }
-
-        imgDailyLimit.setOnClickListener {
-            val intent = Intent(this, SettingTimeActivity::class.java)
-            startActivity(intent)
-        }
-
-        imgSetPassword.setOnClickListener {
-            val intent = Intent(this, LockScreenActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
-    private fun setLimitedAppsPrefs() {
-        AccessibilityPrefs.limitedApps = adapter.getBlackListApps()
-    }
-
-    private fun getLimitedAppsPrefs(): HashSet<String> {
-        var blockedAppsList: HashSet<String> = AccessibilityPrefs.limitedApps
-        Log.e("adapter", "getSharedPrefs: $blockedAppsList")
-
-        return blockedAppsList
-    }
-
     private fun initViews() {
-        imgDailyLimit = findViewById(R.id.img_time_settings)
-        imgSetPassword = findViewById(R.id.img_set_pin)
-
-        adapter = LimitationsAppsAdapter(
-            this,
-            ApkInfoExtractor(this).GetAllInstalledApkInfo(), getLimitedAppsPrefs()
-        )
-        btnFinish = findViewById(R.id.btn_finish)
-
-        findViewById<RecyclerView>(R.id.rv_limitations).apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = this@LimitationAppActivity.adapter
-        }
-
-        if (!isAccessibilityGranted(this)) {
-            permissionAccessibility(this)
-        } else {
-            Log.d("ololo", "ooooooooo")
-        }
-
-        vm.sendLimitedApps(getApps())
-    }
-    private fun getApps(): UserAppsBody {
-        val apps = ArrayList<AppBody>()
-        val extractor = ApkInfoExtractor(this)
-
-        extractor.GetAllInstalledApkInfo().forEach {
-            apps.add(AppBody(extractor.GetAppName(it), it))
-        }
-        return UserAppsBody(apps)
+        val argument = intent.getStringExtra("child")
+        if (!argument.isNullOrEmpty()) {
+            child = Gson().fromJson(argument, Child::class.java)
+            child.id.let { vm.getLimited(it) }
+        } else Toast.makeText(this, "Профиль ребенка не найден!", Toast.LENGTH_LONG).show()
     }
 
-    private fun isAccessibilityGranted(context: Context): Boolean {
+    private fun initListeners() {
+        binding.apply {
+            btnFinish.setOnClickListener {
+                saveBeforeFinish()
+            }
 
-        var accessibilityEnabled = 0
-        val service = context.packageName + "/" + AccessibilityService::class.java.canonicalName
-        try {
-            accessibilityEnabled = Settings.Secure.getInt(
-                context.applicationContext.contentResolver,
-                Settings.Secure.ACCESSIBILITY_ENABLED
-            )
-        } catch (e: Settings.SettingNotFoundException) {
-            e.printStackTrace()
+            imgTimeSettings.setOnClickListener {
+                val intent = Intent(this@LimitationAppActivity, SettingTimeActivity::class.java)
+                startActivity(intent)
+            }
+
+            imgSetPin.setOnClickListener {
+                val intent = Intent(this@LimitationAppActivity, LockScreenActivity::class.java)
+                startActivity(intent)
+            }
         }
 
-        val mStringColonSplitter = TextUtils.SimpleStringSplitter(':')
-
-        if (accessibilityEnabled == 1) {
-            val settingValue = Settings.Secure.getString(
-                context.applicationContext.contentResolver,
-                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-            )
-            if (settingValue != null) {
-                mStringColonSplitter.setString(settingValue)
-                while (mStringColonSplitter.hasNext()) {
-                    val accessibilityService = mStringColonSplitter.next()
-                    if (accessibilityService.equals(service, ignoreCase = true)) {
-                        return true
-                    }
+        vm.userApps.observe(this) {
+            when (it) {
+                is ResultStatus.Loading -> {
+                    binding.pbLimitation.visible(true)
+                }
+                is ResultStatus.Error -> {
+                    binding.pbLimitation.visible(false)
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+                is ResultStatus.Success -> {
+                    binding.pbLimitation.visible(false)
+                    userApps = it.data as ArrayList<UserApp>
+                    if (userApps.isNotEmpty())
+                        setData(userApps)
+                    else Toast.makeText(
+                        this,
+                        "Список пуст! Сделайте вход с устройства ребенка",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
-        return false
+
+        vm.loading.observe(this) {
+            when (it) {
+                is ResultStatus.Loading -> {
+                    binding.pbLimitation.visible(true)
+                    Toast.makeText(this, "Данные сохраняются...", Toast.LENGTH_SHORT).show()
+                }
+                is ResultStatus.Error -> {
+                    binding.pbLimitation.visible(false)
+                    Toast.makeText(this," Ошибка при сохранении, попробуйте еще раз", Toast.LENGTH_SHORT).show()
+                    goTo()
+                }
+                is ResultStatus.Success -> {
+                    binding.pbLimitation.visible(false)
+                    Toast.makeText(this, "Данные успешно сохранились!", Toast.LENGTH_SHORT).show()
+                    goTo()
+                }
+            }
+        }
     }
 
-    private fun permissionAccessibility(context: Context) {
-        AlertDialog.Builder(context, R.style.AlertDialogTheme)
-            .setTitle("")
-            .setView(
-                LayoutInflater.from(context).inflate(
-                    R.layout.view_dialog_permission_accessibility,
-                    null,
-                    false
-                )
-            )
-            .setPositiveButton("Настройки") { _, _ ->
-                //Utils.reportEventClick("AppLock Screen", "AppLock_Permission_btn")
-                context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            }
-            .create().show()
+    private fun setData(userApps: ArrayList<UserApp>) {
+        adapter = LimitationsAppsAdapter(userApps, this::onItemClick)
+        binding.rvLimitations.adapter = adapter
+    }
+
+    private fun onItemClick(app: UserApp) {
+        //vm.setLimit(app)
+    }
+
+    private fun saveBeforeFinish() {
+        vm.setLimits(adapter.getBlockedApps())
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
+    private fun goTo() {
+        finish()
     }
 }

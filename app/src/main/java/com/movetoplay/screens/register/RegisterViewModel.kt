@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.movetoplay.model.ErrorResponse
-import com.movetoplay.model.Registration
+import com.movetoplay.domain.model.Registration
 import com.movetoplay.network_api.ApiService
 import com.movetoplay.network_api.RetrofitClient
 import com.movetoplay.pref.Pref
@@ -19,7 +19,7 @@ class RegisterViewModel: ViewModel() {
     var api: ApiService = RetrofitClient().getApi()
     val mutableLiveData = MutableLiveData<Boolean>()
 
-    fun sendUser(register: Registration, activity: RegisterActivity){
+    fun sendUser(register: Registration){
         val response = api.postUserRegister(register)
         response.enqueue(object : Callback<Registration>{
             override fun onResponse(call: Call<Registration>, response: Response<Registration>) {

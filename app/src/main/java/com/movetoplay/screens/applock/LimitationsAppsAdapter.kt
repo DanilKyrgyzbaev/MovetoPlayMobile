@@ -1,7 +1,5 @@
 package com.movetoplay.screens.applock
 
-import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +7,24 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
+import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.pref.AccessibilityPrefs
+import com.movetoplay.pref.Pref
 
-
-class LimitationsAppsAdapter(private val context: Context, private val list: List<String?>, private val blackListApps: HashSet<String>) :
+class LimitationsAppsAdapter(
+    private val list: ArrayList<UserApp>,
+    private val listener: (UserApp) -> Unit
+) :
     RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
+
+    private val blockedList = HashSet<String>()
+
+    init {
+        list.forEach {
+            if (it.type == "unlimited")
+                blockedList.add(it.id)
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -21,53 +33,40 @@ class LimitationsAppsAdapter(private val context: Context, private val list: Lis
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val apkInfoExtractor = ApkInfoExtractor(context)
-
-        val applicationPackageName = list[position]
-        val applicationLabelName: String = apkInfoExtractor.GetAppName(applicationPackageName)
-        val drawable: Drawable = apkInfoExtractor.getAppIconByPackageName(applicationPackageName)
-
-        holder.title.text = applicationLabelName
-        holder.image.setImageDrawable(drawable)
-
-//        val i: Iterator<String> = blackListApps.iterator()
-//        while (i.hasNext()) {
-//            if (i.next() == applicationPackageName){
-//                holder.status.isChecked = true
-//
-//            }
-//        }
-           blackListApps.forEach {
-            if (it==applicationPackageName){
-                holder.status.isChecked = true
-
-            }
-        }
-
-        holder.status.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                if (applicationPackageName != null) {
-                    blackListApps.add(applicationPackageName)
-                }
-                Toast.makeText(context, "Added to black list", Toast.LENGTH_SHORT).show()
-                Log.e("Toggle", "onBindViewHolder: $blackListApps")
-            } else {
-                blackListApps.remove(applicationPackageName)
-            }
-        }
-    }
-
-    fun getBlackListApps(): HashSet<String> {
-        return blackListApps
+        Log.e("limit", "onBindViewHolder: ${list[position]}")
+        holder.onBind(list[position])
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        internal var title = itemView.findViewById<TextView>(R.id.tv_limitations)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private var title = itemView.findViewById<TextView>(R.id.tv_limitations)
         internal var image = itemView.findViewById<ImageView>(R.id.img_app_icon)
-        internal var status = itemView.findViewById<ToggleButton>(R.id.toggle_button)
+        private var status = itemView.findViewById<ToggleButton>(R.id.toggle_button)
+
+        fun onBind(app: UserApp) {
+
+            title.text = app.name
+
+            blockedList.forEach {
+                if (it == app.id)
+                    status.isChecked = true
+            }
+
+            status.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    blockedList.add(app.id)
+                } else {
+                    blockedList.remove(app.id)
+                }
+            }
+        }
     }
+
+    fun getBlockedApps(): HashSet<String> {
+        return blockedList
+    }
+
 }

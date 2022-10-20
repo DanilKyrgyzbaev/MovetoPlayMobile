@@ -1,4 +1,4 @@
-package com.movetoplay.model
+package com.movetoplay.domain.model
 
 data class Registration(
     val email: String,

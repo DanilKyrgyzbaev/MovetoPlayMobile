@@ -38,7 +38,7 @@ fun TimeUse(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "${stringResource(R.string.available_for_day)}: $remainderMinutes",
+            text = "${stringResource(R.string.available_for_day)}: $remainderMinutes мин",
             color = Color.Gray,
             fontSize = 18.sp,
             textAlign = TextAlign.Center
@@ -51,7 +51,7 @@ fun TimeUse(
             fontWeight = FontWeight.W600
         )
         Text(
-            text = availableForDayMinutes.toString(),
+            text = "$availableForDayMinutes мин",
             color = colorScheme.primary,
             fontSize = 28.sp,
             fontWeight = FontWeight.W600

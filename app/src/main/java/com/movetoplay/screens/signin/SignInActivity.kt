@@ -5,28 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.movetoplay.databinding.ActivitySignInBinding
-import com.movetoplay.model.ErrorResponse
-import com.movetoplay.model.MyCustomError
-import com.movetoplay.model.ResponseSucces
-import com.movetoplay.model.User
-import com.movetoplay.network_api.ApiService
-import com.movetoplay.network_api.RetrofitClient
+import com.movetoplay.domain.model.User
 import com.movetoplay.pref.Pref
-import com.movetoplay.presentation.vm.session_creation.SessionCreationVM
-import com.movetoplay.screens.applock.LimitationAppActivity
 import com.movetoplay.screens.create_child_profile.SetupProfileActivity
+import com.movetoplay.screens.parent.MainActivityParent
 import com.movetoplay.util.ValidationUtil
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
@@ -54,6 +40,7 @@ class SignInActivity : AppCompatActivity() {
                     password
                 )
             ) {
+                viewModel.isChild.value = binding.checkBox.isChecked
                 viewModel.sendUser(User(email, password))
             }
         }
@@ -61,10 +48,13 @@ class SignInActivity : AppCompatActivity() {
             if (it) {
                 if (Pref.userToken.isNotEmpty()) {
                     if (binding.checkBox.isChecked) {
+                        Pref.isChild = true
                         startActivity(Intent(this, SetupProfileActivity::class.java))
                     } else {
-                        startActivity(Intent(this, LimitationAppActivity::class.java))
+                        startActivity(Intent(this, MainActivityParent::class.java))
+                        Pref.isChild = false
                     }
+                    finishAffinity()
                 } else {
                     Toast.makeText(this, Pref.toast, Toast.LENGTH_SHORT).show()
                 }

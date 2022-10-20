@@ -5,15 +5,20 @@
 
     <uses-sdk tools:overrideLibrary="androidx.camera.camera2,     androidx.camera.core,     androidx.camera.view, androidx.camera.lifecycle" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera.any" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <uses-feature android:name="android.hardware.camera" />
 
+    <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
@@ -43,37 +48,40 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.MoveToPlay"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".screens.parent.MainActivityChild"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
+            android:name=".screens.parent.MainActivityParent"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".presentation.ui.splash_screen.SplashActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Design.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".screens.ChildLockActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
-
         <activity
             android:name=".screens.signin.SignInActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
-
         <activity
             android:name=".screens.create_child_profile.SetupProfileActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
-
         <activity
             android:name=".screens.SettingTimeActivity"
             android:exported="false"
@@ -123,7 +131,7 @@
         <activity
             android:name=".screens.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Design.NoActionBar"/>
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".computer_vision.ComputerVisionActivity"
             android:exported="false"
@@ -131,8 +139,7 @@
         <activity
             android:name=".screens.Auth"
             android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.Design.NoActionBar" />
 
         <service
             android:name=".screens.applock.AccessibilityService"

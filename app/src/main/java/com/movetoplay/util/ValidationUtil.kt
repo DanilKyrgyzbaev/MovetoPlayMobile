@@ -38,4 +38,23 @@ object ValidationUtil {
         }
         return false
     }
+    fun isValidAge(context: Context, age: String): Boolean {
+        when {
+            isNullOrEmpty(age) -> showToast(context, "Please enter Age first.")
+            !Pattern.matches("\\b([1-9]|[1-9][0-9]|100)\\b", age) -> showToast(context,
+                "Please enter valid age")
+            else -> return true
+        }
+        return false
+    }
+
+    fun isValidName(context: Context, name: String): Boolean {
+        when {
+            isNullOrEmpty(name) -> showToast(context, "Please enter Name first.")
+            name.length < 2 -> showToast(context,
+                "Name length should not be less than 2 characters")
+            else -> return true
+        }
+        return false
+    }
 }

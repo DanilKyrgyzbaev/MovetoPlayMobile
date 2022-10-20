@@ -104,7 +104,7 @@ class AccessibilityService : AccessibilityService() {
     }
 
     private fun getLimitedAppsPrefs(): HashSet<String> {
-        blackList = AccessibilityPrefs.limitedApps
+        blackList = AccessibilityPrefs.getLimitedAppsById(Pref.childId)
         Log.e("PrefsCome", "onAccessibilityEvent: $blackList")
         return blackList
     }

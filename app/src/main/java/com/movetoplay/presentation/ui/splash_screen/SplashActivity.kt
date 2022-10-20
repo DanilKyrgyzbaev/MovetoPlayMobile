@@ -9,6 +9,7 @@ import com.movetoplay.R
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.Auth
 import com.movetoplay.screens.MainActivity
+import com.movetoplay.screens.parent.MainActivityParent
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,11 +34,15 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkUser() {
         if (Pref.userToken.isEmpty() && Pref.childName.isEmpty() && Pref.childAge.isEmpty()) {
+            Pref.isFirst = true
             val intent = Intent(this, Auth::class.java)
             startActivity(intent)
         } else {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            Pref.isFirst = false
+            if (Pref.isChild) {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            } else startActivity(Intent(this, MainActivityParent::class.java))
         }
     }
 }

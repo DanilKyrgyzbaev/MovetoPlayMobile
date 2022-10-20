@@ -1,60 +1,116 @@
 package com.movetoplay.screens.create_child_profile
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
-import com.movetoplay.model.CreateProfile
-import com.movetoplay.model.ErrorResponse
-import com.movetoplay.model.Registration
-import com.movetoplay.network_api.ApiService
-import com.movetoplay.network_api.RetrofitClient
+import androidx.lifecycle.viewModelScope
+import com.movetoplay.data.model.DeviceBody
+import com.movetoplay.domain.model.Child
+import com.movetoplay.domain.model.Gender
+import com.movetoplay.domain.repository.AuthRepository
+import com.movetoplay.domain.repository.DeviceRepository
+import com.movetoplay.domain.repository.ProfilesRepository
+import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
-import com.movetoplay.screens.register.RegisterActivity
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.movetoplay.util.ValidationUtil.isValidAge
+import com.movetoplay.util.ValidationUtil.isValidName
+import com.movetoplay.util.getMacAddress
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SetupProfileViewModel: ViewModel() {
-    val errorHandle = MutableLiveData<String>()
-    var api: ApiService = RetrofitClient().getApi()
-    val mutableLiveData = MutableLiveData<Boolean>()
+@HiltViewModel
+class SetupProfileViewModel @Inject constructor(
+    private val profileRepository: ProfilesRepository,
+    private val authRepository: AuthRepository,
+    private val deviceRepository: DeviceRepository,
+) : ViewModel() {
 
-    fun sendProfileChild(token: String, createProfile: CreateProfile){
-        val response = api.postChildProfile(token,createProfile)
-        response.enqueue(object : Callback<CreateProfile>{
-            override fun onResponse(call: Call<CreateProfile>, response: Response<CreateProfile>) {
-                if (response.isSuccessful){
-                    response.body()?.id
-                    Pref.childId = response.body()?.id.toString()
-                    mutableLiveData.value = true
-                    Log.e("ResponseProfile",response.body().toString())
-                } else{
-                    val error = response.errorBody().toApiError<ErrorResponse>().message
-                    response.errorBody()
-                    Log.e("Response","${response.errorBody()}")
-                    errorHandle.value = error
+    val createResultStatus = MutableLiveData<ResultStatus<Child>>()
+    val getChildesResultStatus = MutableLiveData<ResultStatus<List<Child>>>()
+    val syncProfileStatus = MutableLiveData<ResultStatus<Boolean>>()
+
+    fun sendProfileChild(
+        fullName: String,
+        age: String,
+        gender: Gender,
+        isSport: Boolean,
+        cxt: Context,
+    ) {
+        if (isValidName(cxt, fullName) && isValidAge(cxt, age)) {
+            viewModelScope.launch {
+                try {
+                    createResultStatus.value = ResultStatus.Loading()
+                    createResultStatus.value =
+                        ResultStatus.Success(
+                            profileRepository.createProfileChild(
+                                Child(
+                                    fullName,
+                                    gender,
+                                    age.toInt(),
+                                    isSport
+                                )
+                            )
+                        )
+                } catch (e: Throwable) {
+                    createResultStatus.value = ResultStatus.Error(e.localizedMessage)
                 }
             }
-
-            override fun onFailure(call: Call<CreateProfile>, t: Throwable) {
-                errorHandle.postValue(t.message)
-                Log.e("onFailure","${t.message}")
-                errorHandle.value = t.message
-            }
-
-        })
+        }
     }
 
-    protected inline fun <reified ErrorType> ResponseBody?.toApiError(): ErrorType {
-        val errorJson = this?.string()
-        Log.e("retrying", "to api error body $errorJson")
-        val data = Gson().fromJson(
-            errorJson,
-            ErrorType::class.java
-        )
-        Log.e("retrying", "to api error ${Gson().toJson(data)})")
-        return data
+    fun getChildesList() {
+        viewModelScope.launch {
+            try {
+                getChildesResultStatus.value = ResultStatus.Loading()
+                getChildesResultStatus.value =
+                    ResultStatus.Success(profileRepository.getListProfileChild())
+            } catch (e: Throwable) {
+                getChildesResultStatus.value = ResultStatus.Error(e.localizedMessage)
+            }
+        }
+    }
+
+    fun syncProfile() {
+        val mac = getMacAddress()
+        val deviceName = android.os.Build.BRAND + " " + android.os.Build.MODEL
+        syncProfileStatus.value = ResultStatus.Loading()
+
+        viewModelScope.launch {
+            when (val it =
+                deviceRepository.createDevice(
+                    DeviceBody(
+                        mac,
+                        deviceName,
+                        Pref.childId
+                    )
+                )) {
+                is ResultStatus.Loading -> {}
+                is ResultStatus.Error -> {
+                    Log.e("authorize", "createDevice ERROR: " + it.error)
+                    syncProfileStatus.value = ResultStatus.Error(it.error)
+                }
+                is ResultStatus.Success -> {
+                    Log.e("authorize", "createDevice SUCCESS" + it.data)
+                    Pref.deviceId = it.data?.id.toString()
+                    when (val authorize =
+                        authRepository.authorizeProfile(Pref.childId, Pref.deviceId)) {
+                        is ResultStatus.Loading -> {}
+                        is ResultStatus.Success -> {
+                            Log.e("authorize", "authorizeUser: SUCCESS" + authorize.data)
+                            authorize.data?.token?.let {
+                                Pref.childToken = it
+                            }
+                            syncProfileStatus.value = ResultStatus.Success(true)
+                        }
+                        is ResultStatus.Error -> {
+                            Log.e("authorize", "authorizeUser ERROR: " + authorize.error)
+                            syncProfileStatus.value = ResultStatus.Error(authorize.error)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

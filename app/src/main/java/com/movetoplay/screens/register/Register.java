@@ -1,17 +1,17 @@
-package com.movetoplay.screens;
+package com.movetoplay.screens.register;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.movetoplay.R;
+import com.movetoplay.screens.create_child_profile.SetupProfileActivity;
 import com.yandex.metrica.YandexMetrica;
 import com.yandex.metrica.YandexMetricaConfig;
 
@@ -20,6 +20,7 @@ import java.util.TimerTask;
 
 public class Register extends AppCompatActivity {
 
+    private  RegisterViewModel viewModel;
     Button btn;
     EditText email, pass, age;
 
@@ -27,7 +28,7 @@ public class Register extends AppCompatActivity {
     private static final int NOTIFY_ID = 101;
 
     // Идентификатор канала
-    private static String CHANNEL_ID = "MoveToPlay";
+    private static final String CHANNEL_ID = "MoveToPlay";
 
 
     public void startTimer() {
@@ -74,26 +75,20 @@ public class Register extends AppCompatActivity {
         btn = findViewById(R.id.google);
         email = findViewById(R.id.email);
         pass = findViewById(R.id.password);
-        age = findViewById(R.id.password2);
+        age = findViewById(R.id.child_age);
+        viewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
 
-        btn.setOnClickListener(view -> {
-            //get data
-            String email_data = email.getText().toString().trim();
-            String pass_data = pass.getText().toString();
-            String age_data = age.getText().toString();
+       initListeners();
+    }
 
+    private void initListeners() {
 
-            if (email_data.isEmpty() || pass_data.isEmpty() || age_data.isEmpty()) {
-                Toast.makeText(getApplicationContext(), "Поля пусты", Toast.LENGTH_LONG).show();
-            } else {
-                //process to backend
-                startActivity(new Intent(getApplicationContext(), SetupProfileActivity.class));
-                finish();
-            }
+    }
 
-            }
-        });
+    private void goTo() {
+        startActivity(new Intent(getApplicationContext(), SetupProfileActivity.class));
+        finish();
     }
 
     class UpdateTimeTask extends TimerTask {
