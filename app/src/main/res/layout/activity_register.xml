@@ -4,33 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.Register">
+    android:background="@color/white"
+    tools:context=".screens.register.Register">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/img_sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:layout_marginBottom="23dp"
         android:src="@drawable/ic_logo"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/tv_enter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tv_enter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginBottom="29dp"
-        android:text="Вход"
+        android:text="Регистрация"
+        app:layout_constraintEnd_toEndOf="@id/img_sign_in"
         android:textColor="@color/main_value"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/email"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintStart_toStartOf="@+id/img_sign_in"
+        app:layout_constraintTop_toBottomOf="@+id/img_sign_in" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/email"
@@ -45,7 +47,7 @@
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/tv_enter"
         app:met_textColorHint="@color/main_value" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
@@ -56,51 +58,55 @@
         android:layout_marginEnd="33dp"
         android:layout_marginBottom="11dp"
         android:hint="Пароль"
-        android:inputType="textWebEmailAddress|textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/password2"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/child_age"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email"
         app:met_textColorHint="@color/main_value" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/password2"
+        android:id="@+id/child_age"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="33dp"
         android:layout_marginEnd="33dp"
         android:layout_marginBottom="10dp"
-        android:hint="@string/age_n"
+        android:hint="@string/age"
         android:inputType="date"
-        app:layout_constraintBottom_toTopOf="@+id/checkBox2"
+        app:layout_constraintBottom_toTopOf="@+id/checkBox_privacy_policy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
         app:met_textColorHint="@color/main_value" />
 
     <Button
-        android:id="@+id/google"
+        android:id="@+id/register_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="34dp"
         android:layout_marginEnd="34dp"
         android:layout_marginBottom="216dp"
+        android:textAllCaps="false"
+        android:textSize="20sp"
         android:background="@drawable/btn_bg_colored"
         android:text="Зарегистрироваться"
         android:textColor="@color/ic_launcher_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox2" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_privacy_policy" />
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/checkBox_privacy_policy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="13dp"
-        android:text="Я принимаю политику конфиденциальности"
-        app:layout_constraintBottom_toTopOf="@+id/google"
-        app:layout_constraintStart_toStartOf="@+id/password2"
-        app:layout_constraintTop_toBottomOf="@+id/password2" />
+        android:buttonTint="@color/main_value"
+        android:text="@string/string_privacy_policy"
+        android:textColor="#21A8F4"
+        app:layout_constraintBottom_toTopOf="@+id/register_button"
+        app:layout_constraintStart_toStartOf="@+id/child_age"
+        app:layout_constraintTop_toBottomOf="@+id/child_age" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

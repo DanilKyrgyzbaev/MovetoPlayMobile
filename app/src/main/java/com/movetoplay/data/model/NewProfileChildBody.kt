@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class NewProfileChildBody(
     val fullName: String,
     val age: Int,
-    val sex: String
+    val sex: String,
+    val isEnjoySport: Boolean
 )

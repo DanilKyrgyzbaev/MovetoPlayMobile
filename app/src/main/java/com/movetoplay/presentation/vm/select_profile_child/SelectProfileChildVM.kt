@@ -26,7 +26,7 @@ class SelectProfileChildVM @Inject constructor(
     private val _isSelectedProfileChild = mutableStateOf(false)
     val isSelectedProfileChild : State<Boolean> get() = _isSelectedProfileChild
     val state: State<StateSelectProfileChild?> get() = _state
-    val listNameChild get() = listChild.map { it.name }
+    val listNameChild get() = listChild.map { it.fullName }
 
     init {
         viewModelScope.async(Dispatchers.IO) {
@@ -41,7 +41,7 @@ class SelectProfileChildVM @Inject constructor(
                     )
                 } ?: StateSelectProfileChild(
                     isEdit = true,
-                    child = Child(name = "", gender = Gender.MAN, age = 0),
+                    child = Child(fullName = "", sex = Gender.MAN, age = 0),
                     index = -1
                 )
             }
@@ -60,7 +60,7 @@ class SelectProfileChildVM @Inject constructor(
             EventSelectProfileChild.AddNewProfileChild ->{
                 _state.value = StateSelectProfileChild(
                     isEdit = true,
-                    child = Child(name = "", gender = Gender.MAN, age = 0),
+                    child = Child(fullName = "", sex = Gender.MAN, age = 0),
                     index = -1
                 )
             }

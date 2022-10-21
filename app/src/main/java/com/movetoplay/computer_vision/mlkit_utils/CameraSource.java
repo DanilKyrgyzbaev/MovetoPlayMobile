@@ -39,7 +39,7 @@ public class CameraSource {
 
     private static final String TAG = "MIDemoApp:CameraSource";
 
-    /**
+    /**a
      * The dummy surface texture must be assigned a chosen name. Since we never use an OpenGL context,
      * we can choose any ID we want here. The dummy surface texture is not a crazy hack - it is
      * actually how the camera team recommends using the camera without a preview.
@@ -56,7 +56,7 @@ public class CameraSource {
 
     private Camera camera;
 
-    private int facing = CAMERA_FACING_BACK;
+    private int facing = CAMERA_FACING_FRONT;
 
     /** Rotation of the device, and thus the associated preview images captured from the device. */
     private int rotationDegrees;

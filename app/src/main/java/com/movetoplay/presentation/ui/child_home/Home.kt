@@ -10,19 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import com.movetoplay.computer_vision.ComputerVisionActivity
 import com.movetoplay.domain.model.TypeExercise
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
-import io.ktor.client.engine.*
-import kotlin.coroutines.coroutineContext
 
 @Composable
 fun Home(
     viewModel: ProfileChildVM,
-    openCameraForExercise: (TypeExercise)->Unit
+    openCameraForExercise: (TypeExercise) -> Unit
 ) {
-    val sizeButtonAndIndicators= DpSize(300.dp, 40.dp)
+    val sizeButtonAndIndicators = DpSize(300.dp, 40.dp)
     val stateScroll = rememberScrollState()
     var visibleDialog by remember {
         mutableStateOf(false)
@@ -44,13 +41,12 @@ fun Home(
         Spacer(modifier = Modifier.height(20.dp))
         ExercisesPerformedOnDay(
             sizeButtonAndIndicators,
-            listExercise = viewModel.listExerciseForDay,
-            performExercise = {visibleDialog = true}
-        )
+            listExercise = viewModel.listExerciseForDay
+        ) { visibleDialog = true }
     }
-    if(visibleDialog){
+    if (visibleDialog) {
         SelectExercise(
-            onDismiss = {visibleDialog = false},
+            onDismiss = { visibleDialog = false },
             chose = {
 //                openCameraForExercise(it)
                 context.startActivity(Intent(context, ComputerVisionActivity::class.java))

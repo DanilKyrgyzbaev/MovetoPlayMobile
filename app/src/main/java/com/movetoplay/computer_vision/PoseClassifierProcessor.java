@@ -1,11 +1,16 @@
 package com.movetoplay.computer_vision;
 
 
+import static androidx.camera.core.impl.utils.ContextUtil.getApplicationContext;
+
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
+
 import androidx.annotation.WorkerThread;
 
 import com.movetoplay.computer_vision.mlkit_utils.ClassificationResult;
@@ -15,6 +20,10 @@ import com.movetoplay.computer_vision.mlkit_utils.PoseSample;
 import com.movetoplay.computer_vision.mlkit_utils.RepetitionCounter;
 import com.google.android.gms.common.internal.Preconditions;
 import com.google.mlkit.vision.pose.Pose;
+import com.movetoplay.db.UserDao;
+import com.movetoplay.db.UserDatabase;
+import com.movetoplay.db.UserEntity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +32,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class PoseClassifierProcessor {
+
+
+    int int_final = 0;
+
     private static final String TAG = "PoseClassifierProcessor";
     private static final String POSE_SAMPLES_FILE = "pose/opt.csv";
 
@@ -110,8 +123,17 @@ public class PoseClassifierProcessor {
                     // Play a fun beep when rep counter updates.
                     ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
                     tg.startTone(ToneGenerator.TONE_PROP_BEEP);
-                    lastRepResult = String.format(
-                            Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
+                    lastRepResult = String.format(Locale.US,"%s : %d reps", repCounter.getClassName(), repsAfter);
+                    Log.e("Result",lastRepResult);
+//                    lastRepResult = String.format(
+//
+//                            Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
+
+
+                    UserEntity userEntity = new UserEntity();
+                    userEntity.setPos(String.valueOf(int_final + 1));
+
+
                     break;
                 }
             }

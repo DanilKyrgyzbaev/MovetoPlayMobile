@@ -1,50 +1,40 @@
 package com.movetoplay.data.repository
 
-import android.util.Log
-import com.movetoplay.data.model.AuthBody
-import com.movetoplay.data.model.NewProfileChildBody
 import com.movetoplay.domain.model.Child
 import com.movetoplay.domain.repository.ProfileRepository
 import com.movetoplay.domain.repository.ProfilesRepository
-import com.movetoplay.domain.utils.RequestStatus
-import com.movetoplay.domain.utils.StateProblems
+import com.movetoplay.domain.model.CreateProfile
+import com.movetoplay.network_api.ApiService
+import com.movetoplay.pref.Pref
 import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class ProfilesRepositoryImpl(
     private val client: HttpClient,
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val api: ApiService
 ) : ProfilesRepository {
     override suspend fun getListProfileChild(): List<Child> {
-        val response = client.get("/profiles/getList"){
-            headers {
-                header(HttpHeaders.Authorization, "Bearer " +profileRepository.token)
-            }
-        }
-        return when(response.status){
-            HttpStatusCode.OK -> response.body()
-            HttpStatusCode.Unauthorized -> throw StateProblems.NeedRestoreSession
-            else -> throw StateProblems.Contingency
+        return try {
+            val res = api.getChildes("Bearer ${Pref.userToken}")
+
+            if (res.isSuccessful) res.body()!!
+            else throw Throwable(res.message())
+        } catch (e: Throwable) {
+            throw Throwable(e.localizedMessage)
         }
     }
 
     override suspend fun createProfileChild(child: Child): Child {
-        val response = client.post("/profiles/create"){
-            contentType(ContentType.Application.Json)
-            setBody(child.run { NewProfileChildBody(name,age,gender.name) })
-            headers {
-                header(HttpHeaders.Authorization,"Bearer " +profileRepository.token)
-            }
-        }
-        return when(response.status){
-            HttpStatusCode.OK -> response.body()
-            HttpStatusCode.Unauthorized -> throw StateProblems.NeedRestoreSession
-            else -> throw StateProblems.Contingency
+        return try {
+            val res = api.postChildProfile(
+                "Bearer ${Pref.userToken}", CreateProfile(
+                    child.fullName, child.age, child.sex, child.isEngagedSports
+                )
+            )
+            if (res.isSuccessful) res.body()!!
+            else throw Throwable(res.message())
+        } catch (e: Throwable) {
+            throw Throwable(e.localizedMessage)
         }
     }
 
