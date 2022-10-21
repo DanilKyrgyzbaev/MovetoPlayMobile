@@ -24,7 +24,7 @@ fun SelectExercise(
     onDismiss: () -> Unit,
     chose: (TypeExercise) -> Unit,
     sizeButton: DpSize,
-    listExercise: List<TypeExercise>,
+    listExercise: List<TypeExercise>
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Column(
@@ -42,17 +42,91 @@ fun SelectExercise(
                 fontWeight = FontWeight.W600
             )
             Spacer(modifier = Modifier.height(26.dp))
-            for (type in listExercise){
-                Button(
-                    label = when(type){
-                        TypeExercise.StarJump -> stringResource(R.string.jumps)
-                        TypeExercise.Squats -> stringResource(R.string.squats)
-                        TypeExercise.Pushups -> stringResource(R.string.pushups)
-                    },
-                    onClick = {chose(type)},
-                    size = sizeButton
-                )
-                Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
+                    .padding(4.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(120.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.jumps),
+                        Modifier.padding(5.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Left,
+                        fontWeight = FontWeight.W600
+                    )
+                }
+
+                Box(modifier = Modifier.height(50.dp).width(90.dp)) {
+                    Button(
+                        label = "Начать",
+                        onClick = { chose(TypeExercise.StarJump) },
+                        size = sizeButton
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
+                    .padding(4.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(120.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.squats),
+                        Modifier.padding(5.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Left,
+                        fontWeight = FontWeight.W600
+                    )
+                }
+                Box(modifier = Modifier.height(50.dp).width(90.dp)) {
+                    Button(
+                        label = "Начать",
+                        onClick = { chose(TypeExercise.Squats) },
+                        size = sizeButton
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
+                    .padding(4.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(45.dp)
+                        .width(120.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.pushups),
+                        Modifier.padding(5.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 19.sp,
+                        textAlign = TextAlign.Left,
+                        fontWeight = FontWeight.W600
+                    )
+                }
+                Box(modifier = Modifier.height(50.dp).width(90.dp)) {
+                    Button(
+                        label = "Начать",
+                        onClick = { chose(TypeExercise.Pushups) },
+                        size = sizeButton
+                    )
+                }
             }
         }
     }

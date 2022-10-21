@@ -4,14 +4,17 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "info")
+@Entity(tableName = "users")
 public class UserEntity {
 
     @PrimaryKey(autoGenerate = true)
     Integer id;
 
-    @ColumnInfo(name = "time")
-    String time;
+    @ColumnInfo(name = "userId")
+    String userId;
+
+    @ColumnInfo(name = "pos")
+    String pos;
 
 
     public Integer getId() {
@@ -22,13 +25,19 @@ public class UserEntity {
         this.id = id;
     }
 
-
-    public String getTime() {
-        return time;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
+    public String getPos() {
+        return pos;
+    }
+
+    public void setPos(String pos) {
+        this.pos = pos;
+    }
 }

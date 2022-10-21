@@ -37,10 +37,10 @@ fun CreatingProfileChild(
         stringResource(R.string.female),
     )
     var name by remember {
-       mutableStateOf(child.name)
+       mutableStateOf(child.fullName)
     }
     var gender by remember {
-        mutableStateOf(child.gender)
+        mutableStateOf(child.sex)
     }
     var age by remember {
         mutableStateOf(child.age)
@@ -52,7 +52,7 @@ fun CreatingProfileChild(
         text = name ,
         onValueChange = {
             name = it
-            child.name = name
+            child.fullName = name
         },
         label = stringResource(R.string.child_name),
         size = sizeWidgets,
@@ -62,7 +62,7 @@ fun CreatingProfileChild(
         currentItem = gender.ordinal,
         onItemChange ={
             gender = Gender.values()[it]
-            child.gender = gender
+            child.sex = gender
         } ,
         listItem = genders,
         size = sizeWidgets

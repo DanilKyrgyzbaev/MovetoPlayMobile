@@ -44,7 +44,7 @@ public class BitmapUtils {
             stream.close();
             return rotateBitmap(bmp, metadata.getRotation(), false, false);
         } catch (Exception e) {
-            Log.e("VisionProcessorBase", "Error: " + e.getMessage());
+            Log.e("V+isionProcessorBase", "Error: " + e.getMessage());
         }
         return null;
     }

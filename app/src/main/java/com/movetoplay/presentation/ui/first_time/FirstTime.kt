@@ -1,5 +1,6 @@
 package com.movetoplay.presentation.ui.first_time
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -19,7 +20,7 @@ import com.movetoplay.R
 import com.movetoplay.presentation.ui.component_widgets.Button
 import com.movetoplay.presentation.ui.component_widgets.TypeButton
 
-
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun FirstTime(
     signUp : ()-> Unit,

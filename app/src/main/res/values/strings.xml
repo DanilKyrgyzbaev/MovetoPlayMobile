@@ -10,6 +10,7 @@
     <string name="repeat_password">Повторение пароля</string>
     <string name="sing_up">Зарегистрироваться</string>
     <string name="i_accept">Я принимаю</string>
+    <string name="required">Required</string>
     <string name="privacy_policy">политику конфиденциальности</string>
     <string name="child_phone">Устройство ребенка</string>
     <string name="log_in">Вход</string>
@@ -38,6 +39,7 @@
     <string name="such_user_is_registered">Такой пользователь зарегистрирован</string>
     <string name="choose_child_profile">Выберите профиль ребенка</string>
     <string name="create_new">Создать новый</string>
+    <string name="import_old">Импортировать старый</string>
     <string name="child_name">Имя ребенка</string>
     <string name="male">Мужской</string>
     <string name="female">Женский</string>
@@ -197,4 +199,46 @@
     <string name="pref_title_segmentation_raw_size_mask" translatable="false">Enable raw size mask</string>
     <string name="pref_key_segmentation_raw_size_mask" translatable="false">srsm</string>
     <string name="age_n">Возраст ребенка</string>
+    <string name="btn_stop">Остановить</string>
+    <string name="select_limitation_apps">Нажмите,чтобы выбрать какие приложения хотите ограничить своему ребенку</string>
+    <string name="setup_profile_title">Выберите профиль ребенка</string>
+    <string name="setup_profile_name">Имя ребенка</string>
+    <string name="setup_profile_age">Возраст</string>
+    <string name="setup_profile_check_sport">Занимается ли ребенок \nспортом?</string>
+    <string name="setup_profile_continue">Продолжить</string>
+    <string name="select_gender">Выберите пол</string>
+    <string name="enter">Вход</string>
+    <string name="child_device">Устройство ребенка</string>
+    <string name="enter_now">Войти</string>
+    <string name="todo">TODO</string>
+
+    <string-array name="StatusArr">
+        <item>Создать новый</item>
+        <item>Импортировать старый</item>
+    </string-array>
+
+    <string-array name="GenderArr">
+        <item>Мужской</item>
+        <item>Женский</item>
+    </string-array>
+
+    <string name="accessibility_description">
+        Enable Real Optimizer to:\n
+        1. Boost device and cool the phone down\n
+        2. Stop battery draining apps\n
+        3. Completely clean system cache\n
+        \n
+        We solemnly promise:\n
+        Real Optimizer NEVER collects any privacy information.\n
+        \n
+        Please note that:\n
+        There is a standart confirmation procedure when enabling Accessibility Service on all Android device. If you receive these privacy warnings, just ignore them please.
+    </string>
+    <string name="what_apps_block">Какие приложения хотите ограничить?</string>
+    <string name="daily_limit">Дневной лимит</string>
+    <string name="finish">Завершить</string>
+    <string name="title_activity_splash_screen">SplashScreen</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="string_privacy_policy">Я принимаю политику конфиденциальности</string>
 </resources>
