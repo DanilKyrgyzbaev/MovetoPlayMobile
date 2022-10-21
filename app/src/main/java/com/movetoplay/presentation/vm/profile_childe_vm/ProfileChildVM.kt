@@ -10,21 +10,15 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileChildVM @Inject constructor(
-
-) : ViewModel(){
+class ProfileChildVM @Inject constructor() : ViewModel() {
     private val _availableForDay = mutableStateOf(45)
     val availableForDay: State<Int> get() = _availableForDay
     val flowRemainingTime = flow<Int> {
         emit(25)
     }
     private val _listExerciseForDay = mutableStateListOf<Exercise>()
-    val listExerciseForDay : List<Exercise> get()= _listExerciseForDay
+    val listExerciseForDay: List<Exercise> get() = _listExerciseForDay
 
     private val _listExerciseRemainingTime = mutableStateListOf<Exercise>()
-    val listExerciseFRemainingTime : List<Exercise> get()= _listExerciseRemainingTime
-
-
-
-
+    val listExerciseFRemainingTime: List<Exercise> get() = _listExerciseRemainingTime
 }

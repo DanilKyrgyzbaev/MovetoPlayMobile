@@ -14,14 +14,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val userAppsRepository: UserAppsRepository,
+    private val userAppsRepository: UserAppsRepository
 ) : ViewModel() {
 
     fun syncApps(context: Context) {
-        if (Pref.childToken!="" && Pref.isFirst) {
+        if (Pref.childToken != "" && Pref.isFirst) {
             viewModelScope.launch {
                 userAppsRepository.postLimitedApps(Pref.childToken, getApps(context))
                     .collect { result ->

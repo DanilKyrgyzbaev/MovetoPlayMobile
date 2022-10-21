@@ -1,6 +1,5 @@
 package com.movetoplay.presentation.vm.select_profile_child
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -12,26 +11,25 @@ import com.movetoplay.domain.use_case.select_profile_child.SelectProfileChildUse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectProfileChildVM @Inject constructor(
-    private val selectProfileChildUseCase : SelectProfileChildUseCase
-) : ViewModel(){
+    private val selectProfileChildUseCase: SelectProfileChildUseCase
+) : ViewModel() {
 
     private val listChild = mutableListOf<Child>()
     private val _state: MutableState<StateSelectProfileChild?> = mutableStateOf(null)
     private val _isSelectedProfileChild = mutableStateOf(false)
-    val isSelectedProfileChild : State<Boolean> get() = _isSelectedProfileChild
+    val isSelectedProfileChild: State<Boolean> get() = _isSelectedProfileChild
     val state: State<StateSelectProfileChild?> get() = _state
     val listNameChild get() = listChild.map { it.fullName }
 
     init {
         viewModelScope.async(Dispatchers.IO) {
             val answer = selectProfileChildUseCase.getListChild()
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 listChild.addAll(answer)
                 _state.value = listChild.getOrNull(0)?.let {
                     StateSelectProfileChild(
@@ -48,16 +46,16 @@ class SelectProfileChildVM @Inject constructor(
         }.start()
     }
 
-    fun onEvent(event: EventSelectProfileChild){
-        when(event){
-            is EventSelectProfileChild.SelectProfileChild ->{
+    fun onEvent(event: EventSelectProfileChild) {
+        when (event) {
+            is EventSelectProfileChild.SelectProfileChild -> {
                 _state.value = StateSelectProfileChild(
                     isEdit = false,
                     child = listChild[event.index],
                     index = event.index
                 )
             }
-            EventSelectProfileChild.AddNewProfileChild ->{
+            EventSelectProfileChild.AddNewProfileChild -> {
                 _state.value = StateSelectProfileChild(
                     isEdit = true,
                     child = Child(fullName = "", sex = Gender.MAN, age = 0),
@@ -65,9 +63,9 @@ class SelectProfileChildVM @Inject constructor(
                 )
             }
             EventSelectProfileChild.ProfileSelected -> {
-                viewModelScope.async(Dispatchers.IO){
+                viewModelScope.async(Dispatchers.IO) {
                     selectProfileChildUseCase.saveProfileChild(_state.value!!.child)
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         _isSelectedProfileChild.value = true
                     }
                 }.start()

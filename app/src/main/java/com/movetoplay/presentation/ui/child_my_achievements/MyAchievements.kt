@@ -25,7 +25,8 @@ import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 
 @Composable
 fun MyAchievements(
-    viewModel: ProfileChildVM) {
+    viewModel: ProfileChildVM
+) {
     val sizeButtonAndIndicators = DpSize(300.dp, 40.dp)
     Column(
         modifier = Modifier
@@ -62,22 +63,22 @@ fun MyAchievements(
                 .fillMaxWidth(0.9f)
                 .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(10.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
-
+        ) {
             Spacer(modifier = Modifier.height(22.dp))
 
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center){
-
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Box(
                     modifier = Modifier
                         .width(80.dp)
                         .height(151.dp)
-                ){
+                ) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         Image(
                             painter = painterResource(R.drawable.ic_medal_outline),
-                            contentDescription = null,
+                            contentDescription = null
                         )
                         Spacer(modifier = Modifier.height(12.dp))
 
@@ -93,14 +94,15 @@ fun MyAchievements(
                 Spacer(modifier = Modifier.width(12.dp))
                 Box(
                     modifier = Modifier
-                    .width(80.dp)
-                    .height(151.dp)){
-
+                        .width(80.dp)
+                        .height(151.dp)
+                ) {
                     Column(
-                        modifier = Modifier.fillMaxWidth()) {
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Image(
                             painter = painterResource(R.drawable.ic_license),
-                            contentDescription = null,
+                            contentDescription = null
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(

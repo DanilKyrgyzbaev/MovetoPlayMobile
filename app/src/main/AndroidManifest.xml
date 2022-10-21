@@ -78,6 +78,21 @@
             android:name=".screens.signin.SignInActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
+
+        <activity
+            android:name=".screens.forgot_password.ForgotPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+
+        <activity
+            android:name=".screens.forgot_password.GetSmsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+
+        <activity
+            android:name=".screens.forgot_password.NewPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".screens.create_child_profile.SetupProfileActivity"
             android:exported="false"

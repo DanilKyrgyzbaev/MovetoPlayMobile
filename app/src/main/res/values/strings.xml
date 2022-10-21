@@ -241,4 +241,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="string_privacy_policy">Я принимаю политику конфиденциальности</string>
+    <string name="description_password">* Введите эл. почту к который был привязан Ваш аккаунт, на неё прийдёт письмо с кодом подтверждения</string>
+    <string name="string_getsms">* На указанную почту было отправлено письмо с кодом подтверждения, введите его, чтобы продолжить</string>
+
 </resources>

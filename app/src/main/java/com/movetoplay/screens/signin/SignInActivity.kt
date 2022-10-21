@@ -10,9 +10,9 @@ import com.movetoplay.databinding.ActivitySignInBinding
 import com.movetoplay.domain.model.User
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.create_child_profile.SetupProfileActivity
+import com.movetoplay.screens.forgot_password.ForgotPasswordActivity
 import com.movetoplay.screens.parent.MainActivityParent
 import com.movetoplay.util.ValidationUtil
-
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignInBinding
@@ -24,7 +24,12 @@ class SignInActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
         initListeners()
+
+        binding.tvForgotPassword.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+        }
     }
+
     override fun onBackPressed() {
         finish()
         super.onBackPressed()
