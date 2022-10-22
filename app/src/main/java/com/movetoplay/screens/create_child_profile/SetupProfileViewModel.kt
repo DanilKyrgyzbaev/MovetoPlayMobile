@@ -16,6 +16,7 @@ import com.movetoplay.pref.Pref
 import com.movetoplay.util.ValidationUtil.isValidAge
 import com.movetoplay.util.ValidationUtil.isValidName
 import com.movetoplay.util.getMacAddress
+import com.movetoplay.util.isValidDeviceName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -74,7 +75,8 @@ class SetupProfileViewModel @Inject constructor(
 
     fun syncProfile() {
         val mac = getMacAddress()
-        val deviceName = android.os.Build.BRAND + " " + android.os.Build.MODEL
+        val deviceName = android.os.Build.BRAND + " "+ android.os.Build.MODEL
+
         syncProfileStatus.value = ResultStatus.Loading()
 
         viewModelScope.launch {
@@ -82,7 +84,7 @@ class SetupProfileViewModel @Inject constructor(
                 deviceRepository.createDevice(
                     DeviceBody(
                         mac,
-                        deviceName,
+                        deviceName.isValidDeviceName(),
                         Pref.childId
                     )
                 )) {

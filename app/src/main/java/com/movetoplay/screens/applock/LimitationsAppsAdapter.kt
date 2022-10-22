@@ -8,22 +8,21 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
 import com.movetoplay.domain.model.user_apps.UserApp
-import com.movetoplay.pref.AccessibilityPrefs
-import com.movetoplay.pref.Pref
 
 class LimitationsAppsAdapter(
-    private val list: ArrayList<UserApp>,
-    private val listener: (UserApp) -> Unit
+    private val list: ArrayList<UserApp>
 ) :
     RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
 
-    private val blockedList = HashSet<String>()
+    private val blockedList = HashMap<String, String>()
 
     init {
         list.forEach {
             if (it.type == "unlimited")
-                blockedList.add(it.id)
+                blockedList[it.id] = (it.type)
         }
+
+        Log.e("adapter", "block apps: $blockedList")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,7 +32,7 @@ class LimitationsAppsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.e("limit", "onBindViewHolder: ${list[position]}")
+        // Log.e("limit", "onBindViewHolder: ${list[position]}")
         holder.onBind(list[position])
     }
 
@@ -50,22 +49,23 @@ class LimitationsAppsAdapter(
 
             title.text = app.name
 
-            blockedList.forEach {
-                if (it == app.id)
+            if (blockedList[app.id]?.isNotEmpty() == true) {
+                if (blockedList[app.id].equals("unlimited"))
                     status.isChecked = true
             }
 
             status.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    blockedList.add(app.id)
+                    blockedList[app.id] = "unlimited"
                 } else {
-                    blockedList.remove(app.id)
+                    blockedList[app.id] = "limited"
                 }
             }
         }
     }
 
-    fun getBlockedApps(): HashSet<String> {
+    fun getBlockedApps(): HashMap<String, String> {
+        Log.e("adapter", "block apps: $blockedList")
         return blockedList
     }
 
