@@ -13,7 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.movetoplay.databinding.ActivityLimitationAppBinding
 import com.movetoplay.domain.model.Child
 import com.movetoplay.domain.model.user_apps.UserApp
-import com.movetoplay.pref.Pref
 
 @AndroidEntryPoint
 class LimitationAppActivity : AppCompatActivity() {
@@ -103,12 +102,8 @@ class LimitationAppActivity : AppCompatActivity() {
     }
 
     private fun setData(userApps: ArrayList<UserApp>) {
-        adapter = LimitationsAppsAdapter(userApps, this::onItemClick)
+        adapter = LimitationsAppsAdapter(userApps)
         binding.rvLimitations.adapter = adapter
-    }
-
-    private fun onItemClick(app: UserApp) {
-        //vm.setLimit(app)
     }
 
     private fun saveBeforeFinish() {
@@ -117,7 +112,7 @@ class LimitationAppActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        finish()
+        saveBeforeFinish()
     }
 
     private fun goTo() {

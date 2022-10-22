@@ -142,7 +142,7 @@
             android:theme="@style/Theme.Design.NoActionBar" />
 
         <service
-            android:name=".screens.applock.AccessibilityService"
+            android:name=".screens.applock.AccessibilityServiceVersion2"
             android:exported="true"
             android:label="AccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">

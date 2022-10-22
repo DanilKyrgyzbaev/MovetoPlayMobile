@@ -58,63 +58,14 @@ class LimitationAppViewModel @Inject constructor(
         }
     }
 
-    fun setLimit(app: UserApp) {
-        viewModelScope.launch {
-            if (Pref.childToken == "") {
-                when (val res = authRepository.authorizeProfile(app.profileId, app.deviceId)) {
-                    is ResultStatus.Error -> {
-                        authorizeResult.value = false
-                    }
-                    is ResultStatus.Success -> {
-                        Pref.childToken = res.data?.token.toString()
-                        repository.setLimitedApp(
-                            app.id,
-                            Limited(AccessibilityPrefs.dailyLimit, app.type)
-                        ).collect {
-//                            when (it) {
-//                                is ResultStatus.Success -> {
-//                                    loading.value = ResultStatus.Success(true)
-//                                }
-//                                is ResultStatus.Error -> {
-//                                    loading.value = ResultStatus.Error(it.error)
-//                                }
-//                                is ResultStatus.Loading -> {
-//                                    loading.value = ResultStatus.Loading()
-//                                }
-//                            }
-                        }
-                    }
-                    else -> {}
-                }
-            } else {
-                repository.setLimitedApp(
-                    app.id,
-                    Limited(AccessibilityPrefs.dailyLimit, app.type)
-                ).collect {
-//                    when (it) {
-//                        is ResultStatus.Success -> {
-//                            loading.value = ResultStatus.Success(true)
-//                        }
-//                        is ResultStatus.Error -> {
-//                            loading.value = ResultStatus.Error(it.error)
-//                        }
-//                        is ResultStatus.Loading -> {
-//                            loading.value = ResultStatus.Loading()
-//                        }
-//                    }
-                }
-            }
-        }
-    }
-
-    fun setLimits(blockedApps: HashSet<String>) {
+    fun setLimits(blockedApps: HashMap<String, String>) {
         viewModelScope.launch {
             loading.value = ResultStatus.Loading()
             if (Pref.childToken != "") {
                 blockedApps.forEach { id ->
                     repository.setLimitedApp(
-                        id,
-                        Limited(AccessibilityPrefs.dailyLimit, "unlimited")
+                        id.key,
+                        Limited(AccessibilityPrefs.dailyLimit, id.value)
                     ).collect {
                         if (it is ResultStatus.Error)
                             loading.value = ResultStatus.Error(it.error)

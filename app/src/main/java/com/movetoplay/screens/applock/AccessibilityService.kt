@@ -66,10 +66,10 @@ class AccessibilityService : AccessibilityService() {
     }
 
     private fun checkDay() {
-        val diff = AccessibilityPrefs.currentDay - System.currentTimeMillis()
+        val diff = AccessibilityPrefs.currentDay - getTimeMillis()
         if (TimeUnit.MILLISECONDS.toDays(diff) < 0) {
             Log.e("TAG", "checkDay: DNI OTLICHAYUTSYA : " + TimeUnit.MILLISECONDS.toDays(diff))
-            AccessibilityPrefs.currentDay = System.currentTimeMillis()
+            AccessibilityPrefs.currentDay = getTimeMillis()
             AccessibilityPrefs.remainingTime = AccessibilityPrefs.dailyLimit
         } else Log.e(
             "TAG",
