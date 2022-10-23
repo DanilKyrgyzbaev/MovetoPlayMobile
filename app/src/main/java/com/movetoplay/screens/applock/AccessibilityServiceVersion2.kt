@@ -52,7 +52,7 @@ class AccessibilityServiceVersion2 : AccessibilityService() {
 
     private fun getUserApps() {
         serviceScope.launch {
-            apiRepository.getLimitedApps(Pref.userToken, Pref.childId).collect {
+            apiRepository.getLimitedApps(Pref.accessToken, Pref.childId).collect {
                 if (it is ResultStatus.Success) {
                     if (it.data?.isNotEmpty() == true) {
                         it.data.forEach {app->

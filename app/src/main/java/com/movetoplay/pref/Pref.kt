@@ -58,9 +58,13 @@ object Pref {
         get() = sharedPreferences.getString("id", "").toString()
         set(value) = sharedPreferences.edit().putString("id", value).apply()
 
-    var userToken: String
-        get() = sharedPreferences.getString("userToken", "").toString()
-        set(value) = sharedPreferences.edit().putString("userToken", value).apply()
+    var accessToken: String
+        get() = sharedPreferences.getString("accessToken", "").toString()
+        set(value) = sharedPreferences.edit().putString("accessToken", value).apply()
+
+    var refreshToken: String
+        get() = sharedPreferences.getString("refreshToken", "").toString()
+        set(value) = sharedPreferences.edit().putString("refreshToken", value).apply()
 
     var childToken: String
         get() = sharedPreferences.getString("childToken", "").toString()

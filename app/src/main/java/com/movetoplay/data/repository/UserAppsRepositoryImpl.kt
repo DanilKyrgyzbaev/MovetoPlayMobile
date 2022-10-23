@@ -47,7 +47,7 @@ class UserAppsRepositoryImpl @Inject constructor(private val client: ApiService)
                 emit(ResultStatus.Loading())
 
                 withTimeout(NETWORK_TIMEOUT) {
-                    val response = client.getUserApps("Bearer ${Pref.userToken}", id)
+                    val response = client.getUserApps("Bearer ${Pref.accessToken}", id)
                     if (response.isSuccessful) emit(ResultStatus.Success(data = response.body()))
                     else emit(ResultStatus.Error(response.message()))
                 }

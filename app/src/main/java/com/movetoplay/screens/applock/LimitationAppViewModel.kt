@@ -28,7 +28,7 @@ class LimitationAppViewModel @Inject constructor(
 
     fun getLimited(id: String) {
         viewModelScope.launch {
-            repository.getLimitedApps(Pref.userToken, id).collect { appsResponse ->
+            repository.getLimitedApps(Pref.accessToken, id).collect { appsResponse ->
                 when (appsResponse) {
                     is ResultStatus.Loading -> {
                         userApps.value = ResultStatus.Loading()

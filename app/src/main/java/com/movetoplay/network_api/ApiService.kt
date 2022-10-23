@@ -7,13 +7,14 @@ import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.*
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.model.AccountsConfirm
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
 
-    //-------------- Auth ----------------------//
+    // -------------- Auth ----------------------//
     @POST("/auth/login")
     fun postUser(@Body user: User): Call<User>
 
@@ -23,13 +24,19 @@ interface ApiService {
     @POST("/auth/registration")
     fun postUserRegister(@Body registration: Registration): Call<Registration>
 
+    @PATCH("/accounts/confirm")
+    fun confirmAccounts(
+        @Header("Authorization") token: String,
+        @Body confirm: AccountsConfirm
+    ): Call<AccountsConfirm>
+
     @POST("/auth/authorizeProfile")
     suspend fun authorizeProfile(
         @Header("Authorization") token: String,
         @Body authorize: AuthorizeProfileBody
     ): Response<TokenResponse>
 
-    //-------------- Profiles ----------------------//
+    // -------------- Profiles ----------------------//
 
     @POST("/profiles/create")
     suspend fun postChildProfile(
@@ -39,37 +46,37 @@ interface ApiService {
 
     @GET("/profiles/getList")
     suspend fun getChildes(
-        @Header("Authorization") token: String,
+        @Header("Authorization") token: String
     ): Response<List<Child>>
 
-    //-------------- Account ----------------------//
+    // -------------- Account ----------------------//
 
     @GET("/accounts/getInfo")
     suspend fun geInfo(
         @Header("Authorization") token: String
     ): Response<Parent>
 
-    //-------------- Apps ----------------------//
+    // -------------- Apps ----------------------//
     @POST("/apps/sync")
     suspend fun postUserApps(
         @Header("Authorization") token: String,
-        @Body apps: UserAppsBody,
+        @Body apps: UserAppsBody
     ): Response<ErrorBody>
 
     @GET("/apps/getList")
     suspend fun getUserApps(
         @Header("Authorization") token: String,
-        @Query("profileId") id: String,
+        @Query("profileId") id: String
     ): Response<List<UserApp>>
 
     @PATCH("/apps/setLimit")
     suspend fun onLimit(
         @Header("Authorization") token: String,
         @Query("id") id: String,
-        @Body limited: Limited,
+        @Body limited: Limited
     ): Response<Limited>
 
-    //-------------- Device ----------------------//
+    // -------------- Device ----------------------//
 
     @POST("/devices/create")
     suspend fun createDevice(

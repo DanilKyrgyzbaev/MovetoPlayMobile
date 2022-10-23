@@ -12,12 +12,13 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <uses-feature android:name="android.hardware.camera" />
 
-    <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS"
+    <uses-permission
+        android:name="android.permission.LOCAL_MAC_ADDRESS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -52,6 +53,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".screens.confirm_accounts.ConfirmAccountsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar"/>
+        <activity
             android:name=".screens.parent.MainActivityChild"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
@@ -78,17 +83,14 @@
             android:name=".screens.signin.SignInActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
-
         <activity
             android:name=".screens.forgot_password.ForgotPasswordActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
-
         <activity
             android:name=".screens.forgot_password.GetSmsActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
-
         <activity
             android:name=".screens.forgot_password.NewPasswordActivity"
             android:exported="false"

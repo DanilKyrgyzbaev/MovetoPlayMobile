@@ -15,7 +15,7 @@ class ProfilesRepositoryImpl(
 ) : ProfilesRepository {
     override suspend fun getListProfileChild(): List<Child> {
         return try {
-            val res = api.getChildes("Bearer ${Pref.userToken}")
+            val res = api.getChildes("Bearer ${Pref.accessToken}")
 
             if (res.isSuccessful) res.body()!!
             else throw Throwable(res.message())
@@ -27,7 +27,7 @@ class ProfilesRepositoryImpl(
     override suspend fun createProfileChild(child: Child): Child {
         return try {
             val res = api.postChildProfile(
-                "Bearer ${Pref.userToken}", CreateProfile(
+                "Bearer ${Pref.accessToken}", CreateProfile(
                     child.fullName, child.age, child.sex, child.isEngagedSports
                 )
             )

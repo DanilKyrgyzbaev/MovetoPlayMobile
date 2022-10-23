@@ -13,7 +13,7 @@ class DeviceRepositoryImpl @Inject constructor(private val apiService: ApiServic
 
     override suspend fun createDevice(device: DeviceBody): ResultStatus<ChildDevice> {
         return try {
-            val res = apiService.createDevice("Bearer ${Pref.userToken}", device)
+            val res = apiService.createDevice("Bearer ${Pref.accessToken}", device)
 
             if (res.isSuccessful) ResultStatus.Success(res.body())
             else ResultStatus.Error(res.errorBody().toString())
@@ -25,7 +25,7 @@ class DeviceRepositoryImpl @Inject constructor(private val apiService: ApiServic
 
     override suspend fun getDevice(id: String): ResultStatus<ChildDevice> {
         return try {
-            val res = apiService.getDevice("Bearer ${Pref.userToken}", id)
+            val res = apiService.getDevice("Bearer ${Pref.accessToken}", id)
 
             if (res.isSuccessful) ResultStatus.Success(res.body())
             else ResultStatus.Error(res.message())

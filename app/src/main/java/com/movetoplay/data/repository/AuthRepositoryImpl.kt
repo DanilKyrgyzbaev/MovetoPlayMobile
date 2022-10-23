@@ -54,13 +54,12 @@ class AuthRepositoryImpl @Inject constructor(
     ): ResultStatus<TokenResponse> {
         return try {
             val response = api.authorizeProfile(
-                "Bearer ${Pref.userToken}",
+                "Bearer ${Pref.accessToken}",
                 AuthorizeProfileBody(deviceId, childId)
             )
 
             if (response.isSuccessful) ResultStatus.Success(response.body())
             else ResultStatus.Error(response.errorBody().toString())
-
         } catch (e: Throwable) {
             ResultStatus.Error(e.localizedMessage)
         }

@@ -25,7 +25,7 @@ import javax.inject.Inject
 class SetupProfileViewModel @Inject constructor(
     private val profileRepository: ProfilesRepository,
     private val authRepository: AuthRepository,
-    private val deviceRepository: DeviceRepository,
+    private val deviceRepository: DeviceRepository
 ) : ViewModel() {
 
     val createResultStatus = MutableLiveData<ResultStatus<Child>>()
@@ -37,7 +37,7 @@ class SetupProfileViewModel @Inject constructor(
         age: String,
         gender: Gender,
         isSport: Boolean,
-        cxt: Context,
+        cxt: Context
     ) {
         if (isValidName(cxt, fullName) && isValidAge(cxt, age)) {
             viewModelScope.launch {
@@ -75,19 +75,21 @@ class SetupProfileViewModel @Inject constructor(
 
     fun syncProfile() {
         val mac = getMacAddress()
-        val deviceName = android.os.Build.BRAND + " "+ android.os.Build.MODEL
+        val deviceName = android.os.Build.BRAND + " " + android.os.Build.MODEL
 
         syncProfileStatus.value = ResultStatus.Loading()
 
         viewModelScope.launch {
-            when (val it =
-                deviceRepository.createDevice(
-                    DeviceBody(
-                        mac,
-                        deviceName.isValidDeviceName(),
-                        Pref.childId
+            when (
+                val it =
+                    deviceRepository.createDevice(
+                        DeviceBody(
+                            mac,
+                            deviceName.isValidDeviceName(),
+                            Pref.childId
+                        )
                     )
-                )) {
+            ) {
                 is ResultStatus.Loading -> {}
                 is ResultStatus.Error -> {
                     Log.e("authorize", "createDevice ERROR: " + it.error)
@@ -96,8 +98,10 @@ class SetupProfileViewModel @Inject constructor(
                 is ResultStatus.Success -> {
                     Log.e("authorize", "createDevice SUCCESS" + it.data)
                     Pref.deviceId = it.data?.id.toString()
-                    when (val authorize =
-                        authRepository.authorizeProfile(Pref.childId, Pref.deviceId)) {
+                    when (
+                        val authorize =
+                            authRepository.authorizeProfile(Pref.childId, Pref.deviceId)
+                    ) {
                         is ResultStatus.Loading -> {}
                         is ResultStatus.Success -> {
                             Log.e("authorize", "authorizeUser: SUCCESS" + authorize.data)

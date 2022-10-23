@@ -11,13 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import com.movetoplay.databinding.ActivityRegisterBinding
 import com.movetoplay.domain.model.Registration
 import com.movetoplay.pref.Pref
+import com.movetoplay.screens.confirm_accounts.ConfirmAccountsActivity
 import com.movetoplay.screens.create_child_profile.SetupProfileActivity
 import com.movetoplay.util.ValidationUtil
 import com.yandex.metrica.YandexMetrica
 import com.yandex.metrica.YandexMetricaConfig
-
 import java.util.*
-
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -26,6 +25,18 @@ class RegisterActivity : AppCompatActivity() {
     private val NOTIFY_ID = 101
     private val CHANNEL_ID = "MoveToPlay"
 
+    fun createNotification() {
+        val builder: NotificationCompat.Builder =
+            NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification_overlay)
+                .setContentTitle("Время кончилось")
+                .setContentText("Нужно пройти испытания, чтобы добавить времени")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        val notificationManager = NotificationManagerCompat.from(
+            applicationContext
+        )
+        notificationManager.notify(NOTIFY_ID, builder.build())
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -44,7 +55,6 @@ class RegisterActivity : AppCompatActivity() {
         // Automatic tracking of user activity.
         // Automatic tracking of user activity.
         YandexMetrica.enableActivityAutoTracking(application)
-
     }
 
     private fun initListeners() {
@@ -57,13 +67,13 @@ class RegisterActivity : AppCompatActivity() {
                     password
                 ) && age.isNotEmpty()
             ) {
-                 viewModel.sendUser(Registration(email,password,age.toInt()))
+                viewModel.sendUser(Registration(email, password, age.toInt()))
             }
             viewModel.mutableLiveData.observe(this) {
                 if (it) {
-                    if (Pref.userToken.isNotEmpty()) {
+                    if (Pref.accessToken.isNotEmpty()) {
                         if (binding.checkBoxPrivacyPolicy.isChecked) {
-                            startActivity(Intent(this, SetupProfileActivity::class.java))
+                            startActivity(Intent(this, ConfirmAccountsActivity::class.java))
                         } else {
                             Toast.makeText(
                                 this,
@@ -81,28 +91,14 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
-
-     fun createNotification() {
-        val builder: NotificationCompat.Builder =
-            NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notification_overlay)
-                .setContentTitle("Время кончилось")
-                .setContentText("Нужно пройти испытания, чтобы добавить времени")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        val notificationManager = NotificationManagerCompat.from(
-            applicationContext
-        )
-        notificationManager.notify(NOTIFY_ID, builder.build())
-    }
-
     fun startTimer() {
         val timer = Timer()
-        timer.schedule(UpdateTimeTask(), 0, 1000) //установленно в данный момент на 1 секунду
+        timer.schedule(UpdateTimeTask(), 0, 1000) // установленно в данный момент на 1 секунду
     }
 
     inner class UpdateTimeTask : TimerTask() {
         override fun run() {
-            //создание уведомления
+            // создание уведомления
             createNotification()
         }
     }

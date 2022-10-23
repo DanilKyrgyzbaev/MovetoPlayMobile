@@ -51,7 +51,7 @@ class SignInActivity : AppCompatActivity() {
         }
         viewModel.mutableLiveData.observe(this) {
             if (it) {
-                if (Pref.userToken.isNotEmpty()) {
+                if (Pref.accessToken.isNotEmpty()) {
                     if (binding.checkBox.isChecked) {
                         Pref.isChild = true
                         startActivity(Intent(this, SetupProfileActivity::class.java))

@@ -1,10 +1,10 @@
-package com.movetoplay.screens.register
+package com.movetoplay.screens.confirm_accounts // ktlint-disable package-name
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
-import com.movetoplay.domain.model.Registration
+import com.movetoplay.model.AccountsConfirm
 import com.movetoplay.model.ErrorResponse
 import com.movetoplay.network_api.ApiService
 import com.movetoplay.network_api.RetrofitClient
@@ -14,20 +14,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RegisterViewModel : ViewModel() {
+class ConfirmAccountsViewModel : ViewModel() {
     val errorHandle = MutableLiveData<String>()
     var api: ApiService = RetrofitClient().getApi()
     val mutableLiveData = MutableLiveData<Boolean>()
 
-    fun sendUser(register: Registration) {
-        val response = api.postUserRegister(register)
-        response.enqueue(object : Callback<Registration> {
-            override fun onResponse(call: Call<Registration>, response: Response<Registration>) {
+    fun confirmAccounts(accountsConfirm: AccountsConfirm) {
+        val response = api.confirmAccounts("Bearer ${Pref.accessToken}", accountsConfirm)
+        response.enqueue(object : Callback<AccountsConfirm> {
+            override fun onResponse(call: Call<AccountsConfirm>, response: Response<AccountsConfirm>) {
                 if (response.isSuccessful) {
-                    Pref.accessToken = response.body()?.accessToken.toString()
-                    Pref.refreshToken = response.body()?.refreshToken.toString()
-                    Log.e("AccessToken", Pref.accessToken)
-                    Log.e("RefreshToken", Pref.refreshToken)
                     mutableLiveData.value = true
                 } else {
                     val error = response.errorBody().toApiError<ErrorResponse>().message
@@ -37,7 +33,7 @@ class RegisterViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<Registration>, t: Throwable) {
+            override fun onFailure(call: Call<AccountsConfirm>, t: Throwable) {
                 errorHandle.postValue(t.message)
                 Log.e("onFailure", "${t.message}")
                 errorHandle.value = t.message

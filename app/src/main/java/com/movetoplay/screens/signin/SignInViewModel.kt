@@ -28,10 +28,10 @@ class SignInViewModel : ViewModel() {
         api.login(user).enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
-                    Pref.userToken = response.body()?.token.toString()
+                    Pref.accessToken = response.body()?.token.toString()
                     Log.e("Token", response.body()?.token.toString())
                     viewModelScope.launch {
-                        val getParentInfo = api.geInfo("Bearer ${Pref.userToken}")
+                        val getParentInfo = api.geInfo("Bearer ${Pref.accessToken}")
                         if (getParentInfo.isSuccessful) {
                             Pref.parentId = getParentInfo.body()?.id.toString()
                             mutableLiveData.value = true
@@ -57,7 +57,6 @@ class SignInViewModel : ViewModel() {
     }
 
     private fun sendUserApps() {
-
     }
 
     protected inline fun <reified ErrorType> ResponseBody?.toApiError(): ErrorType {
