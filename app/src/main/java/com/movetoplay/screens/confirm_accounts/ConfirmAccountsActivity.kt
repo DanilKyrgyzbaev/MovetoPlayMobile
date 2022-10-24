@@ -29,15 +29,25 @@ class ConfirmAccountsActivity : AppCompatActivity() {
             }
         }
         view.startListeningForIncomingMessages()
+
+        initListeners()
+    }
+
+    private fun initListeners() {
         binding.btnEnter.setOnClickListener {
             viewModel.confirmAccounts(AccountsConfirm(otpCode!!.toInt()))
         }
+
         viewModel.mutableLiveData.observe(this) {
             if (it) {
                 startActivity(Intent(this, SetupProfileActivity::class.java))
             } else {
                 Toast.makeText(this, Pref.toast, Toast.LENGTH_SHORT).show()
             }
+        }
+
+        viewModel.errorHandle.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
 }

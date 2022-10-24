@@ -70,7 +70,6 @@ fun ExercisesPerformedOnDay(
         ) {
             val jumps = Pref.jumps
             val progressJumping = jumps.toInt()
-            //.substrintStart(6)
             Box(
                 modifier = Modifier
                     .width(300.dp)
