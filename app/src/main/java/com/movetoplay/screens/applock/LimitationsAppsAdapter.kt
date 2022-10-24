@@ -1,27 +1,26 @@
 package com.movetoplay.screens.applock
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
 import com.movetoplay.domain.model.user_apps.UserApp
 
-class LimitationsAppsAdapter(
-    private val list: ArrayList<UserApp>
-) :
-    RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
-
+class LimitationsAppsAdapter(private val list: List<UserApp>) : RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
     private val blockedList = HashMap<String, String>()
-
+    var context1: Context? = null
     init {
         list.forEach {
-            if (it.type == "unlimited")
+            if (it.type == "unlimited") {
                 blockedList[it.id] = (it.type)
+            }
         }
-
         Log.e("adapter", "block apps: $blockedList")
     }
 
@@ -34,6 +33,11 @@ class LimitationsAppsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Log.e("limit", "onBindViewHolder: ${list[position]}")
         holder.onBind(list[position])
+        val apkInfoExtractor = ApkInfoExtractor(context1)
+
+        val ApplicationPackageName = list.get(position) as String
+        val drawable = apkInfoExtractor.getAppIconByPackageName(ApplicationPackageName)
+        holder.image.setImageDrawable(drawable)
     }
 
     override fun getItemCount(): Int {
@@ -46,12 +50,12 @@ class LimitationsAppsAdapter(
         private var status = itemView.findViewById<ToggleButton>(R.id.toggle_button)
 
         fun onBind(app: UserApp) {
-
             title.text = app.name
 
             if (blockedList[app.id]?.isNotEmpty() == true) {
-                if (blockedList[app.id].equals("unlimited"))
+                if (blockedList[app.id].equals("unlimited")) {
                     status.isChecked = true
+                }
             }
 
             status.setOnCheckedChangeListener { _, isChecked ->
@@ -68,5 +72,4 @@ class LimitationsAppsAdapter(
         Log.e("adapter", "block apps: $blockedList")
         return blockedList
     }
-
 }

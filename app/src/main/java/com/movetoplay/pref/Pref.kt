@@ -70,6 +70,14 @@ object Pref {
         get() = sharedPreferences.getString("childToken", "").toString()
         set(value) = sharedPreferences.edit().putString("childToken", value).apply()
 
+    var accountId: String
+        get() = sharedPreferences.getString("accountId", "").toString()
+        set(value) = sharedPreferences.edit().putString("accountId", value).apply()
+
+    var jwtSessionToken: String
+        get() = sharedPreferences.getString("jwtSessionToken", "").toString()
+        set(value) = sharedPreferences.edit().putString("jwtSessionToken", value).apply()
+
     var isChild: Boolean
         get() = sharedPreferences.getBoolean("isChild", false)
         set(value) = sharedPreferences.edit().putBoolean("isChild", value).apply()

@@ -24,7 +24,9 @@ class ConfirmAccountsViewModel : ViewModel() {
         response.enqueue(object : Callback<AccountsConfirm> {
             override fun onResponse(call: Call<AccountsConfirm>, response: Response<AccountsConfirm>) {
                 if (response.isSuccessful) {
-                    mutableLiveData.value = true
+                    if (mutableLiveData.value == null) {
+                        mutableLiveData.value = true
+                    }
                 } else {
                     val error = response.errorBody().toApiError<ErrorResponse>().message
                     Pref.toast = error.toString()
@@ -40,7 +42,7 @@ class ConfirmAccountsViewModel : ViewModel() {
             }
         })
     }
-    protected inline fun <reified ErrorType> ResponseBody?.toApiError(): ErrorType {
+    private inline fun <reified ErrorType> ResponseBody?.toApiError(): ErrorType {
         val errorJson = this?.string()
         Log.e("retrying", "to api error body $errorJson")
         val data = Gson().fromJson(

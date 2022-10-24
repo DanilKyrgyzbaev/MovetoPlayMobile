@@ -6,13 +6,13 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
+import com.movetoplay.databinding.ActivityLimitationAppBinding
+import com.movetoplay.domain.model.Child
+import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.screens.SettingTimeActivity
 import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
-import com.movetoplay.databinding.ActivityLimitationAppBinding
-import com.movetoplay.domain.model.Child
-import com.movetoplay.domain.model.user_apps.UserApp
 
 @AndroidEntryPoint
 class LimitationAppActivity : AppCompatActivity() {
@@ -70,9 +70,9 @@ class LimitationAppActivity : AppCompatActivity() {
                 is ResultStatus.Success -> {
                     binding.pbLimitation.visible(false)
                     userApps = it.data as ArrayList<UserApp>
-                    if (userApps.isNotEmpty())
+                    if (userApps.isNotEmpty()) {
                         setData(userApps)
-                    else Toast.makeText(
+                    } else Toast.makeText(
                         this,
                         "Список пуст! Сделайте вход с устройства ребенка",
                         Toast.LENGTH_LONG
@@ -89,7 +89,7 @@ class LimitationAppActivity : AppCompatActivity() {
                 }
                 is ResultStatus.Error -> {
                     binding.pbLimitation.visible(false)
-                    Toast.makeText(this," Ошибка при сохранении, попробуйте еще раз", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Ошибка при сохранении, попробуйте еще раз", Toast.LENGTH_SHORT).show()
                     goTo()
                 }
                 is ResultStatus.Success -> {
