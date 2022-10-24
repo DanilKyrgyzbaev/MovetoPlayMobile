@@ -25,7 +25,7 @@ import javax.inject.Inject
 class SetupProfileViewModel @Inject constructor(
     private val profileRepository: ProfilesRepository,
     private val authRepository: AuthRepository,
-    private val deviceRepository: DeviceRepository,
+    private val deviceRepository: DeviceRepository
 ) : ViewModel() {
 
     val createResultStatus = MutableLiveData<ResultStatus<Child>>()
@@ -37,7 +37,7 @@ class SetupProfileViewModel @Inject constructor(
         age: String,
         gender: Gender,
         isSport: Boolean,
-        cxt: Context,
+        cxt: Context
     ) {
         if (isValidName(cxt, fullName) && isValidAge(cxt, age)) {
             viewModelScope.launch {
@@ -86,8 +86,8 @@ class SetupProfileViewModel @Inject constructor(
                 )) {
                 is ResultStatus.Loading -> {}
                 is ResultStatus.Error -> {
-                    Log.e("authorize", "getDevice ERROR: " + it.error)
-                    createDevice()
+                    Log.e("authorize", "createDevice ERROR: " + it.error)
+                    syncProfileStatus.value = ResultStatus.Error(it.error)
                 }
                 is ResultStatus.Success -> {
                     Log.e("authorize", "createDevice SUCCESS" + it.data)

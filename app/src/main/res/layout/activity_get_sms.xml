@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".screens.forgot_password.GetSmsActivity">
+
+    <ImageView
+        android:id="@+id/img_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="23dp"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintBottom_toTopOf="@+id/tv_enter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_enter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="29dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Восстановление \n пароля"
+        android:textColor="@color/main_value"
+        android:textSize="32dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/img_sign_in"
+        app:layout_constraintStart_toStartOf="@+id/img_sign_in"
+        app:layout_constraintTop_toBottomOf="@+id/img_sign_in" />
+
+    <com.fraggjkee.smsconfirmationview.SmsConfirmationView
+        android:id="@+id/sms_code_viewGetSms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_enter"
+        app:scv_codeLength="4"
+        app:scv_showCursor="true"
+        android:layout_marginTop="24dp"
+        app:scv_smsDetectionMode="manual"
+        app:scv_symbolBackgroundColor="@color/white"
+        app:scv_symbolBorderActiveColor="@color/main_value"
+        app:scv_symbolBorderColor="@color/main_value"
+        app:scv_symbolBorderCornerRadius="8dp"
+        app:scv_symbolBorderWidth="2dp"
+        app:scv_symbolHeight="52dp"
+        app:scv_symbolTextColor="@color/main_value"
+        app:scv_symbolTextSize="24sp"
+        app:scv_symbolWidth="48dp"
+        app:scv_symbolsSpacing="12dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/hint_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/string_getsms"
+        android:textColorHint="@color/grey"
+        android:textSize="12sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintRight_toRightOf="@id/tv_enter"
+        app:layout_constraintLeft_toLeftOf="@id/tv_enter"
+        app:layout_constraintTop_toBottomOf="@+id/sms_code_view" />
+
+    <Button
+        android:id="@+id/btn_enter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/btn_bg_colored"
+        android:text="Продолжить"
+        android:textAllCaps="false"
+        android:textColor="@color/ic_launcher_background"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/hint_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

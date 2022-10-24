@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.WorkerThread;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.movetoplay.computer_vision.mlkit_utils.ClassificationResult;
 import com.movetoplay.computer_vision.mlkit_utils.EMASmoothing;
@@ -20,31 +21,47 @@ import com.movetoplay.computer_vision.mlkit_utils.PoseSample;
 import com.movetoplay.computer_vision.mlkit_utils.RepetitionCounter;
 import com.google.android.gms.common.internal.Preconditions;
 import com.google.mlkit.vision.pose.Pose;
-import com.movetoplay.db.UserDao;
-import com.movetoplay.db.UserDatabase;
 import com.movetoplay.db.UserEntity;
+import com.movetoplay.model.Touch;
+import com.movetoplay.network_api.ApiService;
+import com.movetoplay.network_api.RetrofitClient;
+import com.movetoplay.pref.Pref;
+import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PoseClassifierProcessor {
 
 
     int int_final = 0;
+    private String getPose = Pref.INSTANCE.getPose();
 
     private static final String TAG = "PoseClassifierProcessor";
-    private static final String POSE_SAMPLES_FILE = "pose/opt.csv";
+    private ApiService apiService = new RetrofitClient().getApi();
+    private final String POSE_SAMPLES_FILE = "pose/"+getPose;
 
+    //jumps.csv
     // Specify classes for which we want rep counting.
     // These are the labels in the given {@code POSE_SAMPLES_FILE}. You can set your own class labels
     // for your pose samples.
+
+    // Указываем классы, для которых мы хотим подсчет повторений.
+    // Это метки в данном {@code POSE_SAMPLES_FILE}. Вы можете установить свои собственные метки класса
+    // для ваших образцов позы.
     private static final String[] POSE_CLASSES = {
             "jump", "sit", "push-up"
     };
+    // Exercise
 
     private final boolean isStreamMode;
 
@@ -125,11 +142,29 @@ public class PoseClassifierProcessor {
                     tg.startTone(ToneGenerator.TONE_PROP_BEEP);
                     lastRepResult = String.format(Locale.US,"%s : %d reps", repCounter.getClassName(), repsAfter);
                     Log.e("Result",lastRepResult);
+
+                    String numberOnly= lastRepResult.replaceAll("[^0-9]", "");
+                    Log.e("ResultNumber",numberOnly);
+                    //push_ups.csv  sits.csv
+                    long unixTime = Instant.now().getEpochSecond();
+
+                    switch (Pref.INSTANCE.getPose()){
+                        case "jumps.csv":
+                            Pref.INSTANCE.setJumps(numberOnly);
+                            senTouch(new Touch("jumps", numberOnly, 123434));
+                            break;
+                        case "sits.csv":
+                            Pref.INSTANCE.setSits(numberOnly);
+                            senTouch(new Touch("sits", numberOnly, 123434));
+                            break;
+                        case "push_ups.csv":
+                            Pref.INSTANCE.setPush_ups(numberOnly);
+                            senTouch(new Touch("push_ups", numberOnly, 123434));
+                            break;
+                    }
 //                    lastRepResult = String.format(
 //
 //                            Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
-
-
                     UserEntity userEntity = new UserEntity();
                     userEntity.setPos(String.valueOf(int_final + 1));
 
@@ -152,6 +187,24 @@ public class PoseClassifierProcessor {
             result.add(maxConfidenceClassResult);
         }
         return result;
+    }
+
+    private void senTouch(Touch touch){
+        apiService.sendTouch("Bearer "+Pref.INSTANCE.getAccessToken(),touch).enqueue(new Callback<Touch>() {
+            @Override
+            public void onResponse(Call<Touch> call, Response<Touch> response) {
+                if(response.isSuccessful()){
+                    response.body();
+                } else {
+                    response.errorBody();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Touch> call, Throwable t) {
+
+            }
+        });
     }
 
 }

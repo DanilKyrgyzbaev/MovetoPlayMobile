@@ -1,25 +1,18 @@
 package com.movetoplay.screens
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import com.movetoplay.R
 import com.movetoplay.pref.AccessibilityPrefs
-import java.io.IOException
-
 
 class SettingTimeActivity : AppCompatActivity() {
 
     private lateinit var btnSetTime: Button
     private lateinit var timePicker: TimePicker
     private lateinit var etLimit: EditText
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +33,7 @@ class SettingTimeActivity : AppCompatActivity() {
 
             val timeInMilliseconds = time.toLong() * 60000
 
-           AccessibilityPrefs.dailyLimit = timeInMilliseconds
+            AccessibilityPrefs.dailyLimit = timeInMilliseconds
 
             finish()
         }

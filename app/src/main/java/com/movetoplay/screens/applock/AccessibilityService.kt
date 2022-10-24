@@ -1,23 +1,16 @@
 package com.movetoplay.screens.applock
 
 import android.accessibilityservice.AccessibilityService
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import com.google.gson.Gson
 import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.ChildLockActivity
 import io.ktor.util.date.*
-import java.io.IOException
-import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
 import kotlin.collections.HashSet
-
 
 class AccessibilityService : AccessibilityService() {
 
@@ -26,7 +19,6 @@ class AccessibilityService : AccessibilityService() {
     private var isTimerPaused = false
     private var timer: CountDownTimer? = null
 
-
     override fun onServiceConnected() {
         Log.e("onServiceConnected", "onServiceConnected: " + AccessibilityPrefs.currentDay)
         AccessibilityPrefs.currentDay = System.currentTimeMillis()
@@ -34,7 +26,6 @@ class AccessibilityService : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-
         Log.e("AccessTime", "onAccessibilityEvent: " + getRemainingTimePrefs().toString())
 
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
@@ -52,7 +43,7 @@ class AccessibilityService : AccessibilityService() {
                     Log.e("PackageN", "onAccessibilityEvent: package $appPackageName")
                 } else {
                     isTimerPaused = true
-                    Log.e("TAG", "TIMER STOPPPPED!!!!!!!!!!!!!!!!!!!! " )
+                    Log.e("TAG", "TIMER STOPPPPED!!!!!!!!!!!!!!!!!!!! ")
                 }
             }
         }
@@ -85,15 +76,17 @@ class AccessibilityService : AccessibilityService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
+
     private fun startTimer() {
         val timeDuration = getRemainingTimePrefs()
         timer = object : CountDownTimer(timeDuration, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 AccessibilityPrefs.remainingTime = millisUntilFinished
-                if (isTimerPaused)
-                  cancel()
-                else
+                if (isTimerPaused) {
+                    cancel()
+                } else {
                     start()
+                }
             }
 
             override fun onFinish() {

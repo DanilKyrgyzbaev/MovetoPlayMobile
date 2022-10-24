@@ -51,7 +51,7 @@ fun ExercisesPerformedOnDay(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W600
         )
-        Log.e("Pref",Pref.userLogin)
+        Log.e("Pref", Pref.userLogin)
         Spacer(modifier = Modifier.height(26.dp))
         for (exercise in list) {
             ExercisesPerformedIndicator(
@@ -68,8 +68,8 @@ fun ExercisesPerformedOnDay(
                 .height(40.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
-            val progressJumping = 25
-            Log.e("Pos", "${userEntity?.pos}")
+            val jumps = Pref.jumps
+            val progressJumping = jumps.toInt()
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -100,7 +100,7 @@ fun ExercisesPerformedOnDay(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "25/30",
+                        text = "$jumps/30",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,
@@ -117,7 +117,8 @@ fun ExercisesPerformedOnDay(
                 .height(40.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
-            val progressPushUps = 15
+            val pushups = Pref.push_ups
+            val progressPushUps = pushups.toInt()
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -149,7 +150,7 @@ fun ExercisesPerformedOnDay(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "15/30",
+                        text = "$pushups/30",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,
@@ -166,7 +167,8 @@ fun ExercisesPerformedOnDay(
                 .height(40.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
-            val progressSquats = 19
+            val squats = Pref.sits
+            val progressSquats = squats.toInt()
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -198,7 +200,7 @@ fun ExercisesPerformedOnDay(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "19/30",
+                        text = "$squats/30",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,

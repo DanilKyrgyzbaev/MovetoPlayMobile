@@ -31,7 +31,6 @@ class SetupProfileActivity : AppCompatActivity() {
     private var gender: Gender = Gender.MAN
     private lateinit var childesAdapter: ListChildesAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySetupProfileBinding.inflate(layoutInflater)
@@ -42,7 +41,6 @@ class SetupProfileActivity : AppCompatActivity() {
     }
 
     private fun spinner() {
-
         val statusArr = ArrayAdapter(this, R.layout.spin_status_item, statusArr)
         binding.spStatus.adapter = statusArr
         val genderArr = ArrayAdapter(this, R.layout.spin_gender_item, genderArr)
@@ -53,7 +51,7 @@ class SetupProfileActivity : AppCompatActivity() {
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
-                id: Long,
+                id: Long
             ) {
                 if (position == 1) {
                     hideViews()
@@ -75,18 +73,17 @@ class SetupProfileActivity : AppCompatActivity() {
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
-                id: Long,
+                id: Long
             ) {
-                gender = if (position == 1)
+                gender = if (position == 1) {
                     Gender.WOMAN
-                else Gender.MAN
+                } else Gender.MAN
                 genderArr.getPosition(id.toString())
                 Pref.gender = genderArr.getPosition(id.toString()).toString()
                 Log.e("genderArr", genderArr.getItem(position).toString())
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {}
-
         }
     }
 
@@ -198,11 +195,7 @@ class SetupProfileActivity : AppCompatActivity() {
                     is ResultStatus.Loading -> {
                         binding.btnContinue.isClickable = false
                         visible(true)
-                        Toast.makeText(
-                            this@SetupProfileActivity,
-                            "Синхронизация данных...",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@SetupProfileActivity, "Синхронизация данных...", Toast.LENGTH_SHORT).show()
                     }
                     is ResultStatus.Success -> {
                         visible(false)
