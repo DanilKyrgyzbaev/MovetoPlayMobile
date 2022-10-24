@@ -30,7 +30,8 @@ class MainViewModel @Inject constructor(
                         is ResultStatus.Loading -> {}
                         is ResultStatus.Success -> {
                             it.data?.let { apps ->
-                                AccessibilityPrefs.setLimitedAppsById(Pref.childId,
+                                AccessibilityPrefs.setLimitedAppsById(
+                                    Pref.childId,
                                     apps as ArrayList<UserApp>
                                 )
                             }
@@ -42,6 +43,7 @@ class MainViewModel @Inject constructor(
                     }
                 }
             }
+
         }
     }
 
@@ -55,14 +57,15 @@ class MainViewModel @Inject constructor(
                 if (listLoc.apps?.contains(app) != true) {
                     postList.add(app)
                 }
-
-                if (postList.isNotEmpty())
-                    postApps(UserAppsBody(postList))
             }
-        } else postApps(listLoc)
+            if (postList.isNotEmpty()) {
+                Log.e("main", "compareLists diff: $postList")
+                postApps(UserAppsBody(postList), context)
+            }
+        } else postApps(listLoc, context)
     }
 
-    private fun postApps(apps: UserAppsBody) {
+    private fun postApps(apps: UserAppsBody, context: Context) {
         viewModelScope.launch {
             userAppsRepository.postLimitedApps(Pref.childToken, apps)
                 .collect { result ->
@@ -73,6 +76,7 @@ class MainViewModel @Inject constructor(
                                 "authorize",
                                 "syncApps: SUCCESS" + result.data
                             )
+                            syncApps(context)
                         }
                         is ResultStatus.Error -> {
                             Log.e(

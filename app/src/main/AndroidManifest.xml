@@ -76,6 +76,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".screens.forgot_password.ForgotPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
+            android:name=".screens.forgot_password.GetSmsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
+            android:name=".screens.forgot_password.NewPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
             android:name=".screens.ChildLockActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />

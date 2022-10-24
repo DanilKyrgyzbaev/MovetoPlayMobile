@@ -205,7 +205,7 @@ class SetupProfileActivity : AppCompatActivity() {
                     is ResultStatus.Error -> {
                         visible(false)
                         Log.e("TAG", "Sync Result Status Error: ${it.error} ")
-                        goToMainActivity()
+                        //goToMainActivity()
                     }
                 }
             }

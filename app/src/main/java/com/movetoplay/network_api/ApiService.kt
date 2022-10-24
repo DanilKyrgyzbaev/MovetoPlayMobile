@@ -8,6 +8,10 @@ import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.*
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.model.ChangePasswordByCode
+import com.movetoplay.model.JwtSessionToken
+import com.movetoplay.model.RememberPassword
+import com.movetoplay.model.Touch
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -33,6 +37,30 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body confirmBody: ConfirmBody
     ): Response<Unit>
+
+
+    @GET("/auth/rememberPassword")
+    fun rememberPassword(
+        @Query("email") email: String
+    ): Call<RememberPassword>
+
+    @POST("/auth/confirmRememberPasswordCode")
+    fun getJwtSessionToken(
+        @Body jwtSessionToken: JwtSessionToken
+    ): Call<JwtSessionToken>
+
+    @PATCH("/auth/changePasswordByCode")
+    fun changePasswordByCode(
+        @Header("Authorization") token: String,
+        @Body changePasswordByCode: ChangePasswordByCode
+    ): Call<ChangePasswordByCode>
+
+    @POST("/exercises/touch")
+    fun sendTouch(
+        @Header("Authorization") token: String,
+        @Body touch: Touch
+    ): Call<Touch>
+
     //-------------- Profiles ----------------------//
 
     @POST("/profiles/create")

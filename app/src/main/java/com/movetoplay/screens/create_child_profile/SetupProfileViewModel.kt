@@ -87,7 +87,8 @@ class SetupProfileViewModel @Inject constructor(
                 is ResultStatus.Loading -> {}
                 is ResultStatus.Error -> {
                     Log.e("authorize", "createDevice ERROR: " + it.error)
-                    syncProfileStatus.value = ResultStatus.Error(it.error)
+                    createDevice()
+                    //syncProfileStatus.value = ResultStatus.Error(it.error)
                 }
                 is ResultStatus.Success -> {
                     Log.e("authorize", "createDevice SUCCESS" + it.data)

@@ -29,13 +29,13 @@ class SignInActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initListeners()
-
-        binding.tvForgotPassword.setOnClickListener {
-            startActivity(Intent(this, ForgotPasswordActivity::class.java))
-        }
     }
 
     private fun initListeners() {
+        binding.tvForgotPassword.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+        }
+
         binding.btnEnter.setOnClickListener {
             val email: String = binding.email.text.toString().trim()
             val password: String = binding.password.text.toString().trim()

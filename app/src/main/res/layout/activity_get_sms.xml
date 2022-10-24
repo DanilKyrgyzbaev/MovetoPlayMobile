@@ -68,7 +68,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintRight_toRightOf="@id/tv_enter"
         app:layout_constraintLeft_toLeftOf="@id/tv_enter"
-        app:layout_constraintTop_toBottomOf="@+id/sms_code_view" />
+        app:layout_constraintTop_toBottomOf="@+id/sms_code_viewGetSms" />
 
     <Button
         android:id="@+id/btn_enter"

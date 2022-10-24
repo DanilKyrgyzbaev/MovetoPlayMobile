@@ -26,7 +26,7 @@ class AccessibilityServiceVersion2 : AccessibilityService() {
     private var timer: CountDownTimer? = null
     private val serviceJob = Job()
     //private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
-    private var userApps = HashMap<String, UserApp>()
+    private var userApps = ArrayList<UserApp>()
     private lateinit var resetAlarmManager: ResetAlarmManager
 
     override fun onServiceConnected() {
@@ -36,23 +36,20 @@ class AccessibilityServiceVersion2 : AccessibilityService() {
         resetAlarmManager = ResetAlarmManager()
         resetAlarmManager.setAlarm(this.applicationContext)
 
-        getUserApps()
+        updateUserApps()
 
         super.onServiceConnected()
     }
 
-    private fun getUserApps() {
+    private fun updateUserApps() {
         val apps = ArrayList<UserApp>()
         AccessibilityPrefs.getLimitedAppsById(Pref.childId)?.let {
             parseArray<ArrayList<UserApp>>(it, object : TypeToken<ArrayList<UserApp>>() {}.type)
         }?.let { apps.addAll(it) }
 
         if (apps.isNotEmpty()) {
-            apps.forEach { app ->
-                userApps[app.packageName] = app
-            }
+          userApps = apps
         }
-
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
@@ -64,6 +61,7 @@ class AccessibilityServiceVersion2 : AccessibilityService() {
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             return
         }
+         updateUserApps()
 
         val eventPackage = event.packageName.toString()
         Log.e("access", "eventPackageName  $eventPackage")
@@ -74,9 +72,9 @@ class AccessibilityServiceVersion2 : AccessibilityService() {
         ) {
             if (AccessibilityPrefs.lastPackage == "") {
                 userApps.forEach { app ->
-                    Log.e("access", "Event app package: ${app.key} type: ${app.value.type}")
-                    if (app.key == eventPackage && app.value.type == "allowed") return
-                    if (app.key == eventPackage && app.value.type == "unallowed") {
+                    Log.e("access", "Event app package: ${app.packageName} type: ${app.type}")
+                    if (app.packageName == eventPackage && app.type == "allowed") return
+                    if (app.packageName == eventPackage && app.type == "unallowed") {
                         Log.e("access", "Is timer running: ${AccessibilityPrefs.isTimerRunning}")
                         if (!AccessibilityPrefs.isTimerRunning) {
                             AccessibilityPrefs.isTimerRunning = true
