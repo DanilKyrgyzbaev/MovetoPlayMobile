@@ -1,6 +1,7 @@
 package com.movetoplay.network_api
 
 import com.movetoplay.data.model.AuthorizeProfileBody
+import com.movetoplay.data.model.ConfirmBody
 import com.movetoplay.data.model.DeviceBody
 import com.movetoplay.data.model.ErrorBody
 import com.movetoplay.data.model.user_apps.UserAppsBody
@@ -14,14 +15,12 @@ import retrofit2.http.*
 interface ApiService {
 
     //-------------- Auth ----------------------//
-    @POST("/auth/login")
-    fun postUser(@Body user: User): Call<User>
 
     @POST("/auth/login")
-    fun login(@Body user: User): Call<User>
+    suspend fun login(@Body user: User): Response<TokenResponse>
 
     @POST("/auth/registration")
-    fun postUserRegister(@Body registration: Registration): Call<Registration>
+    suspend fun register(@Body registration: Registration): Response<TokenResponse>
 
     @POST("/auth/authorizeProfile")
     suspend fun authorizeProfile(
@@ -29,6 +28,11 @@ interface ApiService {
         @Body authorize: AuthorizeProfileBody
     ): Response<TokenResponse>
 
+    @PATCH("/accounts/confirm")
+    suspend fun confirmEmail(
+        @Header("Authorization") token: String,
+        @Body confirmBody: ConfirmBody
+    ): Response<Unit>
     //-------------- Profiles ----------------------//
 
     @POST("/profiles/create")
@@ -81,5 +85,12 @@ interface ApiService {
     suspend fun getDevice(
         @Header("Authorization") token: String,
         @Query("id") id: String
+    ): Response<ChildDevice>
+
+    @GET("/devices/getByMacAddress")
+    suspend fun getDeviceByMac(
+        @Header("Authorization") token: String,
+        @Query("profileId") profileId: String,
+        @Query("macAddress") macAddress: String
     ): Response<ChildDevice>
 }

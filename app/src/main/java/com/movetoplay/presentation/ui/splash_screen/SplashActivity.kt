@@ -33,7 +33,7 @@ class SplashActivity : AppCompatActivity() {
     //{"age":5,"email":"test5@mail.ru","password":"qwertyui"}
 
     private fun checkUser() {
-        if (Pref.userToken.isEmpty() && Pref.childName.isEmpty() && Pref.childAge.isEmpty()) {
+        if (Pref.userAccessToken.isEmpty() && Pref.childName.isEmpty() && Pref.childAge.isEmpty()) {
             Pref.isFirst = true
             val intent = Intent(this, Auth::class.java)
             startActivity(intent)

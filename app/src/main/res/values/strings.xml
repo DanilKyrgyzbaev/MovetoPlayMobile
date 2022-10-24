@@ -241,4 +241,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="string_privacy_policy">Я принимаю политику конфиденциальности</string>
+    <string name="send_message_to_email">Мы отправили вам письмо с кодом. /n Пожалуйста проверьте вашу почту.</string>
+    <string name="string_getsms">* На указанную почту было отправлено письмо с кодом подтверждения, введите его, чтобы продолжить</string>
 </resources>

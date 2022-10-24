@@ -7,10 +7,10 @@ import java.util.regex.Pattern
 
 object ValidationUtil {
 
-    fun showToast(context: Context, message: String) =
+    private fun showToast(context: Context, message: String) =
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 
-    fun isNullOrEmpty(input: String?): Boolean = input == null || input.isEmpty()
+    private fun isNullOrEmpty(input: String?): Boolean = input == null || input.isEmpty()
 
     fun isValidUsername(
         context: Context,
@@ -80,10 +80,22 @@ object ValidationUtil {
         return false
     }
 
+    fun isValidCode(context: Context, code: String?): Boolean {
+        when {
+            isNullOrEmpty(code) -> showToast(context, "Введите код!")
+            code?.length!! < 2 -> showToast(
+                context,
+                "Заполните поле!"
+            )
+            else -> return true
+        }
+        return false
+    }
+
 }
 
 fun String.isValidDeviceName(): String {
     val len = this.length
-    return if (len > 20) this.removeRange(20, len - 1)
+    return if (len > 20) this.removeRange(19, len - 1)
     else this
 }

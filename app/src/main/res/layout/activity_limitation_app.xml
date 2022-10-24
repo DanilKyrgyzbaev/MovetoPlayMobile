@@ -8,15 +8,15 @@
     tools:context=".screens.applock.LimitationAppActivity">
 
     <ProgressBar
+        android:id="@+id/pb_limitation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/pb_limitation"
         android:indeterminate="true"
         android:indeterminateTint="@color/main_value"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_limitations"
@@ -63,22 +63,22 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="10dp"
+        android:contentDescription="@string/todo"
         android:src="@drawable/ic_baseline_settings_24"
         app:layout_constraintBottom_toTopOf="@id/just_separation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/just_separation2"
-        android:contentDescription="@string/todo" />
+        app:layout_constraintTop_toBottomOf="@id/just_separation2" />
 
     <ImageView
         android:id="@+id/img_set_pin"
         android:layout_width="30dp"
         android:layout_height="0dp"
         android:layout_marginEnd="10dp"
+        android:contentDescription="@string/todo"
         android:src="@drawable/ic_baseline_fiber_pin_24"
         app:layout_constraintBottom_toTopOf="@id/just_separation3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/just_separation"
-        android:contentDescription="@string/todo" />
+        app:layout_constraintTop_toBottomOf="@id/just_separation" />
 
 
     <View
@@ -94,6 +94,7 @@
         android:layout_height="2dp"
         android:background="#ccc"
         app:layout_constraintTop_toTopOf="@id/tv_daily_limit" />
+
     <View
         android:id="@+id/just_separation3"
         android:layout_width="match_parent"
@@ -101,13 +102,21 @@
         android:background="#ccc"
         app:layout_constraintBottom_toBottomOf="@id/tv_set_pin" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_limitations"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:overScrollMode="ifContentScrolls"
         app:layout_constraintBottom_toTopOf="@id/btn_finish"
-        app:layout_constraintTop_toBottomOf="@id/tv_set_pin" />
+        app:layout_constraintTop_toBottomOf="@id/tv_set_pin">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_limitations"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/limitations_item"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </androidx.core.widget.NestedScrollView>
+
 
     <Button
         android:id="@+id/btn_finish"

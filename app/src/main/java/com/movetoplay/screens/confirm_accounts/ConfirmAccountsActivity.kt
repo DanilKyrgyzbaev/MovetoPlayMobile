@@ -1,11 +1,13 @@
-package com.movetoplay.screens.signin
+package com.movetoplay.screens.confirm_accounts
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.movetoplay.databinding.ActivitySignInBinding
+import com.fraggjkee.smsconfirmationview.SmsConfirmationView
+import com.movetoplay.databinding.ActivityConfirmAccountsBinding
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.create_child_profile.SetupProfileActivity
@@ -15,30 +17,33 @@ import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SignInActivity : AppCompatActivity() {
+class ConfirmAccountsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySignInBinding
-    private val viewModel: SignInViewModel by viewModels()
+    private lateinit var binding: ActivityConfirmAccountsBinding
+    private val viewModel: ConfirmAccountsViewModel by viewModels()
+    private var otpCode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignInBinding.inflate(layoutInflater)
+        binding = ActivityConfirmAccountsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initListeners()
     }
 
     private fun initListeners() {
+        binding.smsCodeView.onChangeListener =
+            SmsConfirmationView.OnChangeListener { code, isComplete ->
+                if (isComplete) {
+                    otpCode = code
+                }
+            }
+        binding.smsCodeView.startListeningForIncomingMessages()
+
         binding.btnEnter.setOnClickListener {
-            val email: String = binding.email.text.toString().trim()
-            val password: String = binding.password.text.toString().trim()
-            if (ValidationUtil.isValidEmail(this, email) && ValidationUtil.isValidPassword(
-                    this,
-                    password
-                )
-            ) {
-                Pref.isChild = binding.checkBox.isChecked
-                viewModel.login(this, email, password)
+            if (ValidationUtil.isValidCode(this, otpCode) && Pref.userAccessToken != "") {
+                Log.e("reg", "initListeners: $otpCode" )
+                viewModel.confirmEmail(otpCode!!.toInt())
             }
         }
 
@@ -46,10 +51,10 @@ class SignInActivity : AppCompatActivity() {
             when (it) {
                 is ResultStatus.Loading -> {
                     binding.btnEnter.isClickable = false
-                    binding.pbSignIn.visible(true)
+                    binding.progress.visible(true)
                 }
                 is ResultStatus.Success -> {
-                    binding.pbSignIn.visible(false)
+                    binding.progress.visible(false)
                     binding.btnEnter.isClickable = true
                     if (Pref.userAccessToken.isNotEmpty()) {
                         if (Pref.isChild) {
@@ -61,16 +66,12 @@ class SignInActivity : AppCompatActivity() {
                     }
                 }
                 is ResultStatus.Error -> {
-                    binding.pbSignIn.visible(false)
+                    binding.progress.visible(false)
                     binding.btnEnter.isClickable = true
+                    Log.e("reg", "initListeners: ${it.error}", )
                     Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
                 }
             }
         }
-    }
-
-    override fun onBackPressed() {
-        finish()
-        super.onBackPressed()
     }
 }

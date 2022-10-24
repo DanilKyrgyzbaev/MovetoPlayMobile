@@ -1,7 +1,10 @@
 package com.movetoplay.pref
 
+import com.google.gson.Gson
 import com.movetoplay.App
+import com.movetoplay.domain.model.user_apps.UserApp
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 
 object AccessibilityPrefs {
@@ -25,11 +28,10 @@ object AccessibilityPrefs {
         get() = sharedPreferences.getStringSet("limited_apps", HashSet<String>()) as HashSet<String>
         set(value) = sharedPreferences.edit().putStringSet("limited_apps", value).apply()
 
-    fun getLimitedAppsById(id: String) =
-        sharedPreferences.getStringSet(id, HashSet<String>()) as HashSet<String>
+    fun getLimitedAppsById(id: String) = sharedPreferences.getString(id, "")
 
-    fun setLimitedAppsById(id: String, value: HashSet<String>) =
-        sharedPreferences.edit().putStringSet(id, value).apply()
+    fun setLimitedAppsById(id: String, value: ArrayList<UserApp>) =
+        sharedPreferences.edit().putString(id, Gson().toJson(value)).apply()
 
     var isTimerRunning: Boolean
         get() = sharedPreferences.getBoolean("is_limited", false)

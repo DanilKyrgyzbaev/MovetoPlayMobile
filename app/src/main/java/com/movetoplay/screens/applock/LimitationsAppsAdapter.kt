@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
 import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.util.load
 
 class LimitationsAppsAdapter(
     private val list: ArrayList<UserApp>
@@ -16,15 +17,6 @@ class LimitationsAppsAdapter(
 
     private val blockedList = HashMap<String, String>()
 
-    init {
-        list.forEach {
-            if (it.type == "unlimited")
-                blockedList[it.id] = (it.type)
-        }
-
-        Log.e("adapter", "block apps: $blockedList")
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.limitations_item, parent, false)
@@ -32,7 +24,8 @@ class LimitationsAppsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Log.e("limit", "onBindViewHolder: ${list[position]}")
+        Log.e("limit", "adapter position:  $position")
+        Log.e("limit", "app: ${list[position].name}")
         holder.onBind(list[position])
     }
 
@@ -46,19 +39,17 @@ class LimitationsAppsAdapter(
         private var status = itemView.findViewById<ToggleButton>(R.id.toggle_button)
 
         fun onBind(app: UserApp) {
-
             title.text = app.name
 
-            if (blockedList[app.id]?.isNotEmpty() == true) {
-                if (blockedList[app.id].equals("unlimited"))
-                    status.isChecked = true
-            }
+            status.isChecked = app.type == "unallowed"
+
+            app.drawable?.let { image.load(it) }
 
             status.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    blockedList[app.id] = "unlimited"
+                    blockedList[app.id] = "unallowed"
                 } else {
-                    blockedList[app.id] = "limited"
+                    blockedList[app.id] = "allowed"
                 }
             }
         }

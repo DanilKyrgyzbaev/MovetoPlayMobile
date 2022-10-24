@@ -1,4 +1,4 @@
-package com.movetoplay.screens.register
+package com.movetoplay.screens.confirm_accounts
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -6,29 +6,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movetoplay.domain.repository.AuthRepository
 import com.movetoplay.domain.utils.ResultStatus
-import com.movetoplay.pref.Pref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
-class RegisterViewModel @Inject constructor(private val authRepository: AuthRepository) :
+class ConfirmAccountsViewModel @Inject constructor(private val authRepository: AuthRepository) :
     ViewModel() {
 
     val resultStatus = MutableLiveData<ResultStatus<Boolean>>()
 
-    fun register(email: String, pass: String, age: String) {
+    fun confirmEmail(code: Int) {
+        Log.e("reg", "confirmEmail: $code", )
         viewModelScope.launch {
             resultStatus.value = ResultStatus.Loading()
-            when (val result = authRepository.signUp(email, pass, age.toInt())) {
+            when (val result = authRepository.confirm(code)) {
                 is ResultStatus.Loading -> {}
                 is ResultStatus.Success -> {
-                    Pref.userAccessToken = result.data?.accessToken.toString()
-                    Pref.userRefreshToken = result.data?.refreshToken.toString()
-                    Log.e("reg", "register token: ${Pref.userAccessToken}", )
+                    Log.e("reg", "confirmEmail: success", )
                     resultStatus.value = ResultStatus.Success(true)
                 }
                 is ResultStatus.Error -> {
+                    Log.e("reg", "confirmEmail: error ${result.error}", )
                     resultStatus.value = ResultStatus.Error(result.error)
                 }
             }

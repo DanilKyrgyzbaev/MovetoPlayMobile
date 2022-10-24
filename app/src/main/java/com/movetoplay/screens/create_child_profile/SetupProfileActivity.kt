@@ -192,13 +192,17 @@ class SetupProfileActivity : AppCompatActivity() {
                 }
             }
         }
-        viewModel.syncProfileStatus.observe(this){
+        viewModel.syncProfileStatus.observe(this) {
             binding.pbProfile.apply {
                 when (it) {
                     is ResultStatus.Loading -> {
                         binding.btnContinue.isClickable = false
                         visible(true)
-                        Toast.makeText(this@SetupProfileActivity, "Синхронизация данных...", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@SetupProfileActivity,
+                            "Синхронизация данных...",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                     is ResultStatus.Success -> {
                         visible(false)
@@ -217,17 +221,17 @@ class SetupProfileActivity : AppCompatActivity() {
 
     private fun chooseGoToActivity() {
         if (Pref.isChild) {
-           viewModel.syncProfile()
-        } else startActivity(Intent(this, MainActivityParent::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        })
-        finishAffinity()
+            viewModel.syncProfile()
+        } else {
+            startActivity(Intent(this, MainActivityParent::class.java))
+            finishAffinity()
+        }
+
     }
 
-    private fun goToMainActivity(){
-        startActivity(Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        })
+    private fun goToMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finishAffinity()
     }
 
     private fun setChildesData(list: List<Child>) {
