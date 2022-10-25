@@ -18,7 +18,7 @@ import com.movetoplay.R
 import com.movetoplay.presentation.app_nav.AppNav
 import com.movetoplay.presentation.child_main_nav.ChildMainNav
 import com.movetoplay.presentation.theme.MoveToPlayTheme
-import com.movetoplay.screens.applock.AccessibilityServiceVersion2
+import com.movetoplay.screens.applock.AccessibilityService
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
     private fun isAccessibilityGranted(context: Context): Boolean {
 
         var accessibilityEnabled = 0
-        val service = context.packageName + "/" + AccessibilityServiceVersion2::class.java.canonicalName
+        val service = context.packageName + "/" + AccessibilityService::class.java.canonicalName
         try {
             accessibilityEnabled = Settings.Secure.getInt(
                 context.applicationContext.contentResolver,

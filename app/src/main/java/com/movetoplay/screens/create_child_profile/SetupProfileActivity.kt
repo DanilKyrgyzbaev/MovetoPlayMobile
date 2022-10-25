@@ -155,6 +155,7 @@ class SetupProfileActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                         visible(false)
+                        binding.btnContinue.isClickable = true
                         chooseGoToActivity()
                     }
                     is ResultStatus.Error -> {
@@ -173,7 +174,6 @@ class SetupProfileActivity : AppCompatActivity() {
             binding.pbProfile.apply {
                 when (it) {
                     is ResultStatus.Loading -> {
-                        binding.btnContinue.isClickable = false
                         visible(true)
                     }
                     is ResultStatus.Success -> {
@@ -199,11 +199,13 @@ class SetupProfileActivity : AppCompatActivity() {
                     }
                     is ResultStatus.Success -> {
                         visible(false)
+                        binding.btnContinue.isClickable = true
                         Log.e("TAG", "Sync Result Status Success: ${it.data} ")
                         goToMainActivity()
                     }
                     is ResultStatus.Error -> {
                         visible(false)
+                        binding.btnContinue.isClickable = true
                         Log.e("TAG", "Sync Result Status Error: ${it.error} ")
                         //goToMainActivity()
                     }

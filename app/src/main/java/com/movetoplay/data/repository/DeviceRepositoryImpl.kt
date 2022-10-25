@@ -8,6 +8,8 @@ import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.domain.model.ChildDevice
 import com.movetoplay.network_api.ApiService
 import com.movetoplay.pref.Pref
+import com.movetoplay.util.getDeviceName
+import com.movetoplay.util.isValidDeviceName
 import javax.inject.Inject
 
 class DeviceRepositoryImpl @Inject constructor(private val apiService: ApiService) :
@@ -25,18 +27,6 @@ class DeviceRepositoryImpl @Inject constructor(private val apiService: ApiServic
         }
     }
 
-    override suspend fun getDevice(id: String): ResultStatus<ChildDevice> {
-        return try {
-            val res = apiService.getDevice("Bearer ${Pref.userAccessToken}", id)
-
-            if (res.isSuccessful) ResultStatus.Success(res.body())
-            else ResultStatus.Error(res.errorBody().toApiError<ErrorBody>().message)
-
-        } catch (e: Throwable) {
-            ResultStatus.Error(e.localizedMessage)
-        }
-    }
-
     override suspend fun getDeviceByMacAddress(
         profileId: String,
         mac: String
@@ -44,8 +34,16 @@ class DeviceRepositoryImpl @Inject constructor(private val apiService: ApiServic
         return try {
             val res = apiService.getDeviceByMac("Bearer ${Pref.userAccessToken}", profileId, mac)
 
-            if (res.isSuccessful) ResultStatus.Success(res.body())
-            else ResultStatus.Error(res.errorBody().toApiError<ErrorBody>().message)
+            if (res.isSuccessful) {
+                ResultStatus.Success(res.body())
+            } else {
+                val create = apiService.createDevice(
+                    "Bearer ${Pref.userAccessToken}",
+                    DeviceBody(mac, getDeviceName().isValidDeviceName(), profileId)
+                )
+                if (create.isSuccessful) ResultStatus.Success(create.body())
+                else ResultStatus.Error(res.errorBody().toApiError<ErrorBody>().message)
+            }
 
         } catch (e: Throwable) {
             ResultStatus.Error(e.localizedMessage)

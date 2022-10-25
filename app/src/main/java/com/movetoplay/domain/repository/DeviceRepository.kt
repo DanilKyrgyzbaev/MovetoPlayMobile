@@ -6,6 +6,5 @@ import com.movetoplay.domain.model.ChildDevice
 
 interface DeviceRepository {
     suspend fun createDevice(device: DeviceBody): ResultStatus<ChildDevice>
-    suspend fun getDevice(id: String): ResultStatus<ChildDevice>
     suspend fun getDeviceByMacAddress(profileId: String, mac: String): ResultStatus<ChildDevice>
 }

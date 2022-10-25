@@ -5,76 +5,128 @@ import android.content.Intent
 import android.os.CountDownTimer
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import com.google.gson.reflect.TypeToken
+import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.domain.repository.UserAppsRepository
 import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.ChildLockActivity
-import io.ktor.util.date.*
-import java.util.concurrent.TimeUnit
-import kotlin.collections.HashSet
+import com.movetoplay.services.ResetAlarmManager
+import com.movetoplay.util.parseArray
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AccessibilityService : AccessibilityService() {
 
-    private var blackList: HashSet<String> = HashSet()
-    private var timeDuration: Long = 0
-    private var isTimerPaused = false
+    @Inject
+    lateinit var apiRepository: UserAppsRepository
     private var timer: CountDownTimer? = null
+    private val serviceJob = Job()
+
+    //private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
+    private var userApps = ArrayList<UserApp>()
+    private lateinit var resetAlarmManager: ResetAlarmManager
 
     override fun onServiceConnected() {
         Log.e("onServiceConnected", "onServiceConnected: " + AccessibilityPrefs.currentDay)
-        AccessibilityPrefs.currentDay = System.currentTimeMillis()
+        // AccessibilityPrefs.currentDay = System.currentTimeMillis()
+
+        resetAlarmManager = ResetAlarmManager()
+        resetAlarmManager.setAlarm(this.applicationContext)
+
+        updateUserApps()
+
         super.onServiceConnected()
     }
 
+    private fun updateUserApps() {
+        val apps = ArrayList<UserApp>()
+        AccessibilityPrefs.getLimitedAppsById(Pref.childId)?.let {
+            parseArray<ArrayList<UserApp>>(it, object : TypeToken<ArrayList<UserApp>>() {}.type)
+        }?.let { apps.addAll(it) }
+
+        if (apps.isNotEmpty()) {
+            userApps = apps
+        }
+    }
+
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        Log.e("AccessTime", "onAccessibilityEvent: " + getRemainingTimePrefs().toString())
+        Log.e(
+            "access",
+            "----------------------------------Start----------------------------------------"
+        )
+        Log.e("access", "onAccessibilityEvent:  ${event.packageName}")
+        if (event.packageName == null) AccessibilityPrefs.isEventPackageNull = true
 
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             return
         }
-        checkDay()
+        updateUserApps()
 
-        val appPackageName = event.packageName.toString()
-        if (!appPackageName.equals(packageName.toString(), ignoreCase = true)) {
-            getLimitedAppsPrefs().forEach {
-                if (it == appPackageName) {
-                    startTimer()
-                    isTimerPaused = false
-                    Log.e("PackageN", "onAccessibilityEvent: limited list package $it")
-                    Log.e("PackageN", "onAccessibilityEvent: package $appPackageName")
-                } else {
-                    isTimerPaused = true
-                    Log.e("TAG", "TIMER STOPPPPED!!!!!!!!!!!!!!!!!!!! ")
+        val eventPackage = event.packageName.toString()
+        Log.e("access", "eventPackageName  $eventPackage")
+        if (!eventPackage.equals(
+                packageName.toString(),
+                ignoreCase = true
+            )
+        ) {
+            if (AccessibilityPrefs.lastPackage == "") {
+                userApps.forEach { app ->
+                    Log.e("access", "Event app package: ${app.packageName} type: ${app.type}")
+                    if (app.packageName == eventPackage && app.type == "allowed") return
+                    if (app.packageName == eventPackage && app.type == "unallowed") {
+                        Log.e("access", "Is timer running: ${AccessibilityPrefs.isTimerRunning}")
+                        if (!AccessibilityPrefs.isTimerRunning) {
+                            AccessibilityPrefs.isTimerRunning = true
+                            AccessibilityPrefs.lastPackage = eventPackage
+                            startTimer()
+                        }
+                        return
+                    }
+                }
+            } else {
+                Log.e("access", "Event lastPackage: ${AccessibilityPrefs.lastPackage}")
+                Log.e("access", "isEventPackageNull: ${AccessibilityPrefs.isEventPackageNull}")
+
+                if (AccessibilityPrefs.lastPackage != eventPackage && !AccessibilityPrefs.isEventPackageNull) {
+                    Log.e("access", "Is timer running: ${AccessibilityPrefs.isTimerRunning}")
+                    if (AccessibilityPrefs.isTimerRunning) {
+                        AccessibilityPrefs.lastPackage = ""
+                        AccessibilityPrefs.isTimerRunning = false
+                        timer?.cancel()
+                        Log.e("accessTime", "Remaining time: " + getRemainingTimePrefs().toString())
+                    }
+                }
+                if (AccessibilityPrefs.isEventPackageNull && AccessibilityPrefs.lastPackage == eventPackage) {
+                    AccessibilityPrefs.isEventPackageNull = false
                 }
             }
         }
-        Log.e("eventjopa", "onAccessibilityEvent: $appPackageName")
-
-        Log.e("Time", "onAccessibilityEvent: " + getTimeMillis())
-
         if ("com.android.vending" == packageName) {
             blockGooglePlay()
         }
-    }
 
-    private fun checkDay() {
-        val diff = AccessibilityPrefs.currentDay - getTimeMillis()
-        if (TimeUnit.MILLISECONDS.toDays(diff) < 0) {
-            Log.e("TAG", "checkDay: DNI OTLICHAYUTSYA : " + TimeUnit.MILLISECONDS.toDays(diff))
-            AccessibilityPrefs.currentDay = getTimeMillis()
-            AccessibilityPrefs.remainingTime = AccessibilityPrefs.dailyLimit
-        } else Log.e(
-            "TAG",
-            "DAY IS SAME : " + TimeUnit.MILLISECONDS.toDays(diff) + " second: " + TimeUnit.MILLISECONDS.toSeconds(
-                diff
-            )
+        Log.e(
+            "access",
+            "---------------------------------------End----------------------------------- ",
         )
     }
 
     private fun openLockScreen() {
-        val intent = Intent(this, ChildLockActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+        Log.e("access", "openLockScreen: ")
+//        val intent = Intent(this, ChildLockActivity::class.java)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        startActivity(intent)
+        val lockIntent = Intent(
+            this.applicationContext,
+            ChildLockActivity::class.java
+        )
+        lockIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        this.applicationContext.startActivity(lockIntent)
     }
 
     private fun startTimer() {
@@ -82,29 +134,19 @@ class AccessibilityService : AccessibilityService() {
         timer = object : CountDownTimer(timeDuration, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 AccessibilityPrefs.remainingTime = millisUntilFinished
-                if (isTimerPaused) {
-                    cancel()
-                } else {
-                    start()
-                }
             }
 
             override fun onFinish() {
+                AccessibilityPrefs.isTimerRunning = false
+                AccessibilityPrefs.lastPackage = ""
                 openLockScreen()
             }
         }
         timer?.start()
     }
 
-    private fun getLimitedAppsPrefs(): HashSet<String> {
-//        blackList = AccessibilityPrefs.getLimitedAppsById(Pref.childId)
-        Log.e("PrefsCome", "onAccessibilityEvent: $blackList")
-        return blackList
-    }
-
     private fun getRemainingTimePrefs(): Long {
-        timeDuration = AccessibilityPrefs.remainingTime
-        return timeDuration
+        return AccessibilityPrefs.remainingTime
     }
 
     private fun blockGooglePlay() {
@@ -116,12 +158,10 @@ class AccessibilityService : AccessibilityService() {
 
     override fun onInterrupt() {}
 
-    interface Callback {
-        fun onFailed()
-        fun onSuccess()
-    }
+    override fun onDestroy() {
+        super.onDestroy()
 
-    companion object {
-        var callback: Callback? = null
+        resetAlarmManager.cancelAlarm(this.applicationContext)
+        serviceJob.cancel()
     }
 }

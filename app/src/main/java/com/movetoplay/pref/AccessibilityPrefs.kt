@@ -40,4 +40,8 @@ object AccessibilityPrefs {
     var lastPackage: String?
         get() = sharedPreferences.getString("last_package", "")
         set(value) = sharedPreferences.edit().putString("last_package", value).apply()
+
+    var isEventPackageNull: Boolean
+        get() = sharedPreferences.getBoolean("is_package_null", false)
+        set(value) = sharedPreferences.edit().putBoolean("is_package_null", value).apply()
 }

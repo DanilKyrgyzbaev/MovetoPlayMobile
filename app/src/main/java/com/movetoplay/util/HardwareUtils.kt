@@ -24,3 +24,7 @@ fun getMacAddress(): String {
     }
     return "02:00:00:00:00:00"
 }
+
+fun getDeviceName(): String {
+    return android.os.Build.BRAND + " " + android.os.Build.MODEL
+}

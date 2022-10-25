@@ -1,9 +1,6 @@
 package com.movetoplay.network_api
 
-import com.movetoplay.data.model.AuthorizeProfileBody
-import com.movetoplay.data.model.ConfirmBody
-import com.movetoplay.data.model.DeviceBody
-import com.movetoplay.data.model.ErrorBody
+import com.movetoplay.data.model.*
 import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.*
 import com.movetoplay.domain.model.user_apps.Limited
@@ -55,11 +52,24 @@ interface ApiService {
         @Body changePasswordByCode: ChangePasswordByCode
     ): Call<ChangePasswordByCode>
 
+    //--------------Exercises--------------------------//
+
     @POST("/exercises/touch")
     fun sendTouch(
         @Header("Authorization") token: String,
         @Body touch: Touch
     ): Call<Touch>
+
+    @POST("/exercises/touch")
+    suspend fun postTouch(
+        @Header("Authorization") token: String,
+        @Body touch: Touch
+    ): Response<ExerciseResponse>
+
+    @GET("/exercises/getDaily")
+    suspend fun getDaily(
+        @Header("Authorization") token: String
+    ): Response<DailyExercises>
 
     //-------------- Profiles ----------------------//
 

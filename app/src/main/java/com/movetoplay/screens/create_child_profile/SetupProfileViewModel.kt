@@ -15,6 +15,7 @@ import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
 import com.movetoplay.util.ValidationUtil.isValidAge
 import com.movetoplay.util.ValidationUtil.isValidName
+import com.movetoplay.util.getDeviceName
 import com.movetoplay.util.getMacAddress
 import com.movetoplay.util.isValidDeviceName
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -87,8 +88,7 @@ class SetupProfileViewModel @Inject constructor(
                 is ResultStatus.Loading -> {}
                 is ResultStatus.Error -> {
                     Log.e("authorize", "createDevice ERROR: " + it.error)
-                    createDevice()
-                    //syncProfileStatus.value = ResultStatus.Error(it.error)
+                    syncProfileStatus.value = ResultStatus.Error(it.error)
                 }
                 is ResultStatus.Success -> {
                     Log.e("authorize", "createDevice SUCCESS" + it.data)
@@ -119,28 +119,4 @@ class SetupProfileViewModel @Inject constructor(
         }
     }
 
-    private fun createDevice() {
-        val deviceName = android.os.Build.BRAND + " " + android.os.Build.MODEL
-
-        viewModelScope.launch {
-            when (val it =
-                deviceRepository.createDevice(
-                    DeviceBody(
-                        getMacAddress(),
-                        deviceName.isValidDeviceName(),
-                        Pref.childId
-                    )
-                )) {
-                is ResultStatus.Loading -> {}
-                is ResultStatus.Error -> {
-                    Log.e("authorize", "createDevice ERROR: " + it.error)
-                    syncProfileStatus.value = ResultStatus.Error(it.error)
-                }
-                is ResultStatus.Success -> {
-                    it.data?.id?.let { Pref.deviceId = it }
-                    authorizeProfile()
-                }
-            }
-        }
-    }
 }

@@ -73,6 +73,7 @@ class RegisterActivity : AppCompatActivity() {
                     binding.progress.visible(true)
                 }
                 is ResultStatus.Success -> {
+                    binding.registerButton.isClickable = true
                     binding.progress.visible(false)
                     startActivity(Intent(this, ConfirmAccountsActivity::class.java))
                 }
