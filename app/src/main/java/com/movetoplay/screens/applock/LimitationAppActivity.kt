@@ -41,6 +41,9 @@ class LimitationAppActivity : AppCompatActivity() {
             child = Gson().fromJson(argument, Child::class.java)
             child.id.let { vm.getLimited(it) }
         } else Toast.makeText(this, "Профиль ребенка не найден!", Toast.LENGTH_LONG).show()
+
+        adapter = LimitationsAppsAdapter(userApps)
+        binding.rvLimitations.adapter = adapter
     }
 
     private fun initListeners() {
@@ -111,13 +114,12 @@ class LimitationAppActivity : AppCompatActivity() {
         userApps.forEachIndexed { index, app ->
             userApps[index].drawable = ApkInfoExtractor(this).getAppIconByPackageName(app.packageName)
         }
-        adapter = LimitationsAppsAdapter(userApps)
-        binding.rvLimitations.adapter = adapter
+       adapter.updateList(userApps)
     }
 
     private fun saveBeforeFinish() {
         val appsLimit = adapter.getBlockedApps()
-        if (appsLimit.isNotEmpty())
+        if (appsLimit.isEmpty())
             vm.setLimits(appsLimit)
         else goTo()
     }

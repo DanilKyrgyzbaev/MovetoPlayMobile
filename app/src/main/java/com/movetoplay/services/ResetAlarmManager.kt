@@ -40,7 +40,7 @@ class ResetAlarmManager : HiltBroadcastReceiver() {
     }
 
     private fun resetData() {
-        Log.e("alarm", "resetData: ${getTimeMillis()}")
+        Log.e("alarm", "resetData: ${System.currentTimeMillis()}")
         AccessibilityPrefs.remainingTime = AccessibilityPrefs.dailyLimit
         Log.e("alarm", "remaining time: ${AccessibilityPrefs.remainingTime}")
     }
@@ -49,7 +49,6 @@ class ResetAlarmManager : HiltBroadcastReceiver() {
         Log.e("alarm", "setAlarm: ")
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ResetAlarmManager::class.java)
-        intent.putExtra(ONE_TIME, false)
         val pi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getBroadcast(context, 0, intent, 0)
         } else {
