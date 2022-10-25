@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.movetoplay.computer_vision.ComputerVisionActivity
 import com.movetoplay.domain.model.TypeExercise
+import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 
 @Composable
@@ -33,8 +34,8 @@ fun Home(
     ) {
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
-            availableForDayMinutes = 123,
-            remainderMinutes = 90,
+            availableForDayMinutes = AccessibilityPrefs.remainingTime.toInt(),
+            remainderMinutes = AccessibilityPrefs.dailyLimit.toInt(),
             addTime = {},
             sizeButton = sizeButtonAndIndicators
         )
