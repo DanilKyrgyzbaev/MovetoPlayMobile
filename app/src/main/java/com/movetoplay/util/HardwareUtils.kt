@@ -16,7 +16,8 @@ fun getMacAddress(): String {
             }
             if (res1.isNotEmpty()) {
                 res1.deleteCharAt(res1.length - 1)
-            }
+            } else return "02:00:00:00:00:00"
+
             return res1.toString()
         }
     } catch (ex: Exception) {

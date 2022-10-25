@@ -2,21 +2,18 @@ package com.movetoplay.computer_vision
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.movetoplay.R
 import com.movetoplay.computer_vision.mlkit_utils.*
 import com.movetoplay.model.Touch
-import com.movetoplay.presentation.app_nav.AppNav
-import com.movetoplay.presentation.child_main_nav.ContentRoute
+import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 import java.io.IOException
 import java.util.ArrayList
@@ -59,7 +56,7 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
         btnStopCamera?.setOnClickListener {
             preview?.stop()
             finish()
-        //    viewModel.sendTouch(Touch("", 0, 0))
+            viewModel.sendTouch(Touch(Pref.typeTouch, Pref.countTouch, Pref.startUnixTimestampTouch))
         }
     }
 
