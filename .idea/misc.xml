@@ -56,6 +56,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1055" />
         <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.1055" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.19537037037037036" />
+        <entry key="app/src/main/res/layout/activity_get_sms.xml" value="0.3104166666666667" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1055" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
         <entry key="app/src/main/res/xml/device_admin_sample.xml" value="0.36070559610705594" />
