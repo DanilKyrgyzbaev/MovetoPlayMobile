@@ -65,6 +65,7 @@ class SetupProfileActivity : AppCompatActivity() {
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {}
+
         }
 
         binding.spChildGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -204,7 +205,7 @@ class SetupProfileActivity : AppCompatActivity() {
                     is ResultStatus.Error -> {
                         visible(false)
                         Log.e("TAG", "Sync Result Status Error: ${it.error} ")
-                        goToMainActivity()
+                        //goToMainActivity()
                     }
                 }
             }
@@ -214,20 +215,16 @@ class SetupProfileActivity : AppCompatActivity() {
     private fun chooseGoToActivity() {
         if (Pref.isChild) {
             viewModel.syncProfile()
-        } else startActivity(
-            Intent(this, MainActivityParent::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            }
-        )
-        finishAffinity()
+        } else {
+            startActivity(Intent(this, MainActivityParent::class.java))
+            finishAffinity()
+        }
+
     }
 
     private fun goToMainActivity() {
-        startActivity(
-            Intent(this, MainActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            }
-        )
+        startActivity(Intent(this, MainActivity::class.java))
+        finishAffinity()
     }
 
     private fun setChildesData(list: List<Child>) {

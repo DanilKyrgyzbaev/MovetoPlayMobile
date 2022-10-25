@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.movetoplay.databinding.ActivityNewPasswordBinding
 import com.movetoplay.model.ChangePasswordByCode
 import com.movetoplay.pref.Pref
+import com.movetoplay.screens.create_child_profile.SetupProfileActivity
 import com.movetoplay.screens.signin.SignInActivity
 
 class NewPasswordActivity : AppCompatActivity() {

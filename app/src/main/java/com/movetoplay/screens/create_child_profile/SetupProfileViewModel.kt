@@ -75,46 +75,70 @@ class SetupProfileViewModel @Inject constructor(
 
     fun syncProfile() {
         val mac = getMacAddress()
-        val deviceName = android.os.Build.BRAND + " " + android.os.Build.MODEL
 
         syncProfileStatus.value = ResultStatus.Loading()
 
         viewModelScope.launch {
-            when (
-                val it =
-                    deviceRepository.createDevice(
-                        DeviceBody(
-                            mac,
-                            deviceName.isValidDeviceName(),
-                            Pref.childId
-                        )
+            when (val it =
+                deviceRepository.getDeviceByMacAddress(
+                    Pref.childId,
+                    mac
+                )) {
+                is ResultStatus.Loading -> {}
+                is ResultStatus.Error -> {
+                    Log.e("authorize", "createDevice ERROR: " + it.error)
+                    createDevice()
+                    //syncProfileStatus.value = ResultStatus.Error(it.error)
+                }
+                is ResultStatus.Success -> {
+                    Log.e("authorize", "createDevice SUCCESS" + it.data)
+                    Pref.deviceId = it.data?.id.toString()
+                    authorizeProfile()
+                }
+            }
+        }
+    }
+
+    private fun authorizeProfile() {
+        viewModelScope.launch {
+            when (val authorize =
+                authRepository.authorizeProfile(Pref.childId, Pref.deviceId)) {
+                is ResultStatus.Loading -> {}
+                is ResultStatus.Success -> {
+                    Log.e("authorize", "authorizeUser: SUCCESS" + authorize.data)
+                    authorize.data?.accessToken?.let {
+                        Pref.childToken = it
+                    }
+                    syncProfileStatus.value = ResultStatus.Success(true)
+                }
+                is ResultStatus.Error -> {
+                    Log.e("authorize", "authorizeUser ERROR: " + authorize.error)
+                    syncProfileStatus.value = ResultStatus.Error(authorize.error)
+                }
+            }
+        }
+    }
+
+    private fun createDevice() {
+        val deviceName = android.os.Build.BRAND + " " + android.os.Build.MODEL
+
+        viewModelScope.launch {
+            when (val it =
+                deviceRepository.createDevice(
+                    DeviceBody(
+                        getMacAddress(),
+                        deviceName.isValidDeviceName(),
+                        Pref.childId
                     )
-            ) {
+                )) {
                 is ResultStatus.Loading -> {}
                 is ResultStatus.Error -> {
                     Log.e("authorize", "createDevice ERROR: " + it.error)
                     syncProfileStatus.value = ResultStatus.Error(it.error)
                 }
                 is ResultStatus.Success -> {
-                    Log.e("authorize", "createDevice SUCCESS" + it.data)
-                    Pref.deviceId = it.data?.id.toString()
-                    when (
-                        val authorize =
-                            authRepository.authorizeProfile(Pref.childId, Pref.deviceId)
-                    ) {
-                        is ResultStatus.Loading -> {}
-                        is ResultStatus.Success -> {
-                            Log.e("authorize", "authorizeUser: SUCCESS" + authorize.data)
-                            authorize.data?.token?.let {
-                                Pref.childToken = it
-                            }
-                            syncProfileStatus.value = ResultStatus.Success(true)
-                        }
-                        is ResultStatus.Error -> {
-                            Log.e("authorize", "authorizeUser ERROR: " + authorize.error)
-                            syncProfileStatus.value = ResultStatus.Error(authorize.error)
-                        }
-                    }
+                    it.data?.id?.let { Pref.deviceId = it }
+                    authorizeProfile()
                 }
             }
         }

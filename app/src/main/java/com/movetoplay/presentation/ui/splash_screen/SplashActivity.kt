@@ -30,7 +30,7 @@ class SplashActivity : AppCompatActivity() {
         // to send a message with a delayed time.
     }
     private fun checkUser() {
-        if (Pref.accessToken.isEmpty() && Pref.childName.isEmpty() && Pref.childAge.isEmpty()) {
+        if (Pref.userAccessToken.isEmpty() && Pref.childName.isEmpty() && Pref.childAge.isEmpty()) {
             Pref.isFirst = true
             val intent = Intent(this, Auth::class.java)
             startActivity(intent)

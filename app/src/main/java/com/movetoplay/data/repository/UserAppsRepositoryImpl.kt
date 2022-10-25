@@ -1,5 +1,6 @@
 package com.movetoplay.data.repository
 
+import com.movetoplay.data.mapper.toApiError
 import com.movetoplay.data.model.ErrorBody
 import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.user_apps.Limited
@@ -30,7 +31,7 @@ class UserAppsRepositoryImpl @Inject constructor(private val client: ApiService)
                 withTimeout(NETWORK_TIMEOUT) {
                     val response = client.postUserApps("Bearer $token", apps)
                     if (response.isSuccessful) emit(ResultStatus.Success(response.body()))
-                    else emit(ResultStatus.Error(response.message()))
+                    else emit(ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message))
                 }
             } catch (throwable: Throwable) {
                 emit(ResultStatus.Error(throwable.message))
@@ -47,9 +48,9 @@ class UserAppsRepositoryImpl @Inject constructor(private val client: ApiService)
                 emit(ResultStatus.Loading())
 
                 withTimeout(NETWORK_TIMEOUT) {
-                    val response = client.getUserApps("Bearer ${Pref.accessToken}", id)
+                    val response = client.getUserApps("Bearer ${Pref.userAccessToken}", id)
                     if (response.isSuccessful) emit(ResultStatus.Success(data = response.body()))
-                    else emit(ResultStatus.Error(response.message()))
+                    else emit(ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message))
                 }
             } catch (throwable: Throwable) {
                 emit(ResultStatus.Error(throwable.message))
@@ -64,7 +65,7 @@ class UserAppsRepositoryImpl @Inject constructor(private val client: ApiService)
                 withTimeout(NETWORK_TIMEOUT) {
                     val response = client.onLimit("Bearer ${Pref.childToken}", id, limited)
                     if (response.isSuccessful) emit(ResultStatus.Success(true))
-                    else emit(ResultStatus.Error(response.errorBody().toString()))
+                    else emit(ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message))
                 }
             } catch (throwable: Throwable) {
                 emit(ResultStatus.Error(throwable.message))

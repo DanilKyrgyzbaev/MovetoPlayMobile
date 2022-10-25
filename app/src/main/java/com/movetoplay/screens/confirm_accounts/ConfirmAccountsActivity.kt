@@ -2,52 +2,76 @@ package com.movetoplay.screens.confirm_accounts
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.fraggjkee.smsconfirmationview.SmsConfirmationView
-import com.movetoplay.R
 import com.movetoplay.databinding.ActivityConfirmAccountsBinding
-import com.movetoplay.model.AccountsConfirm
+import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.create_child_profile.SetupProfileActivity
+import com.movetoplay.screens.parent.MainActivityParent
+import com.movetoplay.util.ValidationUtil
+import com.movetoplay.util.visible
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ConfirmAccountsActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityConfirmAccountsBinding
-    lateinit var viewModel: ConfirmAccountsViewModel
-    var otpCode: Int? = null
+    private val viewModel: ConfirmAccountsViewModel by viewModels()
+    private var otpCode: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityConfirmAccountsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this).get(ConfirmAccountsViewModel::class.java)
-        val view = findViewById<SmsConfirmationView>(R.id.sms_code_viewС)
-
-        view.onChangeListener = SmsConfirmationView.OnChangeListener { code, isComplete ->
-            if (isComplete) {
-                otpCode = code.toInt()
-            }
-        }
-        view.startListeningForIncomingMessages()
 
         initListeners()
     }
 
     private fun initListeners() {
-        binding.btnEnter.setOnClickListener {
-            viewModel.confirmAccounts(AccountsConfirm(otpCode!!.toInt()))
-        }
+        binding.smsCodeView.onChangeListener =
+            SmsConfirmationView.OnChangeListener { code, isComplete ->
+                if (isComplete) {
+                    otpCode = code
+                }
+            }
+        binding.smsCodeView.startListeningForIncomingMessages()
 
-        viewModel.mutableLiveData.observe(this) {
-            if (it) {
-                startActivity(Intent(this, SetupProfileActivity::class.java))
-            } else {
-                Toast.makeText(this, Pref.toast, Toast.LENGTH_SHORT).show()
+        binding.btnEnter.setOnClickListener {
+            if (ValidationUtil.isValidCode(this, otpCode) && Pref.userAccessToken != "") {
+                Log.e("reg", "initListeners: $otpCode" )
+                viewModel.confirmEmail(otpCode!!.toInt())
             }
         }
 
-        viewModel.errorHandle.observe(this) {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        viewModel.resultStatus.observe(this) {
+            when (it) {
+                is ResultStatus.Loading -> {
+                    binding.btnEnter.isClickable = false
+                    binding.progress.visible(true)
+                }
+                is ResultStatus.Success -> {
+                    binding.progress.visible(false)
+                    binding.btnEnter.isClickable = true
+                    if (Pref.userAccessToken.isNotEmpty()) {
+                        if (Pref.isChild) {
+                            startActivity(Intent(this, SetupProfileActivity::class.java))
+                        } else {
+                            startActivity(Intent(this, MainActivityParent::class.java))
+                        }
+                        finishAffinity()
+                    }
+                }
+                is ResultStatus.Error -> {
+                    binding.progress.visible(false)
+                    binding.btnEnter.isClickable = true
+                    Log.e("reg", "initListeners: ${it.error}", )
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

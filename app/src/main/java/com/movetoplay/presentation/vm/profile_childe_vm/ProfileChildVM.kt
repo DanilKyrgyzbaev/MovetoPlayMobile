@@ -39,7 +39,7 @@ class ProfileChildVM @Inject constructor() : ViewModel() {
     val listExerciseFRemainingTime: List<Exercise> get() = _listExerciseRemainingTime
 
     fun sendTouch(touch: Touch) {
-        api.sendTouch("Bearer ${Pref.accessToken}", touch).enqueue(object : Callback<Touch> {
+        api.sendTouch("Bearer ${Pref.userAccessToken}", touch).enqueue(object : Callback<Touch> {
             override fun onResponse(call: Call<Touch>, response: Response<Touch>) {
                 if (response.isSuccessful) {
                     response.body()

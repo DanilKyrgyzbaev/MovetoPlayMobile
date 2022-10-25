@@ -55,7 +55,7 @@
         <activity
             android:name=".screens.confirm_accounts.ConfirmAccountsActivity"
             android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar" />
+            android:theme="@style/Theme.Design.NoActionBar"/>
         <activity
             android:name=".screens.parent.MainActivityChild"
             android:exported="false"
@@ -69,22 +69,12 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Design.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
-        <activity
-            android:name=".screens.ChildLockActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar" />
-        <activity
-            android:name=".screens.signin.SignInActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".screens.forgot_password.ForgotPasswordActivity"
             android:exported="false"
@@ -95,6 +85,14 @@
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".screens.forgot_password.NewPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
+            android:name=".screens.ChildLockActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
+            android:name=".screens.signin.SignInActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
@@ -111,8 +109,8 @@
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".screens.applock.LimitationAppActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Design.NoActionBar"/>
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".screens.GetListAllApps"
             android:exported="false"
@@ -173,6 +171,8 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_config" />
         </service>
+        <receiver android:name="com.movetoplay.services.ResetAlarmManager">
+        </receiver>
     </application>
 
 </manifest>

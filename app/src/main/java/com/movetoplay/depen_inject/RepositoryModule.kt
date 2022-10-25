@@ -28,17 +28,14 @@ object RepositoryModule {
 
     @Provides
     fun provideAuthRepository(
-        client : HttpClient,
         api: ApiService
     ) : AuthRepository {
-        return AuthRepositoryImpl(client,api)
+        return AuthRepositoryImpl(api)
     }
     @Provides
     fun provideProfilesRepository(
-        client : HttpClient,
-        repository : ProfileRepository,
         api:ApiService
     ) : ProfilesRepository {
-        return ProfilesRepositoryImpl(client,repository,api)
+        return ProfilesRepositoryImpl(api)
     }
 }

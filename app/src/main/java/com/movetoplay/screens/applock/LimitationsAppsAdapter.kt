@@ -1,28 +1,21 @@
 package com.movetoplay.screens.applock
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.ToggleButton
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
 import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.util.load
 
-class LimitationsAppsAdapter(private val list: List<UserApp>) : RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
+class LimitationsAppsAdapter(
+    private val list: ArrayList<UserApp>
+) :
+    RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
+
     private val blockedList = HashMap<String, String>()
-    var context1: Context? = null
-    init {
-        list.forEach {
-            if (it.type == "unlimited") {
-                blockedList[it.id] = (it.type)
-            }
-        }
-        Log.e("adapter", "block apps: $blockedList")
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -31,13 +24,9 @@ class LimitationsAppsAdapter(private val list: List<UserApp>) : RecyclerView.Ada
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Log.e("limit", "onBindViewHolder: ${list[position]}")
+        Log.e("limit", "adapter position:  $position")
+        Log.e("limit", "app: ${list[position].name}")
         holder.onBind(list[position])
-        val apkInfoExtractor = ApkInfoExtractor(context1)
-
-        val ApplicationPackageName = list.get(position) as String
-        val drawable = apkInfoExtractor.getAppIconByPackageName(ApplicationPackageName)
-        holder.image.setImageDrawable(drawable)
     }
 
     override fun getItemCount(): Int {
@@ -52,17 +41,15 @@ class LimitationsAppsAdapter(private val list: List<UserApp>) : RecyclerView.Ada
         fun onBind(app: UserApp) {
             title.text = app.name
 
-            if (blockedList[app.id]?.isNotEmpty() == true) {
-                if (blockedList[app.id].equals("unlimited")) {
-                    status.isChecked = true
-                }
-            }
+            status.isChecked = app.type == "unallowed"
+
+            app.drawable?.let { image.load(it) }
 
             status.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    blockedList[app.id] = "unlimited"
+                    blockedList[app.id] = "unallowed"
                 } else {
-                    blockedList[app.id] = "limited"
+                    blockedList[app.id] = "allowed"
                 }
             }
         }
@@ -72,4 +59,5 @@ class LimitationsAppsAdapter(private val list: List<UserApp>) : RecyclerView.Ada
         Log.e("adapter", "block apps: $blockedList")
         return blockedList
     }
+
 }

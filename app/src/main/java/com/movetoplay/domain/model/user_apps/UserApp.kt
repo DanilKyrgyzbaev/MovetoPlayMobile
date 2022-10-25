@@ -1,5 +1,7 @@
 package com.movetoplay.domain.model.user_apps
 
+import android.graphics.drawable.Drawable
+
 data class UserApp(
     val allowTime: Long,
     val createdAt: String,
@@ -9,5 +11,6 @@ data class UserApp(
     val packageName: String,
     val profileId: String,
     var type: String,
-    val updatedAt: String
+    val updatedAt: String,
+    var drawable: Drawable? = null
 )

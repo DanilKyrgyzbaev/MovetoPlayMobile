@@ -12,7 +12,6 @@ import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.pref.Pref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.HashSet
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,14 +20,12 @@ class LimitationAppViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private var authorizeResult = MutableLiveData<Boolean>()
     var userApps = MutableLiveData<ResultStatus<List<UserApp>>>()
-    val sendResultStatus = MutableLiveData<ResultStatus<Boolean>>()
     val loading = MutableLiveData<ResultStatus<Boolean>>()
 
     fun getLimited(id: String) {
         viewModelScope.launch {
-            repository.getLimitedApps(Pref.accessToken, id).collect { appsResponse ->
+            repository.getLimitedApps(Pref.userAccessToken, id).collect { appsResponse ->
                 when (appsResponse) {
                     is ResultStatus.Loading -> {
                         userApps.value = ResultStatus.Loading()
@@ -44,8 +41,9 @@ class LimitationAppViewModel @Inject constructor(
                                         uApp.deviceId
                                     )
                                     if (res is ResultStatus.Success)
-                                        Pref.childToken = res.data?.token.toString()
-
+                                        res.data?.accessToken?.let { token ->
+                                            Pref.childToken = token
+                                        }
                                 }
                             }
                         }
@@ -72,7 +70,7 @@ class LimitationAppViewModel @Inject constructor(
                     }
                 }
                 loading.value = ResultStatus.Success(true)
-            } else loading.value = ResultStatus.Error("Ошика авторизации!")
+            } else loading.value = ResultStatus.Error("Ошибка авторизации!")
         }
     }
 }

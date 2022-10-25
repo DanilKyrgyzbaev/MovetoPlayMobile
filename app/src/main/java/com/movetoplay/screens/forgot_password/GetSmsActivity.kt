@@ -10,6 +10,7 @@ import com.movetoplay.R
 import com.movetoplay.databinding.ActivityGetSmsBinding
 import com.movetoplay.model.JwtSessionToken
 import com.movetoplay.pref.Pref
+import com.movetoplay.util.ValidationUtil
 
 class GetSmsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGetSmsBinding
@@ -23,16 +24,18 @@ class GetSmsActivity : AppCompatActivity() {
 
         val view = findViewById<SmsConfirmationView>(R.id.sms_code_viewGetSms)
         view.onChangeListener = SmsConfirmationView.OnChangeListener { code, isComplete ->
-            if (isComplete) {
-                otpCode = code.toInt()
-            }
+            //  if (isComplete) {
+            otpCode = code.toInt()
+            //  }
         }
         view.startListeningForIncomingMessages()
         initListeners()
     }
+
     private fun initListeners() {
         binding.btnEnter.setOnClickListener {
-            viewModel.getJwtSessionToken(JwtSessionToken(Pref.accountId, otpCode!!.toInt()))
+            if (ValidationUtil.isValidCode(this, otpCode.toString()))
+                viewModel.getJwtSessionToken(JwtSessionToken(Pref.accountId, otpCode!!.toInt()))
         }
         viewModel.mutableLiveDataJwtSessionToken.observe(this) {
             if (it) {

@@ -1,18 +1,20 @@
 package com.movetoplay.screens.applock
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
-import com.movetoplay.databinding.ActivityLimitationAppBinding
-import com.movetoplay.domain.model.Child
-import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.screens.SettingTimeActivity
 import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
+import com.movetoplay.databinding.ActivityLimitationAppBinding
+import com.movetoplay.domain.model.Child
+import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.pref.Pref
 
 @AndroidEntryPoint
 class LimitationAppActivity : AppCompatActivity() {
@@ -70,9 +72,9 @@ class LimitationAppActivity : AppCompatActivity() {
                 is ResultStatus.Success -> {
                     binding.pbLimitation.visible(false)
                     userApps = it.data as ArrayList<UserApp>
-                    if (userApps.isNotEmpty()) {
+                    if (userApps.isNotEmpty())
                         setData(userApps)
-                    } else Toast.makeText(
+                    else Toast.makeText(
                         this,
                         "Список пуст! Сделайте вход с устройства ребенка",
                         Toast.LENGTH_LONG
@@ -89,7 +91,11 @@ class LimitationAppActivity : AppCompatActivity() {
                 }
                 is ResultStatus.Error -> {
                     binding.pbLimitation.visible(false)
-                    Toast.makeText(this, "Ошибка при сохранении, попробуйте еще раз", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        " Ошибка при сохранении, попробуйте еще раз",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     goTo()
                 }
                 is ResultStatus.Success -> {
@@ -102,20 +108,27 @@ class LimitationAppActivity : AppCompatActivity() {
     }
 
     private fun setData(userApps: ArrayList<UserApp>) {
+        userApps.forEachIndexed { index, app ->
+            userApps[index].drawable = ApkInfoExtractor(this).getAppIconByPackageName(app.packageName)
+        }
         adapter = LimitationsAppsAdapter(userApps)
         binding.rvLimitations.adapter = adapter
     }
 
     private fun saveBeforeFinish() {
-        vm.setLimits(adapter.getBlockedApps())
+        val appsLimit = adapter.getBlockedApps()
+        if (appsLimit.isNotEmpty())
+            vm.setLimits(appsLimit)
+        else goTo()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        saveBeforeFinish()
+        goTo()
     }
 
     private fun goTo() {
+        Pref.childToken = ""
         finish()
     }
 }

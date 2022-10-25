@@ -190,7 +190,7 @@ public class PoseClassifierProcessor {
     }
 
     private void senTouch(Touch touch){
-        apiService.sendTouch("Bearer "+Pref.INSTANCE.getAccessToken(),touch).enqueue(new Callback<Touch>() {
+        apiService.sendTouch("Bearer "+Pref.INSTANCE.getUserAccessToken(),touch).enqueue(new Callback<Touch>() {
             @Override
             public void onResponse(Call<Touch> call, Response<Touch> response) {
                 if(response.isSuccessful()){

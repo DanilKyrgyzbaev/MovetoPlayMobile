@@ -1,34 +1,43 @@
 package com.movetoplay.network_api
 
 import com.movetoplay.data.model.AuthorizeProfileBody
+import com.movetoplay.data.model.ConfirmBody
 import com.movetoplay.data.model.DeviceBody
 import com.movetoplay.data.model.ErrorBody
 import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.*
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
-import com.movetoplay.model.*
+import com.movetoplay.model.ChangePasswordByCode
+import com.movetoplay.model.JwtSessionToken
+import com.movetoplay.model.RememberPassword
+import com.movetoplay.model.Touch
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
 
-    // -------------- Auth ----------------------//
-    @POST("/auth/login")
-    fun postUser(@Body user: User): Call<User>
+    //-------------- Auth ----------------------//
 
     @POST("/auth/login")
-    fun login(@Body user: User): Call<User>
+    suspend fun login(@Body user: User): Response<TokenResponse>
 
     @POST("/auth/registration")
-    fun postUserRegister(@Body registration: Registration): Call<Registration>
+    suspend fun register(@Body registration: Registration): Response<TokenResponse>
+
+    @POST("/auth/authorizeProfile")
+    suspend fun authorizeProfile(
+        @Header("Authorization") token: String,
+        @Body authorize: AuthorizeProfileBody
+    ): Response<TokenResponse>
 
     @PATCH("/accounts/confirm")
-    fun confirmAccounts(
+    suspend fun confirmEmail(
         @Header("Authorization") token: String,
-        @Body confirm: AccountsConfirm
-    ): Call<AccountsConfirm>
+        @Body confirmBody: ConfirmBody
+    ): Response<Unit>
+
 
     @GET("/auth/rememberPassword")
     fun rememberPassword(
@@ -46,19 +55,13 @@ interface ApiService {
         @Body changePasswordByCode: ChangePasswordByCode
     ): Call<ChangePasswordByCode>
 
-    @POST("/auth/authorizeProfile")
-    suspend fun authorizeProfile(
-        @Header("Authorization") token: String,
-        @Body authorize: AuthorizeProfileBody
-    ): Response<TokenResponse>
-
     @POST("/exercises/touch")
     fun sendTouch(
         @Header("Authorization") token: String,
         @Body touch: Touch
     ): Call<Touch>
 
-    // -------------- Profiles ----------------------//
+    //-------------- Profiles ----------------------//
 
     @POST("/profiles/create")
     suspend fun postChildProfile(
@@ -68,37 +71,37 @@ interface ApiService {
 
     @GET("/profiles/getList")
     suspend fun getChildes(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
     ): Response<List<Child>>
 
-    // -------------- Account ----------------------//
+    //-------------- Account ----------------------//
 
     @GET("/accounts/getInfo")
     suspend fun geInfo(
         @Header("Authorization") token: String
     ): Response<Parent>
 
-    // -------------- Apps ----------------------//
+    //-------------- Apps ----------------------//
     @POST("/apps/sync")
     suspend fun postUserApps(
         @Header("Authorization") token: String,
-        @Body apps: UserAppsBody
+        @Body apps: UserAppsBody,
     ): Response<ErrorBody>
 
     @GET("/apps/getList")
     suspend fun getUserApps(
         @Header("Authorization") token: String,
-        @Query("profileId") id: String
+        @Query("profileId") id: String,
     ): Response<List<UserApp>>
 
     @PATCH("/apps/setLimit")
     suspend fun onLimit(
         @Header("Authorization") token: String,
         @Query("id") id: String,
-        @Body limited: Limited
+        @Body limited: Limited,
     ): Response<Limited>
 
-    // -------------- Device ----------------------//
+    //-------------- Device ----------------------//
 
     @POST("/devices/create")
     suspend fun createDevice(
@@ -110,5 +113,12 @@ interface ApiService {
     suspend fun getDevice(
         @Header("Authorization") token: String,
         @Query("id") id: String
+    ): Response<ChildDevice>
+
+    @GET("/devices/getByMacAddress")
+    suspend fun getDeviceByMac(
+        @Header("Authorization") token: String,
+        @Query("profileId") profileId: String,
+        @Query("macAddress") macAddress: String
     ): Response<ChildDevice>
 }

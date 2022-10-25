@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.gson.Gson
-import com.movetoplay.R
 import com.movetoplay.databinding.ActivityMainParentBinding
-import com.movetoplay.databinding.ActivitySetupProfileBinding
 import com.movetoplay.domain.model.Child
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.screens.create_child_profile.ListChildesAdapter
@@ -22,7 +20,6 @@ class MainActivityParent : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainParentBinding
     private val vm: SetupProfileViewModel by viewModels()
-    private lateinit var childesAdapter: ListChildesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +37,9 @@ class MainActivityParent : AppCompatActivity() {
     private fun initListeners() {
         vm.getChildesResultStatus.observe(this) {
             when (it) {
-                is ResultStatus.Loading -> {}
+                is ResultStatus.Loading -> {
+                    binding.pbChooseChild.visible(true)
+                }
                 is ResultStatus.Success -> {
                     binding.pbChooseChild.visible(false)
                     setData(it.data)
@@ -58,12 +57,13 @@ class MainActivityParent : AppCompatActivity() {
     }
 
     private fun setData(list: List<Child>?) {
-        binding.rvChildList.adapter = list?.let { ListChildesAdapter(this::onItemClick, it) }
-        if (list?.isEmpty() == true) Toast.makeText(
-            this,
-            "У вас нет профилей ребенка, создайте новый с устройства ребенка",
-            Toast.LENGTH_LONG
-        ).show()
+        if (list?.isEmpty() == true) {
+            Toast.makeText(
+                this,
+                "У вас нет профилей ребенка, создайте новый с устройства ребенка",
+                Toast.LENGTH_LONG
+            ).show()
+        } else  binding.rvChildList.adapter = list?.let { ListChildesAdapter(this::onItemClick, it) }
     }
 
     private fun onItemClick(child: Child) {
