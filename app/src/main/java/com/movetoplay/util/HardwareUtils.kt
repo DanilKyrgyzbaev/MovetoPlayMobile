@@ -3,7 +3,6 @@ package com.movetoplay.util
 import java.net.NetworkInterface
 import java.util.*
 
-
 fun getMacAddress(): String {
     try {
         val all: List<NetworkInterface> = Collections.list(NetworkInterface.getNetworkInterfaces())
