@@ -5,10 +5,7 @@ import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.*
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
-import com.movetoplay.model.ChangePasswordByCode
-import com.movetoplay.model.JwtSessionToken
-import com.movetoplay.model.RememberPassword
-import com.movetoplay.model.Touch
+import com.movetoplay.model.*
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*

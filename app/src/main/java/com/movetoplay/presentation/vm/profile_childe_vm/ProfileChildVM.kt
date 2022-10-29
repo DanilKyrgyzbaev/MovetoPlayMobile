@@ -59,6 +59,7 @@ class ProfileChildVM @Inject constructor() : ViewModel() {
             }
         })
     }
+
     private inline fun <reified ErrorType> ResponseBody?.toApiError(): ErrorType {
         val errorJson = this?.string()
         Log.e("retrying", "to api error body $errorJson")

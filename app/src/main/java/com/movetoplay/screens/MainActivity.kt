@@ -21,7 +21,6 @@ import com.movetoplay.presentation.theme.MoveToPlayTheme
 import com.movetoplay.screens.applock.AccessibilityService
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -39,20 +38,20 @@ class MainActivity : ComponentActivity() {
     private fun initViews() {
         cont = this
         vm.syncApps(this)
-
         setContent {
             MoveToPlayTheme(false) {
                 AppNav()
                 ChildMainNav(selectedProfileChild = true)
             }
         }
-
     }
 
     private fun checkPermission() {
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+                this,
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSIONS
             )
             val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
             ActivityCompat.requestPermissions(this, permissions, 0)
@@ -74,7 +73,6 @@ class MainActivity : ComponentActivity() {
         }
     }
     private fun isAccessibilityGranted(context: Context): Boolean {
-
         var accessibilityEnabled = 0
         val service = context.packageName + "/" + AccessibilityService::class.java.canonicalName
         try {
@@ -117,7 +115,7 @@ class MainActivity : ComponentActivity() {
                 )
             )
             .setPositiveButton("Настройки") { _, _ ->
-                //Utils.reportEventClick("AppLock Screen", "AppLock_Permission_btn")
+                // Utils.reportEventClick("AppLock Screen", "AppLock_Permission_btn")
                 context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
             }
             .create().show()

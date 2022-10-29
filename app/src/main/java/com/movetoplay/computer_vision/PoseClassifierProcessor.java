@@ -151,29 +151,29 @@ public class PoseClassifierProcessor {
 
                     switch (Pref.INSTANCE.getPose()){
                         case "jumps.csv":
-                            Pref.INSTANCE.setJumps(number);
-                            Pref.INSTANCE.setTypeTouch("jumps");
+                            int jump = Pref.INSTANCE.getJumps();
+                            int jumpResult = jump + number;
+                            Pref.INSTANCE.setJumps(jumpResult);
                             Pref.INSTANCE.setCountTouch(number);
-                            Pref.INSTANCE.setStartUnixTimestampTouch(5);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
                             break;
                         case "sits.csv":
-                            Pref.INSTANCE.setSits(number);
-                            Pref.INSTANCE.setTypeTouch("squats");
+                            int sits = Pref.INSTANCE.getSits();
+                            int sitResult = sits + number;
+                            Pref.INSTANCE.setSits(sitResult);
                             Pref.INSTANCE.setCountTouch(number);
-                            Pref.INSTANCE.setStartUnixTimestampTouch(5);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
                             break;
                         case "push_ups.csv":
-                            Pref.INSTANCE.setPush_ups(number);
-                            Pref.INSTANCE.setTypeTouch("squeezing");
+                            int push_ups = Pref.INSTANCE.getPush_ups();
+                            int push_upsResult = push_ups + number;
+                            Pref.INSTANCE.setPush_ups(push_upsResult);
                             Pref.INSTANCE.setCountTouch(number);
-                            Pref.INSTANCE.setStartUnixTimestampTouch(5);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
                             break;
                     }
-
                     UserEntity userEntity = new UserEntity();
                     userEntity.setPos(String.valueOf(int_final + 1));
-
-
                     break;
                 }
             }
@@ -193,23 +193,4 @@ public class PoseClassifierProcessor {
         }
         return result;
     }
-
-    private void senTouch(Touch touch){
-        apiService.sendTouch("Bearer "+Pref.INSTANCE.getUserAccessToken(),touch).enqueue(new Callback<Touch>() {
-            @Override
-            public void onResponse(Call<Touch> call, Response<Touch> response) {
-                if(response.isSuccessful()){
-                    response.body();
-                } else {
-                    response.errorBody();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Touch> call, Throwable t) {
-
-            }
-        });
-    }
-
 }

@@ -14,6 +14,10 @@ object Pref {
         get() = sharedPreferences.getBoolean("isFir", true)
         set(value) = sharedPreferences.edit().putBoolean("isFir", value).apply()
 
+    var isFirstDialog: Boolean
+        get() = sharedPreferences.getBoolean("isFir", true)
+        set(value) = sharedPreferences.edit().putBoolean("isFir", value).apply()
+
     var userLogin: String
         get() = sharedPreferences.getString("login", "").toString()
         set(value) = sharedPreferences.edit().putString("login", value).apply()
@@ -87,7 +91,7 @@ object Pref {
         set(value) = sharedPreferences.edit().putString("pose", value).apply()
 
     var typeTouch: String
-        get() = sharedPreferences.getString("type", "0").toString()
+        get() = sharedPreferences.getString("type", "").toString()
         set(value) = sharedPreferences.edit().putString("type", value).apply()
 
     var countTouch: Int

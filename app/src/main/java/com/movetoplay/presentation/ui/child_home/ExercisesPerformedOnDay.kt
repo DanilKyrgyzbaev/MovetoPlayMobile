@@ -26,6 +26,7 @@ import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.ui.component_widgets.Button
 import com.movetoplay.presentation.ui.component_widgets.ExercisesPerformedIndicator
 import com.movetoplay.presentation.ui.component_widgets.TypeButton
+import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 
 @Composable
 fun ExercisesPerformedOnDay(

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.movetoplay.R
+import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.presentation.ui.component_widgets.Button
 import com.movetoplay.presentation.utils.timeFormat
 import dagger.hilt.android.internal.Contexts
@@ -59,7 +60,15 @@ fun TimeUse(
         Spacer(modifier = Modifier.height(26.dp))
         Button(
             label = "+ 10 минут",
-            onClick = addTime,
+            onClick = {
+                val remainingTime = AccessibilityPrefs.remainingTime.toInt()
+                val dailyLimit = AccessibilityPrefs.dailyLimit.toInt()
+                val addTime = 10000
+                val resultRemainingTime = remainingTime + addTime
+                val resultDailyLimit = dailyLimit + addTime
+                AccessibilityPrefs.remainingTime = resultRemainingTime.toLong()
+                AccessibilityPrefs.dailyLimit = resultDailyLimit.toLong()
+            },
             size = sizeButton
         )
     }
