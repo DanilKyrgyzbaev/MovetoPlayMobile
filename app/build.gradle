@@ -149,11 +149,10 @@ dependencies {
 
     //lib for ananalics
     implementation 'com.jjoe64:graphview:4.2.2'
-
+    // SmsConfirmationView
+    implementation "com.github.fraggjkee:sms-confirmation-view:1.7.1"
     //room int
-
     def room_version = "2.4.2"
-
     //yandex
     implementation 'com.yandex.android:mobmetricalib:5.2.0'
 
@@ -167,5 +166,7 @@ dependencies {
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.9'
+
+    implementation "com.github.fraggjkee:sms-confirmation-view:1.7.1"
 
 }

@@ -1,11 +1,8 @@
 package com.movetoplay.domain.use_case.select_profile_child
 
 import com.movetoplay.domain.model.Child
-import com.movetoplay.domain.repository.ProfileRepository
 import com.movetoplay.domain.repository.ProfilesRepository
-import com.movetoplay.domain.use_case.session.CreateSessionUseCase
 import com.movetoplay.domain.use_case.session.RestoreSessionUseCase
-import com.movetoplay.domain.utils.RequestStatus
 import com.movetoplay.domain.utils.StateProblems
 
 class GetListChildUseCase(

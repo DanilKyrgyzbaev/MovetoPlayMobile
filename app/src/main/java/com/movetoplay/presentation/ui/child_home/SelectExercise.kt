@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.movetoplay.R
 import com.movetoplay.domain.model.TypeExercise
+import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.ui.component_widgets.Button
 
 @Composable
@@ -67,7 +68,11 @@ fun SelectExercise(
                 Box(modifier = Modifier.height(50.dp).width(90.dp)) {
                     Button(
                         label = "Начать",
-                        onClick = { chose(TypeExercise.StarJump) },
+                        onClick = {
+                            Pref.pose = "jumps.csv"
+                            chose(TypeExercise.StarJump)
+                            Pref.typeTouch = "jumps"
+                        },
                         size = sizeButton
                     )
                 }
@@ -95,7 +100,11 @@ fun SelectExercise(
                 Box(modifier = Modifier.height(50.dp).width(90.dp)) {
                     Button(
                         label = "Начать",
-                        onClick = { chose(TypeExercise.Squats) },
+                        onClick = {
+                            Pref.typeTouch = "squats"
+                            Pref.pose = "sits.csv"
+                            chose(TypeExercise.Squats)
+                        },
                         size = sizeButton
                     )
                 }
@@ -123,7 +132,11 @@ fun SelectExercise(
                 Box(modifier = Modifier.height(50.dp).width(90.dp)) {
                     Button(
                         label = "Начать",
-                        onClick = { chose(TypeExercise.Pushups) },
+                        onClick = {
+                            Pref.typeTouch = "squeezing"
+                            Pref.pose = "push_ups.csv"
+                            chose(TypeExercise.Pushups)
+                        },
                         size = sizeButton
                     )
                 }

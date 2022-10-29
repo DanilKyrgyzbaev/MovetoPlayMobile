@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.WorkerThread;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.movetoplay.computer_vision.mlkit_utils.ClassificationResult;
 import com.movetoplay.computer_vision.mlkit_utils.EMASmoothing;
@@ -20,31 +21,47 @@ import com.movetoplay.computer_vision.mlkit_utils.PoseSample;
 import com.movetoplay.computer_vision.mlkit_utils.RepetitionCounter;
 import com.google.android.gms.common.internal.Preconditions;
 import com.google.mlkit.vision.pose.Pose;
-import com.movetoplay.db.UserDao;
-import com.movetoplay.db.UserDatabase;
 import com.movetoplay.db.UserEntity;
+import com.movetoplay.model.Touch;
+import com.movetoplay.network_api.ApiService;
+import com.movetoplay.network_api.RetrofitClient;
+import com.movetoplay.pref.Pref;
+import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PoseClassifierProcessor {
 
 
     int int_final = 0;
+    private String getPose = Pref.INSTANCE.getPose();
 
     private static final String TAG = "PoseClassifierProcessor";
-    private static final String POSE_SAMPLES_FILE = "pose/opt.csv";
+    private ApiService apiService = new RetrofitClient().getApi();
+    private final String POSE_SAMPLES_FILE = "pose/"+getPose;
 
+    //jumps.csv
     // Specify classes for which we want rep counting.
     // These are the labels in the given {@code POSE_SAMPLES_FILE}. You can set your own class labels
     // for your pose samples.
+
+    // Указываем классы, для которых мы хотим подсчет повторений.
+    // Это метки в данном {@code POSE_SAMPLES_FILE}. Вы можете установить свои собственные метки класса
+    // для ваших образцов позы.
     private static final String[] POSE_CLASSES = {
             "jump", "sit", "push-up"
     };
+    // Exercise
 
     private final boolean isStreamMode;
 
@@ -125,15 +142,38 @@ public class PoseClassifierProcessor {
                     tg.startTone(ToneGenerator.TONE_PROP_BEEP);
                     lastRepResult = String.format(Locale.US,"%s : %d reps", repCounter.getClassName(), repsAfter);
                     Log.e("Result",lastRepResult);
-//                    lastRepResult = String.format(
-//
-//                            Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
+                    String numberOnly= lastRepResult.replaceAll("[^0-9]", "");
 
+                    int number = Integer.parseInt(numberOnly);
+                    Log.e("ResultNumber",numberOnly);
+                    //push_ups.csv  sits.csv
+                    long unixTime = Instant.now().getEpochSecond();
 
+                    switch (Pref.INSTANCE.getPose()){
+                        case "jumps.csv":
+                            int jump = Pref.INSTANCE.getJumps();
+                            int jumpResult = jump + number;
+                            Pref.INSTANCE.setJumps(jumpResult);
+                            Pref.INSTANCE.setCountTouch(number);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
+                            break;
+                        case "sits.csv":
+                            int sits = Pref.INSTANCE.getSits();
+                            int sitResult = sits + number;
+                            Pref.INSTANCE.setSits(sitResult);
+                            Pref.INSTANCE.setCountTouch(number);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
+                            break;
+                        case "push_ups.csv":
+                            int push_ups = Pref.INSTANCE.getPush_ups();
+                            int push_upsResult = push_ups + number;
+                            Pref.INSTANCE.setPush_ups(push_upsResult);
+                            Pref.INSTANCE.setCountTouch(number);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
+                            break;
+                    }
                     UserEntity userEntity = new UserEntity();
                     userEntity.setPos(String.valueOf(int_final + 1));
-
-
                     break;
                 }
             }
@@ -153,5 +193,4 @@ public class PoseClassifierProcessor {
         }
         return result;
     }
-
 }

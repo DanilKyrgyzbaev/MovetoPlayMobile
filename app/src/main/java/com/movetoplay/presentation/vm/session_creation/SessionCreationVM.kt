@@ -4,10 +4,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.movetoplay.domain.repository.ProfileRepository
 import com.movetoplay.domain.use_case.session.CreateSessionUseCase
 import com.movetoplay.domain.use_case.session.LoginUseCase
-import com.movetoplay.domain.utils.RequestStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -41,7 +39,7 @@ class SessionCreationVM @Inject constructor(
         createSessionJob  = viewModelScope.async(Dispatchers.IO){
             form.run {
                 createSessionUseCase(
-                    email,password, age,
+                    email,password, age?.toInt(),
                     sessionCreated = { token-> loginUseCase(token, role, email, password)},
                     errorMessage = message.component2()
                 )

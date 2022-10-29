@@ -1,6 +1,7 @@
 package com.movetoplay.screens.applock
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -40,6 +41,9 @@ class LimitationAppActivity : AppCompatActivity() {
             child = Gson().fromJson(argument, Child::class.java)
             child.id.let { vm.getLimited(it) }
         } else Toast.makeText(this, "Профиль ребенка не найден!", Toast.LENGTH_LONG).show()
+
+        adapter = LimitationsAppsAdapter(userApps)
+        binding.rvLimitations.adapter = adapter
     }
 
     private fun initListeners() {
@@ -90,7 +94,11 @@ class LimitationAppActivity : AppCompatActivity() {
                 }
                 is ResultStatus.Error -> {
                     binding.pbLimitation.visible(false)
-                    Toast.makeText(this," Ошибка при сохранении, попробуйте еще раз", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        " Ошибка при сохранении, попробуйте еще раз",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     goTo()
                 }
                 is ResultStatus.Success -> {
@@ -103,24 +111,26 @@ class LimitationAppActivity : AppCompatActivity() {
     }
 
     private fun setData(userApps: ArrayList<UserApp>) {
-        adapter = LimitationsAppsAdapter(userApps, this::onItemClick)
-        binding.rvLimitations.adapter = adapter
-    }
-
-    private fun onItemClick(app: UserApp) {
-        //vm.setLimit(app)
+        userApps.forEachIndexed { index, app ->
+            userApps[index].drawable = ApkInfoExtractor(this).getAppIconByPackageName(app.packageName)
+        }
+       adapter.updateList(userApps)
     }
 
     private fun saveBeforeFinish() {
-        vm.setLimits(adapter.getBlockedApps())
+        val appsLimit = adapter.getBlockedApps()
+        if (appsLimit.isEmpty())
+            vm.setLimits(appsLimit)
+        else goTo()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        finish()
+        goTo()
     }
 
     private fun goTo() {
+        Pref.childToken = ""
         finish()
     }
 }

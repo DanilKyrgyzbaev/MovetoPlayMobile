@@ -7,6 +7,18 @@
     android:background="@color/white"
     tools:context=".screens.register.Register">
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/main_value"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/register_button" />
+
     <ImageView
         android:id="@+id/img_sign_in"
         android:layout_width="wrap_content"
@@ -23,18 +35,17 @@
         android:id="@+id/tv_enter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
         android:layout_marginBottom="29dp"
         android:text="Регистрация"
-        app:layout_constraintEnd_toEndOf="@id/img_sign_in"
         android:textColor="@color/main_value"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/email"
+        app:layout_constraintEnd_toEndOf="@id/img_sign_in"
         app:layout_constraintStart_toStartOf="@+id/img_sign_in"
         app:layout_constraintTop_toBottomOf="@+id/img_sign_in" />
 
-    <com.rengwuxian.materialedittext.MaterialEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/email"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -42,6 +53,10 @@
         android:layout_marginEnd="33dp"
         android:layout_marginBottom="13dp"
         android:hint="Электронная почта"
+        android:background="@drawable/bg_child_profile"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:inputType="textWebEmailAddress|textEmailAddress"
         android:textColorHint="@color/main_value"
         app:layout_constraintBottom_toTopOf="@+id/password"
@@ -50,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_enter"
         app:met_textColorHint="@color/main_value" />
 
-    <com.rengwuxian.materialedittext.MaterialEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/password"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -59,13 +74,18 @@
         android:layout_marginBottom="11dp"
         android:hint="Пароль"
         android:inputType="textPassword"
+        android:background="@drawable/bg_child_profile"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/main_value"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/child_age"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email"
         app:met_textColorHint="@color/main_value" />
 
-    <com.rengwuxian.materialedittext.MaterialEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/child_age"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -74,6 +94,11 @@
         android:layout_marginBottom="10dp"
         android:hint="@string/age"
         android:inputType="date"
+        android:background="@drawable/bg_child_profile"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/main_value"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/checkBox_privacy_policy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,17 +107,16 @@
 
     <Button
         android:id="@+id/register_button"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="34dp"
         android:layout_marginEnd="34dp"
-        android:layout_marginBottom="216dp"
-        android:textAllCaps="false"
-        android:textSize="20sp"
+        android:layout_marginTop="34dp"
         android:background="@drawable/btn_bg_colored"
         android:text="Зарегистрироваться"
+        android:textAllCaps="false"
         android:textColor="@color/ic_launcher_background"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkBox_privacy_policy" />

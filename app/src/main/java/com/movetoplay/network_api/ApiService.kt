@@ -1,12 +1,11 @@
 package com.movetoplay.network_api
 
-import com.movetoplay.data.model.AuthorizeProfileBody
-import com.movetoplay.data.model.DeviceBody
-import com.movetoplay.data.model.ErrorBody
+import com.movetoplay.data.model.*
 import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.*
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.model.*
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -14,20 +13,60 @@ import retrofit2.http.*
 interface ApiService {
 
     //-------------- Auth ----------------------//
-    @POST("/auth/login")
-    fun postUser(@Body user: User): Call<User>
 
     @POST("/auth/login")
-    fun login(@Body user: User): Call<User>
+    suspend fun login(@Body user: User): Response<TokenResponse>
 
     @POST("/auth/registration")
-    fun postUserRegister(@Body registration: Registration): Call<Registration>
+    suspend fun register(@Body registration: Registration): Response<TokenResponse>
 
     @POST("/auth/authorizeProfile")
     suspend fun authorizeProfile(
         @Header("Authorization") token: String,
         @Body authorize: AuthorizeProfileBody
     ): Response<TokenResponse>
+
+    @PATCH("/accounts/confirm")
+    suspend fun confirmEmail(
+        @Header("Authorization") token: String,
+        @Body confirmBody: ConfirmBody
+    ): Response<Unit>
+
+
+    @GET("/auth/rememberPassword")
+    fun rememberPassword(
+        @Query("email") email: String
+    ): Call<RememberPassword>
+
+    @POST("/auth/confirmRememberPasswordCode")
+    fun getJwtSessionToken(
+        @Body jwtSessionToken: JwtSessionToken
+    ): Call<JwtSessionToken>
+
+    @PATCH("/auth/changePasswordByCode")
+    fun changePasswordByCode(
+        @Header("Authorization") token: String,
+        @Body changePasswordByCode: ChangePasswordByCode
+    ): Call<ChangePasswordByCode>
+
+    //--------------Exercises--------------------------//
+
+    @POST("/exercises/touch")
+    fun sendTouch(
+        @Header("Authorization") token: String,
+        @Body touch: Touch
+    ): Call<Touch>
+
+    @POST("/exercises/touch")
+    suspend fun postTouch(
+        @Header("Authorization") token: String,
+        @Body touch: Touch
+    ): Response<ExerciseResponse>
+
+    @GET("/exercises/getDaily")
+    suspend fun getDaily(
+        @Header("Authorization") token: String
+    ): Response<DailyExercises>
 
     //-------------- Profiles ----------------------//
 
@@ -81,5 +120,12 @@ interface ApiService {
     suspend fun getDevice(
         @Header("Authorization") token: String,
         @Query("id") id: String
+    ): Response<ChildDevice>
+
+    @GET("/devices/getByMacAddress")
+    suspend fun getDeviceByMac(
+        @Header("Authorization") token: String,
+        @Query("profileId") profileId: String,
+        @Query("macAddress") macAddress: String
     ): Response<ChildDevice>
 }

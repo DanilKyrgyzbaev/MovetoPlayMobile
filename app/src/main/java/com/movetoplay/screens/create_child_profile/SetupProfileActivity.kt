@@ -31,7 +31,6 @@ class SetupProfileActivity : AppCompatActivity() {
     private var gender: Gender = Gender.MAN
     private lateinit var childesAdapter: ListChildesAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySetupProfileBinding.inflate(layoutInflater)
@@ -42,7 +41,6 @@ class SetupProfileActivity : AppCompatActivity() {
     }
 
     private fun spinner() {
-
         val statusArr = ArrayAdapter(this, R.layout.spin_status_item, statusArr)
         binding.spStatus.adapter = statusArr
         val genderArr = ArrayAdapter(this, R.layout.spin_gender_item, genderArr)
@@ -53,7 +51,7 @@ class SetupProfileActivity : AppCompatActivity() {
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
-                id: Long,
+                id: Long
             ) {
                 if (position == 1) {
                     hideViews()
@@ -75,18 +73,17 @@ class SetupProfileActivity : AppCompatActivity() {
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
-                id: Long,
+                id: Long
             ) {
-                gender = if (position == 1)
+                gender = if (position == 1) {
                     Gender.WOMAN
-                else Gender.MAN
+                } else Gender.MAN
                 genderArr.getPosition(id.toString())
                 Pref.gender = genderArr.getPosition(id.toString()).toString()
                 Log.e("genderArr", genderArr.getItem(position).toString())
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {}
-
         }
     }
 
@@ -158,6 +155,7 @@ class SetupProfileActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                         visible(false)
+                        binding.btnContinue.isClickable = true
                         chooseGoToActivity()
                     }
                     is ResultStatus.Error -> {
@@ -176,7 +174,6 @@ class SetupProfileActivity : AppCompatActivity() {
             binding.pbProfile.apply {
                 when (it) {
                     is ResultStatus.Loading -> {
-                        binding.btnContinue.isClickable = false
                         visible(true)
                     }
                     is ResultStatus.Success -> {
@@ -192,7 +189,7 @@ class SetupProfileActivity : AppCompatActivity() {
                 }
             }
         }
-        viewModel.syncProfileStatus.observe(this){
+        viewModel.syncProfileStatus.observe(this) {
             binding.pbProfile.apply {
                 when (it) {
                     is ResultStatus.Loading -> {
@@ -202,13 +199,15 @@ class SetupProfileActivity : AppCompatActivity() {
                     }
                     is ResultStatus.Success -> {
                         visible(false)
+                        binding.btnContinue.isClickable = true
                         Log.e("TAG", "Sync Result Status Success: ${it.data} ")
                         goToMainActivity()
                     }
                     is ResultStatus.Error -> {
                         visible(false)
+                        binding.btnContinue.isClickable = true
                         Log.e("TAG", "Sync Result Status Error: ${it.error} ")
-                        goToMainActivity()
+                        //goToMainActivity()
                     }
                 }
             }
@@ -217,17 +216,17 @@ class SetupProfileActivity : AppCompatActivity() {
 
     private fun chooseGoToActivity() {
         if (Pref.isChild) {
-           viewModel.syncProfile()
-        } else startActivity(Intent(this, MainActivityParent::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        })
-        finishAffinity()
+            viewModel.syncProfile()
+        } else {
+            startActivity(Intent(this, MainActivityParent::class.java))
+            finishAffinity()
+        }
+
     }
 
-    private fun goToMainActivity(){
-        startActivity(Intent(this, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        })
+    private fun goToMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finishAffinity()
     }
 
     private fun setChildesData(list: List<Child>) {

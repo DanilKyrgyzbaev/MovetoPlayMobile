@@ -12,6 +12,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.movetoplay.computer_vision.ComputerVisionActivity
 import com.movetoplay.domain.model.TypeExercise
+import com.movetoplay.pref.AccessibilityPrefs
+import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 
 @Composable
@@ -25,6 +27,10 @@ fun Home(
         mutableStateOf(false)
     }
     val context = LocalContext.current
+    var boolean = Pref
+    val remainingTime = AccessibilityPrefs.remainingTime.toInt()
+    val dailyLimit = AccessibilityPrefs.dailyLimit.toInt()
+    val addTime = 10000
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -33,16 +39,23 @@ fun Home(
     ) {
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
-            availableForDayMinutes = 123,
-            remainderMinutes = 90,
-            addTime = {},
+            availableForDayMinutes = remainingTime,
+            remainderMinutes = dailyLimit,
+            addTime = {
+                val resultRemainingTime = remainingTime + addTime
+                val resultDailyLimit = dailyLimit + addTime
+                AccessibilityPrefs.remainingTime = resultRemainingTime.toLong()
+                AccessibilityPrefs.dailyLimit = resultDailyLimit.toLong()
+            },
             sizeButton = sizeButtonAndIndicators
         )
         Spacer(modifier = Modifier.height(20.dp))
         ExercisesPerformedOnDay(
             sizeButtonAndIndicators,
             listExercise = viewModel.listExerciseForDay
-        ) { visibleDialog = true }
+        ) {
+            visibleDialog = true
+        }
     }
     if (visibleDialog) {
         SelectExercise(

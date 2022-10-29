@@ -14,7 +14,7 @@
     <string name="privacy_policy">политику конфиденциальности</string>
     <string name="child_phone">Устройство ребенка</string>
     <string name="log_in">Вход</string>
-    <string name="age">Возраст</string>
+    <string name="age">Ваш возраст</string>
     <string name="sign_in">Войти</string>
     <string name="сontinue">Продолжить</string>
     <string name="forgot_password">забыли пароль?</string>
@@ -241,4 +241,8 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="string_privacy_policy">Я принимаю политику конфиденциальности</string>
+    <string name="send_message_to_email">Мы отправили вам письмо с кодом. /n Пожалуйста проверьте вашу почту.</string>
+    <string name="string_getsms">* На указанную почту было отправлено письмо с кодом подтверждения, введите его, чтобы продолжить</string>
+    <string name="description_password">* Введите эл. почту к который был привязан Ваш аккаунт, на неё прийдёт письмо с кодом подтверждения</string>
+
 </resources>

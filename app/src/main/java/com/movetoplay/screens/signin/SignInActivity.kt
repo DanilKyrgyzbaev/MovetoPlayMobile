@@ -4,34 +4,38 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.movetoplay.databinding.ActivitySignInBinding
-import com.movetoplay.domain.model.User
+import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.create_child_profile.SetupProfileActivity
+import com.movetoplay.screens.forgot_password.ForgotPasswordActivity
 import com.movetoplay.screens.parent.MainActivityParent
 import com.movetoplay.util.ValidationUtil
+import com.movetoplay.util.visible
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class SignInActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivitySignInBinding
-    lateinit var viewModel: SignInViewModel
+    private val viewModel: SignInViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this).get(SignInViewModel::class.java)
+
         initListeners()
-    }
-    override fun onBackPressed() {
-        finish()
-        super.onBackPressed()
     }
 
     private fun initListeners() {
-        Log.e("Pref", Pref.userLogin)
+        binding.tvForgotPassword.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+        }
+
         binding.btnEnter.setOnClickListener {
             val email: String = binding.email.text.toString().trim()
             val password: String = binding.password.text.toString().trim()
@@ -40,28 +44,40 @@ class SignInActivity : AppCompatActivity() {
                     password
                 )
             ) {
-                viewModel.isChild.value = binding.checkBox.isChecked
-                viewModel.sendUser(User(email, password))
+                Pref.isChild = binding.checkBox.isChecked
+                viewModel.login(this, email, password)
             }
         }
-        viewModel.mutableLiveData.observe(this) {
-            if (it) {
-                if (Pref.userToken.isNotEmpty()) {
-                    if (binding.checkBox.isChecked) {
-                        Pref.isChild = true
-                        startActivity(Intent(this, SetupProfileActivity::class.java))
-                    } else {
-                        startActivity(Intent(this, MainActivityParent::class.java))
-                        Pref.isChild = false
+
+        viewModel.resultStatus.observe(this) {
+            when (it) {
+                is ResultStatus.Loading -> {
+                    binding.btnEnter.isClickable = false
+                    binding.pbSignIn.visible(true)
+                }
+                is ResultStatus.Success -> {
+                    binding.pbSignIn.visible(false)
+                    binding.btnEnter.isClickable = true
+                    if (Pref.userAccessToken.isNotEmpty()) {
+                        if (Pref.isChild) {
+                            startActivity(Intent(this, SetupProfileActivity::class.java))
+                        } else {
+                            startActivity(Intent(this, MainActivityParent::class.java))
+                        }
+                        finishAffinity()
                     }
-                    finishAffinity()
-                } else {
-                    Toast.makeText(this, Pref.toast, Toast.LENGTH_SHORT).show()
+                }
+                is ResultStatus.Error -> {
+                    binding.pbSignIn.visible(false)
+                    binding.btnEnter.isClickable = true
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
                 }
             }
         }
-        viewModel.errorHandle.observe(this) {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-        }
+    }
+
+    override fun onBackPressed() {
+        finish()
+        super.onBackPressed()
     }
 }

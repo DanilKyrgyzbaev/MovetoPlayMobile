@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     android:background="@color/white"
+    android:padding="20dp"
     tools:context=".screens.parent.MainActivityChild">
 
 
@@ -14,20 +14,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Достижения ребёнка"
-        android:textSize="32sp"
         android:textColor="@color/main_value"
+        android:textSize="32sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_child"
-        android:background="@drawable/bg_transparent_blue"
         android:layout_marginVertical="24dp"
-        android:orientation="vertical">
+        android:background="@drawable/bg_transparent_blue"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/tv_child">
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
             android:layout_marginVertical="15dp"
             android:text="Выполнено упражнений за день"
             android:textColor="@color/main_value"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -45,30 +45,31 @@
             android:background="@drawable/btn_bg_colored">
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:id="@+id/progress_jump"
-                app:trackThickness="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="30"
                 android:progress="10"
-                android:max="30"
                 app:indicatorColor="#1790D4"
-                app:trackCornerRadius="12dp"/>
+                app:trackCornerRadius="12dp"
+                app:trackThickness="40dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
                 android:text="Прыжки"
+                android:textSize="16sp" />
+
+            <TextView
                 android:id="@+id/tv_jump"
-                android:textSize="16sp"
-                android:layout_marginStart="12dp"
-                android:layout_gravity="center_vertical"/>
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="12dp"
                 android:text="10/30"
-                android:textSize="16sp"
-                android:layout_marginEnd="12dp"
-                android:layout_gravity="center_vertical|end"/>
+                android:textSize="16sp" />
         </FrameLayout>
 
         <FrameLayout
@@ -78,30 +79,31 @@
             android:background="@drawable/btn_bg_colored">
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress_squeezing"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/progress_otjim"
-                app:trackThickness="40dp"
+                android:max="30"
                 android:progress="15"
-                android:max="30"
                 app:indicatorColor="#1790D4"
-                app:trackCornerRadius="12dp"/>
+                app:trackCornerRadius="12dp"
+                app:trackThickness="40dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Отжимания"
-                android:id="@+id/tv_otjim"
-                android:textSize="16sp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="12dp"
-                android:layout_gravity="center_vertical"/>
+                android:text="Отжимания"
+                android:textSize="16sp" />
+
             <TextView
+                android:id="@+id/tv_squeezing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="15/30"
-                android:textSize="16sp"
+                android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="12dp"
-                android:layout_gravity="center_vertical|end"/>
+                android:text="15/30"
+                android:textSize="16sp" />
         </FrameLayout>
 
 
@@ -112,43 +114,56 @@
             android:background="@drawable/btn_bg_colored">
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress_squats"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/progress_presed"
-                app:trackThickness="40dp"
-                android:progress="5"
                 android:max="30"
+                android:progress="5"
                 app:indicatorColor="#1790D4"
-                app:trackCornerRadius="12dp"/>
+                app:trackCornerRadius="12dp"
+                app:trackThickness="40dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Приседания"
-                android:id="@+id/tv_presed"
-                android:textSize="16sp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="12dp"
-                android:layout_gravity="center_vertical"/>
+                android:text="Приседания"
+                android:textSize="16sp" />
+
             <TextView
+                android:id="@+id/tv_squats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5/30"
-                android:textSize="16sp"
+                android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="12dp"
-                android:layout_gravity="center_vertical|end"/>
+                android:text="5/30"
+                android:textSize="16sp" />
         </FrameLayout>
 
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_settings_main_child"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="Настройки"
-        android:textSize="20sp"
-        android:id="@+id/btn_settings_main_child"
-        android:gravity="center"
-        android:textColor="@color/white"
         android:background="@drawable/btn_bg_colored"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:gravity="center"
+        android:text="Настройки"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress_child"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:indeterminateTint="@color/main_value"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

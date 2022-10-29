@@ -7,18 +7,21 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.movetoplay.R
 import com.movetoplay.computer_vision.mlkit_utils.*
-import com.movetoplay.presentation.app_nav.AppNav
-import com.movetoplay.presentation.child_main_nav.ContentRoute
+import com.movetoplay.model.Touch
+import com.movetoplay.pref.Pref
+import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
+import com.movetoplay.screens.MainActivity
 import java.io.IOException
 import java.util.ArrayList
 
 class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
+    private val viewModel: ProfileChildVM by viewModels()
     private var cameraSource: CameraSource? = null
     private var preview: CameraSourcePreview? = null
     private var graphicOverlay: GraphicOverlay? = null
@@ -54,7 +57,9 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
     private fun initListeners() {
         btnStopCamera?.setOnClickListener {
             preview?.stop()
-            finish()
+            startActivity(Intent(this, MainActivity::class.java))
+            Log.e("TypeTouch", Pref.typeTouch)
+            viewModel.sendTouch(Touch(Pref.typeTouch, Pref.countTouch, Pref.startUnixTimestampTouch))
         }
     }
 

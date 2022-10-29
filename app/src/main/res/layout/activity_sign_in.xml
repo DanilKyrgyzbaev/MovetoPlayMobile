@@ -8,24 +8,37 @@
     android:padding="34dp"
     tools:context=".screens.signin.SignInActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/pb_sign_in"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:indeterminateTint="@color/main_value"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lt_sign_in" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lt_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/img_sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/todo"
             android:src="@drawable/ic_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/todo" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_enter"
@@ -36,8 +49,8 @@
             android:textColor="@color/main_value"
             android:textSize="26sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/img_sign_in"
             app:layout_constraintEnd_toEndOf="@id/img_sign_in"
+            app:layout_constraintStart_toStartOf="@id/img_sign_in"
             app:layout_constraintTop_toBottomOf="@+id/img_sign_in" />
 
         <EditText
@@ -45,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:autofillHints="emailAddress"
             android:background="@drawable/bg_child_profile"
             android:hint="@string/email"
             android:inputType="textWebEmailAddress|textEmailAddress"
@@ -52,14 +66,14 @@
             android:textColor="@color/black"
             android:textColorHint="@color/main_value"
             android:textSize="18sp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_enter"
-            android:autofillHints="emailAddress" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_enter" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
+            android:autofillHints="password"
             android:background="@drawable/bg_child_profile"
             android:hint="@string/password"
             android:inputType="textPassword"
@@ -68,8 +82,7 @@
             android:textColorHint="@color/main_value"
             android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@id/email"
-            app:met_textColorHint="@color/main_value"
-            android:autofillHints="password" />
+            app:met_textColorHint="@color/main_value" />
 
         <CheckBox
             android:id="@+id/checkBox"

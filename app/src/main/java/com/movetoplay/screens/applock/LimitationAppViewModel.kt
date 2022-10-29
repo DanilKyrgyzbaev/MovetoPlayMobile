@@ -12,7 +12,6 @@ import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.pref.Pref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.HashSet
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,14 +20,12 @@ class LimitationAppViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private var authorizeResult = MutableLiveData<Boolean>()
     var userApps = MutableLiveData<ResultStatus<List<UserApp>>>()
-    val sendResultStatus = MutableLiveData<ResultStatus<Boolean>>()
     val loading = MutableLiveData<ResultStatus<Boolean>>()
 
     fun getLimited(id: String) {
         viewModelScope.launch {
-            repository.getLimitedApps(Pref.userToken, id).collect { appsResponse ->
+            repository.getLimitedApps(Pref.userAccessToken, id).collect { appsResponse ->
                 when (appsResponse) {
                     is ResultStatus.Loading -> {
                         userApps.value = ResultStatus.Loading()
@@ -44,8 +41,9 @@ class LimitationAppViewModel @Inject constructor(
                                         uApp.deviceId
                                     )
                                     if (res is ResultStatus.Success)
-                                        Pref.childToken = res.data?.token.toString()
-
+                                        res.data?.accessToken?.let { token ->
+                                            Pref.childToken = token
+                                        }
                                 }
                             }
                         }
@@ -58,70 +56,21 @@ class LimitationAppViewModel @Inject constructor(
         }
     }
 
-    fun setLimit(app: UserApp) {
-        viewModelScope.launch {
-            if (Pref.childToken == "") {
-                when (val res = authRepository.authorizeProfile(app.profileId, app.deviceId)) {
-                    is ResultStatus.Error -> {
-                        authorizeResult.value = false
-                    }
-                    is ResultStatus.Success -> {
-                        Pref.childToken = res.data?.token.toString()
-                        repository.setLimitedApp(
-                            app.id,
-                            Limited(AccessibilityPrefs.dailyLimit, app.type)
-                        ).collect {
-//                            when (it) {
-//                                is ResultStatus.Success -> {
-//                                    loading.value = ResultStatus.Success(true)
-//                                }
-//                                is ResultStatus.Error -> {
-//                                    loading.value = ResultStatus.Error(it.error)
-//                                }
-//                                is ResultStatus.Loading -> {
-//                                    loading.value = ResultStatus.Loading()
-//                                }
-//                            }
-                        }
-                    }
-                    else -> {}
-                }
-            } else {
-                repository.setLimitedApp(
-                    app.id,
-                    Limited(AccessibilityPrefs.dailyLimit, app.type)
-                ).collect {
-//                    when (it) {
-//                        is ResultStatus.Success -> {
-//                            loading.value = ResultStatus.Success(true)
-//                        }
-//                        is ResultStatus.Error -> {
-//                            loading.value = ResultStatus.Error(it.error)
-//                        }
-//                        is ResultStatus.Loading -> {
-//                            loading.value = ResultStatus.Loading()
-//                        }
-//                    }
-                }
-            }
-        }
-    }
-
-    fun setLimits(blockedApps: HashSet<String>) {
+    fun setLimits(blockedApps: HashMap<String, String>) {
         viewModelScope.launch {
             loading.value = ResultStatus.Loading()
             if (Pref.childToken != "") {
                 blockedApps.forEach { id ->
                     repository.setLimitedApp(
-                        id,
-                        Limited(AccessibilityPrefs.dailyLimit, "unlimited")
+                        id.key,
+                        Limited(AccessibilityPrefs.dailyLimit, id.value)
                     ).collect {
                         if (it is ResultStatus.Error)
                             loading.value = ResultStatus.Error(it.error)
                     }
                 }
                 loading.value = ResultStatus.Success(true)
-            } else loading.value = ResultStatus.Error("Ошика авторизации!")
+            } else loading.value = ResultStatus.Error("Ошибка авторизации!")
         }
     }
 }

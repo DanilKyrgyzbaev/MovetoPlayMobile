@@ -8,23 +8,24 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.movetoplay.R
 import com.movetoplay.domain.model.user_apps.UserApp
-import com.movetoplay.pref.AccessibilityPrefs
-import com.movetoplay.pref.Pref
+import com.movetoplay.util.load
 
 class LimitationsAppsAdapter(
-    private val list: ArrayList<UserApp>,
-    private val listener: (UserApp) -> Unit
+    list: ArrayList<UserApp>
 ) :
     RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
-
-    private val blockedList = HashSet<String>()
+    private var list: ArrayList<UserApp>
 
     init {
-        list.forEach {
-            if (it.type == "unlimited")
-                blockedList.add(it.id)
-        }
+        this.list = list
     }
+
+    fun updateList(list: ArrayList<UserApp>) {
+        this.list = list
+        notifyDataSetChanged()
+    }
+
+    private val blockedList = HashMap<String, String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -33,7 +34,8 @@ class LimitationsAppsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.e("limit", "onBindViewHolder: ${list[position]}")
+        Log.e("limit", "adapter position:  $position")
+        Log.e("limit", "app: ${list[position].name}")
         holder.onBind(list[position])
     }
 
@@ -47,25 +49,24 @@ class LimitationsAppsAdapter(
         private var status = itemView.findViewById<ToggleButton>(R.id.toggle_button)
 
         fun onBind(app: UserApp) {
-
             title.text = app.name
 
-            blockedList.forEach {
-                if (it == app.id)
-                    status.isChecked = true
-            }
+            status.isChecked = app.type == "unallowed"
+
+            app.drawable?.let { image.load(it) }
 
             status.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    blockedList.add(app.id)
+                    blockedList[app.id] = "unallowed"
                 } else {
-                    blockedList.remove(app.id)
+                    blockedList[app.id] = "allowed"
                 }
             }
         }
     }
 
-    fun getBlockedApps(): HashSet<String> {
+    fun getBlockedApps(): HashMap<String, String> {
+        Log.e("adapter", "block apps: $blockedList")
         return blockedList
     }
 
