@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.create
 
-val baseUrl = "http://94.228.112.119:4001/"
+val baseUrl = "http://89.223.67.184:4001/"
 var gson = GsonBuilder()
     .setLenient()
     .create()

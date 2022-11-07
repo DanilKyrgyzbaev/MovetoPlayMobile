@@ -13,8 +13,9 @@ import androidx.compose.ui.unit.dp
 import com.movetoplay.computer_vision.ComputerVisionActivity
 import com.movetoplay.domain.model.TypeExercise
 import com.movetoplay.pref.AccessibilityPrefs
-import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun Home(
@@ -27,10 +28,11 @@ fun Home(
         mutableStateOf(false)
     }
     val context = LocalContext.current
-    var boolean = Pref
     val remainingTime = AccessibilityPrefs.remainingTime.toInt()
     val dailyLimit = AccessibilityPrefs.dailyLimit.toInt()
-    val addTime = 10000
+    val minutesRemainingTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime.toLong())
+    val minutesDailyLimit = TimeUnit.MILLISECONDS.toMinutes(dailyLimit.toLong())
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,13 +41,10 @@ fun Home(
     ) {
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
-            availableForDayMinutes = remainingTime,
-            remainderMinutes = dailyLimit,
+            availableForDayMinutes = viewModel.availableForDay.value,
+            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60).value,
             addTime = {
-                val resultRemainingTime = remainingTime + addTime
-                val resultDailyLimit = dailyLimit + addTime
-                AccessibilityPrefs.remainingTime = resultRemainingTime.toLong()
-                AccessibilityPrefs.dailyLimit = resultDailyLimit.toLong()
+                val addTimePl = 10000
             },
             sizeButton = sizeButtonAndIndicators
         )
