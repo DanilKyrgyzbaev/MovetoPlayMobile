@@ -41,8 +41,8 @@ fun Home(
     ) {
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
-            availableForDayMinutes = viewModel.availableForDay.value,
-            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60).value,
+            availableForDayMinutes = viewModel.availableForDay.value.toLong(),
+            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60).value.toLong(),
             addTime = {
                 val addTimePl = 10000
             },
