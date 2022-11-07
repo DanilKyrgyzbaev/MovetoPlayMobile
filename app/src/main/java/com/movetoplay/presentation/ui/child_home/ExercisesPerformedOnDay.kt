@@ -26,6 +26,7 @@ import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.ui.component_widgets.Button
 import com.movetoplay.presentation.ui.component_widgets.ExercisesPerformedIndicator
 import com.movetoplay.presentation.ui.component_widgets.TypeButton
+import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 
 @Composable
 fun ExercisesPerformedOnDay(
@@ -69,7 +70,7 @@ fun ExercisesPerformedOnDay(
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
             val jumps = Pref.jumps
-            val progressJumping = jumps.toInt()
+            val progressJumping = jumps
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -118,7 +119,7 @@ fun ExercisesPerformedOnDay(
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
             val pushups = Pref.push_ups
-            val progressPushUps = pushups.toInt()
+            val progressPushUps = pushups
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -168,7 +169,7 @@ fun ExercisesPerformedOnDay(
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
             val squats = Pref.sits
-            val progressSquats = squats.toInt()
+            val progressSquats = squats
             Box(
                 modifier = Modifier
                     .width(300.dp)

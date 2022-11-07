@@ -14,6 +14,8 @@ import com.movetoplay.computer_vision.ComputerVisionActivity
 import com.movetoplay.domain.model.TypeExercise
 import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun Home(
@@ -26,6 +28,11 @@ fun Home(
         mutableStateOf(false)
     }
     val context = LocalContext.current
+    val remainingTime = AccessibilityPrefs.remainingTime.toInt()
+    val dailyLimit = AccessibilityPrefs.dailyLimit.toInt()
+    val minutesRemainingTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime.toLong())
+    val minutesDailyLimit = TimeUnit.MILLISECONDS.toMinutes(dailyLimit.toLong())
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,16 +41,20 @@ fun Home(
     ) {
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
-            availableForDayMinutes = AccessibilityPrefs.remainingTime,
-            remainderMinutes = AccessibilityPrefs.dailyLimit,
-            addTime = { },
+            availableForDayMinutes = viewModel.availableForDay.value,
+            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60).value,
+            addTime = {
+                val addTimePl = 10000
+            },
             sizeButton = sizeButtonAndIndicators
         )
         Spacer(modifier = Modifier.height(20.dp))
         ExercisesPerformedOnDay(
             sizeButtonAndIndicators,
             listExercise = viewModel.listExerciseForDay
-        ) { visibleDialog = true }
+        ) {
+            visibleDialog = true
+        }
     }
     if (visibleDialog) {
         SelectExercise(

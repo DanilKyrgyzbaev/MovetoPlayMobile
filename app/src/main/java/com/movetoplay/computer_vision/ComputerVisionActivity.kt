@@ -14,16 +14,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.movetoplay.R
 import com.movetoplay.computer_vision.mlkit_utils.*
-import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.model.Touch
-import com.movetoplay.presentation.app_nav.AppNav
-import com.movetoplay.presentation.child_main_nav.ContentRoute
+import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
-import dagger.hilt.android.AndroidEntryPoint
+import com.movetoplay.screens.MainActivity
 import java.io.IOException
 import java.util.ArrayList
 
-@AndroidEntryPoint
 class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener {
     private val viewModel: ProfileChildVM by viewModels()
     private var cameraSource: CameraSource? = null
@@ -61,19 +58,9 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
     private fun initListeners() {
         btnStopCamera?.setOnClickListener {
             preview?.stop()
-            viewModel.sendTouch()
-        }
-
-        viewModel.sendTouchResult.observe(this) {
-            when (it) {
-                is ResultStatus.Loading -> {}
-                is ResultStatus.Success -> {
-                    finish()
-                }
-                is ResultStatus.Error -> {
-                    finish()
-                }
-            }
+            startActivity(Intent(this, MainActivity::class.java))
+            Log.e("TypeTouch", Pref.typeTouch)
+            viewModel.sendTouch(Touch(Pref.typeTouch, Pref.countTouch, Pref.startUnixTimestampTouch))
         }
     }
 
@@ -98,10 +85,7 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
         }
         try {
             val poseDetectorOptions = PreferenceUtils.getPoseDetectorOptionsForLivePreview(this)
-            Log.i(
-                TAG,
-                "Using Pose Detector with options $poseDetectorOptions"
-            ) // Использование детектора позы с параметрами
+            Log.i(TAG, "Using Pose Detector with options $poseDetectorOptions") // Использование детектора позы с параметрами
             val shouldShowInFrameLikelihood =
                 PreferenceUtils.shouldShowPoseDetectionInFrameLikelihoodLivePreview(this)
             val visualizeZ = PreferenceUtils.shouldPoseDetectionVisualizeZ(this)
@@ -119,11 +103,7 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
                 )
             )
         } catch (e: Exception) {
-            Log.e(
-                TAG,
-                "Can not create image processor: $model",
-                e
-            ) // Не могу создать процессор изображений
+            Log.e(TAG, "Can not create image processor: $model", e) // Не могу создать процессор изображений
             Toast.makeText(
                 applicationContext,
                 "Can not create image processor: " + e.message, // Не могу создать процессор изображений
@@ -147,24 +127,14 @@ class ComputerVisionActivity : AppCompatActivity(), CompoundButton.OnCheckedChan
         if (cameraSource != null) {
             try {
                 if (preview == null) {
-                    Log.d(
-                        TAG,
-                        "resume: Preview is null"
-                    ) // резюме: Предварительный просмотр является нулевым
+                    Log.d(TAG, "resume: Preview is null") // резюме: Предварительный просмотр является нулевым
                 }
                 if (graphicOverlay == null) {
-                    Log.d(
-                        TAG,
-                        "resume: graphOverlay is null"
-                    ) // резюме: graphOverlay имеет значение null
+                    Log.d(TAG, "resume: graphOverlay is null") // резюме: graphOverlay имеет значение null
                 }
                 preview!!.start(cameraSource, graphicOverlay)
             } catch (e: IOException) {
-                Log.e(
-                    TAG,
-                    "Unable to start camera source.",
-                    e
-                ) // Не удалось запустить источник камеры.
+                Log.e(TAG, "Unable to start camera source.", e) // Не удалось запустить источник камеры.
                 cameraSource!!.release()
                 cameraSource = null
             }

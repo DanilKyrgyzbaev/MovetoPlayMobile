@@ -71,6 +71,7 @@ fun SelectExercise(
                         onClick = {
                             Pref.pose = "jumps.csv"
                             chose(TypeExercise.StarJump)
+                            Pref.typeTouch = "jumps"
                         },
                         size = sizeButton
                     )
@@ -100,6 +101,7 @@ fun SelectExercise(
                     Button(
                         label = "Начать",
                         onClick = {
+                            Pref.typeTouch = "squats"
                             Pref.pose = "sits.csv"
                             chose(TypeExercise.Squats)
                         },
@@ -131,6 +133,7 @@ fun SelectExercise(
                     Button(
                         label = "Начать",
                         onClick = {
+                            Pref.typeTouch = "squeezing"
                             Pref.pose = "push_ups.csv"
                             chose(TypeExercise.Pushups)
                         },

@@ -141,8 +141,9 @@ public class PoseClassifierProcessor {
                     tg.startTone(ToneGenerator.TONE_PROP_BEEP);
                     lastRepResult = String.format(Locale.US,"%s : %d reps", repCounter.getClassName(), repsAfter);
                     Log.e("Result",lastRepResult);
-
                     String numberOnly= lastRepResult.replaceAll("[^0-9]", "");
+
+                    int number = Integer.parseInt(numberOnly);
                     Log.e("ResultNumber",numberOnly);
                     //push_ups.csv  sits.csv
                     long unixTime = Instant.now().getEpochSecond();
@@ -150,25 +151,29 @@ public class PoseClassifierProcessor {
 
                     switch (Pref.INSTANCE.getPose()){
                         case "jumps.csv":
-                            Pref.INSTANCE.setJumps(numberOnly);
-                            senTouch(new Touch("jumps", numberOnly, 123434));
+                            int jump = Pref.INSTANCE.getJumps();
+                            int jumpResult = jump + number;
+                            Pref.INSTANCE.setJumps(jumpResult);
+                            Pref.INSTANCE.setCountTouch(number);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
                             break;
                         case "sits.csv":
-                            Pref.INSTANCE.setSits(numberOnly);
-                            senTouch(new Touch("sits", numberOnly, 123434));
+                            int sits = Pref.INSTANCE.getSits();
+                            int sitResult = sits + number;
+                            Pref.INSTANCE.setSits(sitResult);
+                            Pref.INSTANCE.setCountTouch(number);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
                             break;
                         case "push_ups.csv":
-                            Pref.INSTANCE.setPush_ups(numberOnly);
-                            senTouch(new Touch("push_ups", numberOnly, 123434));
+                            int push_ups = Pref.INSTANCE.getPush_ups();
+                            int push_upsResult = push_ups + number;
+                            Pref.INSTANCE.setPush_ups(push_upsResult);
+                            Pref.INSTANCE.setCountTouch(number);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
                             break;
                     }
-//                    lastRepResult = String.format(
-//
-//                            Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
                     UserEntity userEntity = new UserEntity();
                     userEntity.setPos(String.valueOf(int_final + 1));
-
-
                     break;
                 }
             }
@@ -188,23 +193,4 @@ public class PoseClassifierProcessor {
         }
         return result;
     }
-
-    private void senTouch(Touch touch){
-        apiService.sendTouch("Bearer "+Pref.INSTANCE.getUserAccessToken(),touch).enqueue(new Callback<Touch>() {
-            @Override
-            public void onResponse(Call<Touch> call, Response<Touch> response) {
-                if(response.isSuccessful()){
-                    response.body();
-                } else {
-                    response.errorBody();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Touch> call, Throwable t) {
-
-            }
-        });
-    }
-
 }

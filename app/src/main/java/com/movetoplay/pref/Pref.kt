@@ -17,6 +17,10 @@ object Pref {
         get() = sharedPreferences.getBoolean("isFir", true)
         set(value) = sharedPreferences.edit().putBoolean("isFir", value).apply()
 
+    var isFirstDialog: Boolean
+        get() = sharedPreferences.getBoolean("isFir", true)
+        set(value) = sharedPreferences.edit().putBoolean("isFir", value).apply()
+
     var userLogin: String
         get() = sharedPreferences.getString("login", "").toString()
         set(value) = sharedPreferences.edit().putString("login", value).apply()
@@ -89,17 +93,29 @@ object Pref {
         get() = sharedPreferences.getString("pose", "").toString()
         set(value) = sharedPreferences.edit().putString("pose", value).apply()
 
-    var jumps: String
-        get() = sharedPreferences.getString("jumps", "0").toString()
-        set(value) = sharedPreferences.edit().putString("jumps", value).apply()
+    var typeTouch: String
+        get() = sharedPreferences.getString("type", "").toString()
+        set(value) = sharedPreferences.edit().putString("type", value).apply()
 
-    var push_ups: String
-        get() = sharedPreferences.getString("push_ups", "0").toString()
-        set(value) = sharedPreferences.edit().putString("push_ups", value).apply()
+    var countTouch: Int
+        get() = sharedPreferences.getInt("count", 0)
+        set(value) = sharedPreferences.edit().putInt("count", value).apply()
 
-    var sits: String
-        get() = sharedPreferences.getString("sits", "0").toString()
-        set(value) = sharedPreferences.edit().putString("sits", value).apply()
+    var startUnixTimestampTouch: Int
+        get() = sharedPreferences.getInt("startUnixTimestamp", 0)
+        set(value) = sharedPreferences.edit().putInt("startUnixTimestamp", value).apply()
+
+    var jumps: Int
+        get() = sharedPreferences.getInt("jumps", 0)
+        set(value) = sharedPreferences.edit().putInt("jumps", value).apply()
+
+    var push_ups: Int
+        get() = sharedPreferences.getInt("push_ups", 0)
+        set(value) = sharedPreferences.edit().putInt("push_ups", value).apply()
+
+    var sits: Int
+        get() = sharedPreferences.getInt("sits", 0)
+        set(value) = sharedPreferences.edit().putInt("sits", value).apply()
 
     var userRefreshToken: String
         get() = sharedPreferences.getString("userToken", "").toString()

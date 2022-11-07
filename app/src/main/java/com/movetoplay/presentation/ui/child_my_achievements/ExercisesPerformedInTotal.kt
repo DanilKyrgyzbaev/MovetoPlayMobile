@@ -1,7 +1,7 @@
-package com.movetoplay.presentation.ui.child_my_achievements
+package com.movetoplay.presentation.ui.child_my_achievements // ktlint-disable package-name
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.* // ktlint-disable no-wildcard-imports
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -54,7 +54,7 @@ fun ExercisesPerformedInTotal(
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
             val jumps = Pref.jumps
-            val progressJumping = jumps.toInt()
+            val progressJumping = jumps
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -85,7 +85,7 @@ fun ExercisesPerformedInTotal(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "$jumps/30",
+                        text = "$progressJumping/30",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,
@@ -103,7 +103,7 @@ fun ExercisesPerformedInTotal(
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
             val pushups = Pref.push_ups
-            val progressPushUps = pushups.toInt()
+            val progressPushUps = pushups
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -135,7 +135,7 @@ fun ExercisesPerformedInTotal(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "$pushups/30",
+                        text = "$progressPushUps/30",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,
@@ -185,7 +185,7 @@ fun ExercisesPerformedInTotal(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "$squats/30",
+                        text = "$progressSquats/30",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,
