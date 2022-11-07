@@ -1,7 +1,5 @@
 package com.movetoplay.presentation.ui.child_home
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,12 +16,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.movetoplay.R
-import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.presentation.ui.component_widgets.Button
-import com.movetoplay.presentation.utils.timeFormat
-import dagger.hilt.android.internal.Contexts
-import dagger.hilt.android.qualifiers.ApplicationContext
-
 @Composable
 fun TimeUse(
     availableForDayMinutes: Int,
@@ -61,13 +54,7 @@ fun TimeUse(
         Button(
             label = "+ 10 минут",
             onClick = {
-                val remainingTime = AccessibilityPrefs.remainingTime.toInt()
-                val dailyLimit = AccessibilityPrefs.dailyLimit.toInt()
-                val addTime = 10000
-                val resultRemainingTime = remainingTime + addTime
-                val resultDailyLimit = dailyLimit + addTime
-                AccessibilityPrefs.remainingTime = resultRemainingTime.toLong()
-                AccessibilityPrefs.dailyLimit = resultDailyLimit.toLong()
+                addTime()
             },
             size = sizeButton
         )

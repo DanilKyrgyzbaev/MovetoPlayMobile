@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileChildVM @Inject constructor() : ViewModel() {
-    private val _availableForDay = mutableStateOf(45)
+    private val _availableForDay = mutableStateOf(60)
     val availableForDay: State<Int> get() = _availableForDay
     val flowRemainingTime = flow<Int> {
         emit(25)
