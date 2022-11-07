@@ -2,17 +2,15 @@ package com.movetoplay.screens.signin
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.movetoplay.databinding.ActivitySignInBinding
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.create_child_profile.SetupProfileActivity
 import com.movetoplay.screens.forgot_password.ForgotPasswordActivity
-import com.movetoplay.screens.parent.MainActivityParent
+import com.movetoplay.screens.parent.MainParentActivity
 import com.movetoplay.util.ValidationUtil
 import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,7 +60,7 @@ class SignInActivity : AppCompatActivity() {
                         if (Pref.isChild) {
                             startActivity(Intent(this, SetupProfileActivity::class.java))
                         } else {
-                            startActivity(Intent(this, MainActivityParent::class.java))
+                            startActivity(Intent(this, MainParentActivity::class.java))
                         }
                         finishAffinity()
                     }

@@ -4,10 +4,13 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -20,6 +23,7 @@ import com.movetoplay.presentation.child_main_nav.ChildMainNav
 import com.movetoplay.presentation.theme.MoveToPlayTheme
 import com.movetoplay.screens.applock.AccessibilityService
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.reflect.Method
 
 
 @AndroidEntryPoint
@@ -31,9 +35,28 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        isMiUi()
         checkAccessPermission()
         checkPermission()
         initViews()
+    }
+
+    private fun isMiUi() {
+        try {
+            val cl = this.classLoader
+            val c = cl.loadClass("android.os.SystemProperties")
+            val get: Method = c.getMethod("get", String::class.java)
+            val miui = get.invoke(c, "ro.miui.ui.version.name") as String
+            if (miui.isNotEmpty() && miui.contains("11")) {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+        } catch (e: Exception) {
+            Log.e("main", "isMiUi: ${e.localizedMessage}")
+        }
+
     }
 
     private fun initViews() {
@@ -73,6 +96,7 @@ class MainActivity : ComponentActivity() {
             permissionAccessibility(this)
         }
     }
+
     private fun isAccessibilityGranted(context: Context): Boolean {
 
         var accessibilityEnabled = 0

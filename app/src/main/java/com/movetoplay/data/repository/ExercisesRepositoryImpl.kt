@@ -3,6 +3,7 @@ package com.movetoplay.data.repository
 import com.movetoplay.data.mapper.toApiError
 import com.movetoplay.data.model.ErrorBody
 import com.movetoplay.data.model.ExerciseResponse
+import com.movetoplay.data.model.TouchBody
 import com.movetoplay.domain.model.DailyExercises
 import com.movetoplay.domain.repository.ExercisesRepository
 import com.movetoplay.domain.utils.ResultStatus
@@ -14,7 +15,7 @@ import javax.inject.Inject
 class ExercisesRepositoryImpl @Inject constructor(private val api: ApiService) :
     ExercisesRepository {
 
-    override suspend fun postTouch(touch: Touch): ResultStatus<ExerciseResponse> {
+    override suspend fun postTouch(touch: TouchBody): ResultStatus<ExerciseResponse> {
         return try {
             val result = api.postTouch("Bearer ${Pref.childToken}", touch)
 

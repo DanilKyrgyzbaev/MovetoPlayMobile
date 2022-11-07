@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "319143794605-oqvu0km06hujdfinnb4jrdj7j4f15ie6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.movetoplay",
+            "certificate_hash": "90520ad952e1a57d72f95383f78d373555349512"
+          }
+        },
+        {
           "client_id": "319143794605-4t0t43i8sb1tlkksthfrqo8irngnv9f0.apps.googleusercontent.com",
           "client_type": 3
         }

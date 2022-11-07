@@ -23,6 +23,12 @@ interface ApiService {
     @POST("/auth/registration")
     suspend fun register(@Body registration: Registration): Response<TokenResponse>
 
+    @POST("/google/auth")
+    suspend fun loginViaGoogle(@Body loginViaGoogle: LoginViaGoogleBody):Response<TokenResponse>
+
+    @POST("/google/register")
+    suspend fun registerViaGoogle(@Body loginViaGoogle: LoginViaGoogleBody):Response<TokenResponse>
+
     @POST("/auth/authorizeProfile")
     suspend fun authorizeProfile(
         @Header("Authorization") token: String,
@@ -63,7 +69,7 @@ interface ApiService {
     @POST("/exercises/touch")
     suspend fun postTouch(
         @Header("Authorization") token: String,
-        @Body touch: Touch
+        @Body touch: TouchBody
     ): Response<ExerciseResponse>
 
     @GET("/exercises/getDaily")

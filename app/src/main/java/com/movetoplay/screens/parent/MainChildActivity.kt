@@ -17,7 +17,7 @@ import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivityChild : AppCompatActivity() {
+class MainChildActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainChildBinding
     private val vm: MainParentViewModel by viewModels()
@@ -32,14 +32,24 @@ class MainActivityChild : AppCompatActivity() {
         setupListeners()
     }
 
+    private fun initViews() {
+        val argument = intent.getStringExtra("child")
+        if (argument != null) {
+            child = Gson().fromJson(argument, Child::class.java)
+
+            binding.tvChild.text = child.fullName
+            Pref.childId = child.id
+        }
+        vm.checkDailyExercise()
+    }
+
     private fun setupListeners() {
         binding.run {
             btnSettingsMainChild.setOnClickListener {
                 startActivity(
                     Intent(
-                        this@MainActivityChild,
-                        LimitationAppActivity::class.java
-                    ).apply {
+                        this@MainChildActivity,
+                        LimitationAppActivity::class.java).apply {
                         putExtra("child", Gson().toJson(child))
                     })
             }
@@ -87,19 +97,21 @@ class MainActivityChild : AppCompatActivity() {
         }
     }
 
-    private fun initViews() {
-        val argument = intent.getStringExtra("child")
-        if (argument != null) {
-            child = Gson().fromJson(argument, Child::class.java)
+    override fun onRestart() {
+        super.onRestart()
 
-            binding.tvChild.text = child.fullName
-            Pref.childId = child.id
-        }
-        vm.checkDailyExercise()
+       vm.checkDailyExercise()
     }
 
     override fun onBackPressed() {
+        resetData()
         finish()
         super.onBackPressed()
+    }
+
+    private fun resetData() {
+        Pref.childToken = ""
+        Pref.deviceId = ""
+        Pref.childId = ""
     }
 }

@@ -58,7 +58,7 @@ class MainParentViewModel @Inject constructor(
                 result.data?.id?.let { Pref.deviceId = it }
                 authorizeProfile()
             } else if (result is ResultStatus.Error) dailyExerciseResult.value =
-                ResultStatus.Error(result.error)
+                ResultStatus.Error("Сделайте вход с устройства ребенка!")
         }
     }
 

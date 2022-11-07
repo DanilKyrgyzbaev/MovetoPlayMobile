@@ -119,7 +119,7 @@ class LimitationAppActivity : AppCompatActivity() {
 
     private fun saveBeforeFinish() {
         val appsLimit = adapter.getBlockedApps()
-        if (appsLimit.isEmpty())
+        if (appsLimit.isNotEmpty())
             vm.setLimits(appsLimit)
         else goTo()
     }
@@ -130,7 +130,6 @@ class LimitationAppActivity : AppCompatActivity() {
     }
 
     private fun goTo() {
-        Pref.childToken = ""
         finish()
     }
 }

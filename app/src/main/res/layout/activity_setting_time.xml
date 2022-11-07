@@ -20,7 +20,7 @@
         android:layout_below="@id/et_limit"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:background="@color/main_value"
+        android:background="@drawable/btn_bg_colored"
         android:padding="10dp"
         android:text="Установить время"
         android:textAllCaps="false"

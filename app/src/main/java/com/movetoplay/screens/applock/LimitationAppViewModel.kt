@@ -73,4 +73,8 @@ class LimitationAppViewModel @Inject constructor(
             } else loading.value = ResultStatus.Error("Ошибка авторизации!")
         }
     }
+
+    fun updateLimits() {
+        getLimited(Pref.childId)
+    }
 }

@@ -8,6 +8,7 @@
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/bg_button_stop.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/bg_child_profile.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/bg_on_off_toggle.xml" value="0.1" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/bg_rounded.xml" value="0.174" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/bg_transparent_blue.xml" value="0.127" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/block.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/btn_bg_colored.xml" value="0.1" />
@@ -22,8 +23,12 @@
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_logo.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_auth.xml" value="0.2" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_child_lock.xml" value="0.25677083333333334" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_confirm.xml" value="0.2" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_confirm_accounts.xml" value="0.25677083333333334" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_do_exercises.xml" value="0.25677083333333334" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_forgot_password.xml" value="0.19701086956521738" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_get_list_all_apps.xml" value="0.1956521739130435" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_get_sms.xml" value="0.25677083333333334" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_graph_ui.xml" value="0.1956521739130435" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_limitation_app.xml" value="0.2" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_limitation_child.xml" value="0.25677083333333334" />
@@ -49,6 +54,7 @@
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/spin_gender_item.xml" value="0.25677083333333334" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/spin_status_item.xml" value="0.25677083333333334" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/spinner_item.xml" value="0.72" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/view_dialog_auth_like.xml" value="0.25677083333333334" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/view_dialog_permission_accessibility.xml" value="0.264" />
         <entry key="..\:/Users/insapshion/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.25677083333333334" />
         <entry key="app/src/main/res/drawable/ic_cup.xml" value="0.161" />

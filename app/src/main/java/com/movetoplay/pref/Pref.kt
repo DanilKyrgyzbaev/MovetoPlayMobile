@@ -9,6 +9,9 @@ object Pref {
     var localPassword: String
         get() = sharedPreferences.getString("pin", "") ?: ""
         set(value) = sharedPreferences.edit().putString("pin", value).apply()
+    var fidToken: String?
+        get() = sharedPreferences.getString("fid_token", "")
+        set(value) = sharedPreferences.edit().putString("fid_token", value).apply()
 
     var isFirst: Boolean
         get() = sharedPreferences.getBoolean("isFir", true)
@@ -101,4 +104,10 @@ object Pref {
     var userRefreshToken: String
         get() = sharedPreferences.getString("userToken", "").toString()
         set(value) = sharedPreferences.edit().putString("userToken", value).apply()
+
+    var unixTime: Long
+        get() = sharedPreferences.getLong("unix_time", 0)
+        set(value) = sharedPreferences.edit().putLong("unix_time", value).apply()
+
+
 }

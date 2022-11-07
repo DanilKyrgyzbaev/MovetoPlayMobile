@@ -78,4 +78,32 @@ class AuthRepositoryImpl @Inject constructor(
             ResultStatus.Error(e.localizedMessage)
         }
     }
+
+    override suspend fun loginViaGoogle(token: String): ResultStatus<TokenResponse> {
+        return try {
+            val response = api.loginViaGoogle(
+                LoginViaGoogleBody(token)
+            )
+
+            if (response.isSuccessful) ResultStatus.Success(response.body())
+            else ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message)
+
+        } catch (e: Throwable) {
+            ResultStatus.Error(e.localizedMessage)
+        }
+    }
+
+    override suspend fun registerViaGoogle(token: String): ResultStatus<TokenResponse> {
+        return try {
+            val response = api.registerViaGoogle(
+                LoginViaGoogleBody(token)
+            )
+
+            if (response.isSuccessful) ResultStatus.Success(response.body())
+            else ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message)
+
+        } catch (e: Throwable) {
+            ResultStatus.Error(e.localizedMessage)
+        }
+    }
 }

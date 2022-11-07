@@ -16,7 +16,7 @@ import com.movetoplay.domain.model.Gender
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.MainActivity
-import com.movetoplay.screens.parent.MainActivityParent
+import com.movetoplay.screens.parent.MainParentActivity
 import com.movetoplay.util.inVisible
 import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -218,7 +218,7 @@ class SetupProfileActivity : AppCompatActivity() {
         if (Pref.isChild) {
             viewModel.syncProfile()
         } else {
-            startActivity(Intent(this, MainActivityParent::class.java))
+            startActivity(Intent(this, MainParentActivity::class.java))
             finishAffinity()
         }
 

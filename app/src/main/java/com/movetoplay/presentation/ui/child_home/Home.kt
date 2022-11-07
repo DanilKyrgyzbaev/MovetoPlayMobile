@@ -34,9 +34,9 @@ fun Home(
     ) {
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
-            availableForDayMinutes = AccessibilityPrefs.remainingTime.toInt(),
-            remainderMinutes = AccessibilityPrefs.dailyLimit.toInt(),
-            addTime = {},
+            availableForDayMinutes = AccessibilityPrefs.remainingTime,
+            remainderMinutes = AccessibilityPrefs.dailyLimit,
+            addTime = { },
             sizeButton = sizeButtonAndIndicators
         )
         Spacer(modifier = Modifier.height(20.dp))
