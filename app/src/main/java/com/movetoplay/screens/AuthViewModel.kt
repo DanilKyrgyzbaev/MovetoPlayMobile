@@ -1,5 +1,6 @@
 package com.movetoplay.screens
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,57 +26,34 @@ class AuthViewModel : ViewModel() {
     val signViaGoogleResult = MutableLiveData<HashMap<String, String>>()
 
     fun signViaGoogle(token: String) {
-
+      Log.e("auth", token)
         signViaGoogleResult.value = hashMapOf("loading" to "yes")
 
         val credential = GoogleAuthProvider.getCredential(token, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful)
-                signOrRegister(it.result.additionalUserInfo?.isNewUser ?: false)
+               auth()
             else signViaGoogleResult.value =
                 hashMapOf("error" to "Error: " + it.exception?.localizedMessage)
         }
     }
 
-    fun signOrRegister(isNewUser: Boolean) {
+    private fun auth() {
         viewModelScope.launch {
             val result = auth.currentUser?.getIdToken(true)?.await()
             if (result?.token != null) {
-                Pref.fidToken = result.token
-                if (isNewUser)
-                    login(result.token!!)
-                else register(result.token!!)
+                when (val res = authRepository.signViaGoogle(result.token!!)) {
+                    is ResultStatus.Loading -> {}
+                    is ResultStatus.Success -> {
+                        Pref.userAccessToken = res.data?.accessToken.toString()
+                        Pref.userRefreshToken = res.data?.refreshToken.toString()
+                        signViaGoogleResult.value = hashMapOf("success" to "yes")
+                    }
+                    is ResultStatus.Error -> {
+                        signViaGoogleResult.value = hashMapOf("error" to "Error: " + res.error)
+                    }
+                }
             } else signViaGoogleResult.value = hashMapOf("error" to "Invalid token")
-        }
-    }
-
-     fun register(token: String) {
-        viewModelScope.launch {
-            when (val result = authRepository.registerViaGoogle(token)) {
-                is ResultStatus.Loading -> {}
-                is ResultStatus.Success -> {
-                    Pref.userAccessToken = result.data?.accessToken.toString()
-                    signViaGoogleResult.value = hashMapOf("success" to "yes")
-                }
-                is ResultStatus.Error -> {
-                    signViaGoogleResult.value = hashMapOf("error" to "Error: " + result.error)
-                }
-            }
-        }
-    }
-
-    private fun login(token: String) {
-        viewModelScope.launch {
-            when (val result = authRepository.loginViaGoogle(token)) {
-                is ResultStatus.Loading -> {}
-                is ResultStatus.Success -> {
-                    Pref.userAccessToken = result.data?.accessToken.toString()
-                    signViaGoogleResult.value = hashMapOf("success" to "yes")
-                }
-                is ResultStatus.Error -> {
-                    signViaGoogleResult.value = hashMapOf("error" to "Error: " + result.error)
-                }
-            }
         }
     }
 }

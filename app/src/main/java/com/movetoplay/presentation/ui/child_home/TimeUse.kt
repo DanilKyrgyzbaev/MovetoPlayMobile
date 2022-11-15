@@ -1,7 +1,5 @@
 package com.movetoplay.presentation.ui.child_home
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,7 +34,7 @@ fun TimeUse(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "${stringResource(R.string.available_for_day)}: ${remainderMinutes.toStrTime()}",
+            text = "${stringResource(R.string.available_for_day)}: ${availableForDayMinutes.toStrTime()}",
             color = Color.Gray,
             fontSize = 18.sp,
             textAlign = TextAlign.Center
@@ -49,7 +47,7 @@ fun TimeUse(
             fontWeight = FontWeight.W600
         )
         Text(
-            text = availableForDayMinutes.toStrTime(),
+            text = remainderMinutes.toStrTime(),
             color = colorScheme.primary,
             fontSize = 28.sp,
             fontWeight = FontWeight.W600

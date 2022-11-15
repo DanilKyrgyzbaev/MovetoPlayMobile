@@ -207,7 +207,7 @@ class SetupProfileActivity : AppCompatActivity() {
                         visible(false)
                         binding.btnContinue.isClickable = true
                         Log.e("TAG", "Sync Result Status Error: ${it.error} ")
-                        //goToMainActivity()
+                        goToMainActivity()
                     }
                 }
             }

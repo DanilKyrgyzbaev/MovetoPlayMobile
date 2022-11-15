@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.movetoplay.R
+import com.movetoplay.domain.model.DailyExercises
 import com.movetoplay.domain.model.Exercise
 import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.ui.component_widgets.ExercisesPerformedIndicator
@@ -26,7 +27,9 @@ import com.movetoplay.presentation.ui.component_widgets.ExercisesPerformedIndica
 @Composable
 fun ExercisesPerformedInTotal(
     sizeButtonAndIndicators: DpSize,
-    listExercise: List<Exercise>
+    defExerciseCount: HashMap<String, Int>,
+    listExercise: List<Exercise>,
+    dailyExercises: DailyExercises
 ) {
     val list = remember {
         listExercise
@@ -53,8 +56,8 @@ fun ExercisesPerformedInTotal(
                 .height(40.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
-            val jumps = Pref.jumps
-            val progressJumping = jumps
+            val jumps = dailyExercises.jumps?.count ?: Pref.jumps
+            val defJumpsCount = defExerciseCount["jump"]
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -72,7 +75,8 @@ fun ExercisesPerformedInTotal(
                                     Color(0xFF1790D4)
                                 )
                             )
-                        ).width(300.dp * progressJumping / 35)
+                        )
+                        .width(300.dp * jumps / defJumpsCount!!)
                 )
 
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -85,7 +89,7 @@ fun ExercisesPerformedInTotal(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "$progressJumping/30",
+                        text = "$jumps/$defJumpsCount",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,
@@ -102,8 +106,8 @@ fun ExercisesPerformedInTotal(
                 .height(40.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
-            val pushups = Pref.push_ups
-            val progressPushUps = pushups
+            val squeezing = dailyExercises.squeezing?.count ?: Pref.push_ups
+            val defSqueezingCount = defExerciseCount["squeezing"]
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -122,7 +126,7 @@ fun ExercisesPerformedInTotal(
                                 )
                             )
                         )
-                        .width(300.dp * progressPushUps / 35)
+                        .width(300.dp * squeezing / defSqueezingCount!!)
                 )
 
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -135,7 +139,7 @@ fun ExercisesPerformedInTotal(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "$progressPushUps/30",
+                        text = "$squeezing/$defSqueezingCount",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,
@@ -152,8 +156,8 @@ fun ExercisesPerformedInTotal(
                 .height(40.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
-            val squats = Pref.sits
-            val progressSquats = squats.toInt()
+            val squats = dailyExercises.squats?.count ?: Pref.sits
+            val defSquatCount = defExerciseCount["squat"]
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -172,7 +176,7 @@ fun ExercisesPerformedInTotal(
                                 )
                             )
                         )
-                        .width(300.dp * progressSquats / 35)
+                        .width(300.dp * squats / defSquatCount!!)
                 )
 
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -185,7 +189,7 @@ fun ExercisesPerformedInTotal(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "$progressSquats/30",
+                        text = "$squats/$defSquatCount",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,

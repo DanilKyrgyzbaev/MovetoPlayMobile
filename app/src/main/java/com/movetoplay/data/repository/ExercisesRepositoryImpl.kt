@@ -15,7 +15,7 @@ import javax.inject.Inject
 class ExercisesRepositoryImpl @Inject constructor(private val api: ApiService) :
     ExercisesRepository {
 
-    override suspend fun postTouch(touch: TouchBody): ResultStatus<ExerciseResponse> {
+    override suspend fun postTouch(touch: Touch): ResultStatus<ExerciseResponse> {
         return try {
             val result = api.postTouch("Bearer ${Pref.childToken}", touch)
 
@@ -27,9 +27,9 @@ class ExercisesRepositoryImpl @Inject constructor(private val api: ApiService) :
         }
     }
 
-    override suspend fun getDaily(childToken: String): ResultStatus<DailyExercises> {
+    override suspend fun getDaily(id:String,token: String): ResultStatus<DailyExercises> {
         return try {
-            val res = api.getDaily("Bearer $childToken")
+            val res = api.getDaily("Bearer $token",id)
 
             if (res.isSuccessful) ResultStatus.Success(res.body())
             else ResultStatus.Error(res.errorBody().toApiError<ErrorBody>().message)

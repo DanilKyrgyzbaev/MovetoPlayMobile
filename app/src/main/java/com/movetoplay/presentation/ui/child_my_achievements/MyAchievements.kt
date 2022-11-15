@@ -28,6 +28,8 @@ fun MyAchievements(
     viewModel: ProfileChildVM
 ) {
     val sizeButtonAndIndicators = DpSize(300.dp, 40.dp)
+    viewModel.getDailyExercises()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +47,9 @@ fun MyAchievements(
         Spacer(modifier = Modifier.height(20.dp))
         ExercisesPerformedInTotal(
             sizeButtonAndIndicators,
-            listExercise = viewModel.listExerciseFRemainingTime
+            listExercise = viewModel.listExerciseFRemainingTime,
+            defExerciseCount = viewModel.defExerciseCount.value,
+            dailyExercises = viewModel.dailyExercises.value
         )
         Spacer(modifier = Modifier.height(20.dp))
 

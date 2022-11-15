@@ -99,7 +99,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
-            android:name=".screens.SettingTimeActivity"
+            android:name=".screens.set_time.SettingTimeActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity

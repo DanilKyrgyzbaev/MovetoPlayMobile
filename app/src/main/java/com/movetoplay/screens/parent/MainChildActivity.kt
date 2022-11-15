@@ -3,11 +3,13 @@ package com.movetoplay.screens.parent
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.gson.Gson
 import com.movetoplay.databinding.ActivityMainChildBinding
 import com.movetoplay.domain.model.Child
+import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.model.DailyExercises
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.ExercisesPref
@@ -21,7 +23,7 @@ class MainChildActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainChildBinding
     private val vm: MainParentViewModel by viewModels()
-    private var child = Child()
+    private var childInfo = ChildInfo()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +37,13 @@ class MainChildActivity : AppCompatActivity() {
     private fun initViews() {
         val argument = intent.getStringExtra("child")
         if (argument != null) {
-            child = Gson().fromJson(argument, Child::class.java)
+            val child = Gson().fromJson(argument, Child::class.java)
 
             binding.tvChild.text = child.fullName
             Pref.childId = child.id
         }
-        vm.checkDailyExercise()
+        vm.getChildInfo()
+        vm.getDailyExercises(Pref.childId)
     }
 
     private fun setupListeners() {
@@ -49,8 +52,9 @@ class MainChildActivity : AppCompatActivity() {
                 startActivity(
                     Intent(
                         this@MainChildActivity,
-                        LimitationAppActivity::class.java).apply {
-                        putExtra("child", Gson().toJson(child))
+                        LimitationAppActivity::class.java
+                    ).apply {
+                        putExtra("childInfo", Gson().toJson(childInfo))
                     })
             }
         }
@@ -70,37 +74,64 @@ class MainChildActivity : AppCompatActivity() {
                 }
             }
         }
+        vm.childInfoResult.observe(this) {
+            when (it) {
+                is ResultStatus.Loading -> {
+                    binding.progressChild.visible(true)
+                }
+                is ResultStatus.Success -> {
+                    binding.progressChild.visible(false)
+                    it.data?.let { data ->
+                        setChildInfo(data)
+                        childInfo = data
+                    }
+                }
+                is ResultStatus.Error -> {
+                    binding.progressChild.visible(false)
+                    Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun setChildInfo(info: ChildInfo) {
+        Log.e("mainChild", "setChildInfo: info:${info.needJumpCount}  pref:${ExercisesPref.jumps}")
+        binding.run {
+            (info.needJumpCount ?: ExercisesPref.jumps).let {
+                progressJump.max = it
+                tvJumpDefault.text = "/$it"
+            }
+            (info.needSquatsCount ?: ExercisesPref.squats).let {
+                progressSquats.max = it
+                tvSquatsDefault.text = "/$it"
+            }
+            (info.needSqueezingCount ?: ExercisesPref.squeezing).let {
+                progressSqueezing.max = it
+                tvSqueezingDefault.text = "/$it"
+            }
+        }
     }
 
     private fun setData(exercises: DailyExercises) {
-        val dailyCount = ExercisesPref.dailyExercisesCount
         binding.run {
             //jumps
-            "${exercises.jumps.count}/$dailyCount".also {
-                tvJump.text = it
-            }
-            progressJump.max = dailyCount
-            progressJump.progress = exercises.jumps.count
+            tvJump.text = exercises.jumps?.count.toString()
+            progressJump.progress = exercises.jumps?.count ?: ExercisesPref.jumps
             //squats
-            "${exercises.squats.count}/$dailyCount".also {
-                tvSquats.text = it
-            }
-            progressSquats.max = dailyCount
-            progressSquats.progress = exercises.squats.count
+            tvSquats.text = exercises.squats?.count.toString()
+            progressSquats.progress = exercises.squats?.count ?: ExercisesPref.squats
 
             //squeezing
-            "${exercises.squeezing.count}/$dailyCount".also {
-                tvSqueezing.text = it
-            }
-            progressSqueezing.max = dailyCount
-            progressSqueezing.progress = exercises.squeezing.count
+            tvSqueezing.text = exercises.squeezing?.count.toString()
+            progressSqueezing.progress = exercises.squeezing?.count ?: ExercisesPref.squeezing
         }
     }
 
     override fun onRestart() {
+        vm.getDailyExercises(Pref.childId)
+        vm.getChildInfo()
+        Log.e("mainChild", "onRestart: is working")
         super.onRestart()
-
-       vm.checkDailyExercise()
     }
 
     override fun onBackPressed() {

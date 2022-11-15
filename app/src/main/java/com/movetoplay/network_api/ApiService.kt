@@ -20,11 +20,11 @@ interface ApiService {
     @POST("/auth/registration")
     suspend fun register(@Body registration: Registration): Response<TokenResponse>
 
-    @POST("/google/auth")
-    suspend fun loginViaGoogle(@Body loginViaGoogle: LoginViaGoogleBody):Response<TokenResponse>
 
-    @POST("/google/register")
-    suspend fun registerViaGoogle(@Body loginViaGoogle: LoginViaGoogleBody):Response<TokenResponse>
+    @POST("/google/auth")
+    suspend fun signViaGoogle(
+        @Header("Authorization") token: String
+    ): Response<TokenResponse>
 
     @POST("/auth/authorizeProfile")
     suspend fun authorizeProfile(
@@ -66,12 +66,13 @@ interface ApiService {
     @POST("/exercises/touch")
     suspend fun postTouch(
         @Header("Authorization") token: String,
-        @Body touch: TouchBody
+        @Body touch: Touch
     ): Response<ExerciseResponse>
 
     @GET("/exercises/getDaily")
     suspend fun getDaily(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("profileId") profileId: String
     ): Response<DailyExercises>
 
     //-------------- Profiles ----------------------//
@@ -87,6 +88,18 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): Response<List<Child>>
 
+    @GET("/profiles/getInfo")
+    suspend fun getInfo(
+        @Header("Authorization") token: String,
+        @Query("id") id: String
+    ): Response<ChildInfo>
+
+    @PATCH("/profiles/update")
+    suspend fun updateProfileSettings(
+        @Header("Authorization") token: String,
+        @Query("id") id: String,
+        @Body limitSettingsBody: LimitSettingsBody
+    ): Response<Unit>
     //-------------- Account ----------------------//
 
     @GET("/accounts/getInfo")

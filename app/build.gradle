@@ -170,4 +170,7 @@ dependencies {
 
     implementation "com.github.fraggjkee:sms-confirmation-view:1.7.1"
 
+    //Google oauth
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
+
 }

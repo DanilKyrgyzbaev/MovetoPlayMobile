@@ -10,7 +10,6 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -22,6 +21,7 @@ import com.movetoplay.presentation.app_nav.AppNav
 import com.movetoplay.presentation.child_main_nav.ChildMainNav
 import com.movetoplay.presentation.theme.MoveToPlayTheme
 import com.movetoplay.screens.applock.AccessibilityService
+import com.movetoplay.util.permissionAccessibilityAlert
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.reflect.Method
 
@@ -47,9 +47,15 @@ class MainActivity : ComponentActivity() {
             val get: Method = c.getMethod("get", String::class.java)
             val miui = get.invoke(c, "ro.miui.ui.version.name") as String
             if (miui.isNotEmpty() && miui.contains("11")) {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri: Uri = Uri.fromParts("package", packageName, null)
-                intent.data = uri
+                val intent = Intent()
+                intent.apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    data = Uri.parse(("package:$packageName"))
+                    addCategory(Intent.CATEGORY_DEFAULT)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                }
                 startActivity(intent)
             }
         } catch (e: Exception) {
@@ -81,6 +87,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        checkAccessPermission()
+        checkPermission()
+    }
+
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
@@ -92,7 +104,7 @@ class MainActivity : ComponentActivity() {
 
     private fun checkAccessPermission() {
         if (!isAccessibilityGranted(this)) {
-            permissionAccessibility(this)
+            permissionAccessibility()
         }
     }
 
@@ -128,20 +140,7 @@ class MainActivity : ComponentActivity() {
         return false
     }
 
-    private fun permissionAccessibility(context: Context) {
-        AlertDialog.Builder(context, R.style.AlertDialogTheme)
-            .setTitle("")
-            .setView(
-                LayoutInflater.from(context).inflate(
-                    R.layout.view_dialog_permission_accessibility,
-                    null,
-                    false
-                )
-            )
-            .setPositiveButton("Настройки") { _, _ ->
-                // Utils.reportEventClick("AppLock Screen", "AppLock_Permission_btn")
-                context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            }
-            .create().show()
+    private fun permissionAccessibility() {
+        this.permissionAccessibilityAlert()
     }
 }

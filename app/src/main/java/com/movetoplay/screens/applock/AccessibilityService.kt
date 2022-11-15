@@ -54,11 +54,11 @@ class AccessibilityService : AccessibilityService() {
             "----------------------------------Start----------------------------------------"
         )
         Log.e("access", "onAccessibilityEvent:  ${event.packageName}")
-        if (event.packageName == null) AccessibilityPrefs.isEventPackageNull = true
 
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             return
         }
+        if (event.packageName == null) AccessibilityPrefs.isEventPackageNull = true
         updateUserApps()
 
         val eventPackage = event.packageName.toString()
@@ -77,7 +77,7 @@ class AccessibilityService : AccessibilityService() {
                         if (!AccessibilityPrefs.isTimerRunning) {
                             AccessibilityPrefs.isTimerRunning = true
                             AccessibilityPrefs.lastPackage = eventPackage
-                            startTimer(app.allowTime)
+                            startTimer()
                         }
                         return
                     }
@@ -97,6 +97,7 @@ class AccessibilityService : AccessibilityService() {
                 }
                 if (AccessibilityPrefs.isEventPackageNull && AccessibilityPrefs.lastPackage == eventPackage) {
                     AccessibilityPrefs.isEventPackageNull = false
+                    Log.e("access", "isEventpackageNull: false" )
                 }
             }
         }
@@ -121,8 +122,8 @@ class AccessibilityService : AccessibilityService() {
         this.startActivity(lockIntent)
     }
 
-    private fun startTimer(timeDuration:Long) {
-        AccessibilityPrefs.remainingTime = timeDuration
+    private fun startTimer() {
+        val  timeDuration = AccessibilityPrefs.remainingTime
         timer = object : CountDownTimer(timeDuration, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 AccessibilityPrefs.remainingTime = millisUntilFinished

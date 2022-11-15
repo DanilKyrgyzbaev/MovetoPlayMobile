@@ -26,12 +26,12 @@ import com.movetoplay.pref.Pref
 import com.movetoplay.presentation.ui.component_widgets.Button
 import com.movetoplay.presentation.ui.component_widgets.ExercisesPerformedIndicator
 import com.movetoplay.presentation.ui.component_widgets.TypeButton
-import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 
 @Composable
 fun ExercisesPerformedOnDay(
     sizeButtonAndIndicators: DpSize,
     listExercise: List<Exercise>,
+    defExerciseCount: HashMap<String,Int>,
     performExercise: () -> Unit
 ) {
     val list = remember {
@@ -70,7 +70,7 @@ fun ExercisesPerformedOnDay(
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
             val jumps = Pref.jumps
-            val progressJumping = jumps
+            val defJumps = defExerciseCount["jump"]
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -88,7 +88,7 @@ fun ExercisesPerformedOnDay(
                                     Color(0xFF1790D4)
                                 )
                             )
-                        ).width(300.dp * progressJumping / 35)
+                        ).width(300.dp * jumps / defJumps!!)
                 )
 
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -101,7 +101,7 @@ fun ExercisesPerformedOnDay(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "$jumps/30",
+                        text = "$jumps/$defJumps",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,
@@ -118,8 +118,8 @@ fun ExercisesPerformedOnDay(
                 .height(40.dp)
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
-            val pushups = Pref.push_ups
-            val progressPushUps = pushups
+            val squeezing = Pref.push_ups
+            val defSqueezing = defExerciseCount["squeezing"]
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -138,7 +138,7 @@ fun ExercisesPerformedOnDay(
                                 )
                             )
                         )
-                        .width(300.dp * progressPushUps / 35)
+                        .width(300.dp * squeezing / defSqueezing!!)
                 )
 
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -151,7 +151,7 @@ fun ExercisesPerformedOnDay(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "$pushups/30",
+                        text = "$squeezing/$defSqueezing",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,
@@ -169,7 +169,7 @@ fun ExercisesPerformedOnDay(
                 .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
         ) {
             val squats = Pref.sits
-            val progressSquats = squats
+            val defSquats = defExerciseCount["squat"]
             Box(
                 modifier = Modifier
                     .width(300.dp)
@@ -188,7 +188,7 @@ fun ExercisesPerformedOnDay(
                                 )
                             )
                         )
-                        .width(300.dp * progressSquats / 35)
+                        .width(300.dp * squats / defSquats!!)
                 )
 
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -201,7 +201,7 @@ fun ExercisesPerformedOnDay(
                     )
                     Spacer(Modifier.weight(1f))
                     Text(
-                        text = "$squats/30",
+                        text = "$squats/$defSquats",
                         modifier = Modifier.padding(7.dp),
                         color = Color.White,
                         textAlign = TextAlign.Right,

@@ -9,6 +9,5 @@ interface AuthRepository {
     suspend fun signUp(email: String, password: String, age: Int): ResultStatus<TokenResponse>
     suspend fun authorizeProfile(childId: String, deviceId: String): ResultStatus<TokenResponse>
     suspend fun confirm(code: Int): ResultStatus<Boolean>
-    suspend fun loginViaGoogle(token: String): ResultStatus<TokenResponse>
-    suspend fun registerViaGoogle(token: String): ResultStatus<TokenResponse>
+    suspend fun signViaGoogle(token: String): ResultStatus<TokenResponse>
 }

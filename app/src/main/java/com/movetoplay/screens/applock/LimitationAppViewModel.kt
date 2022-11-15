@@ -23,7 +23,7 @@ class LimitationAppViewModel @Inject constructor(
     var userApps = MutableLiveData<ResultStatus<List<UserApp>>>()
     val loading = MutableLiveData<ResultStatus<Boolean>>()
 
-    fun getLimited(id: String) {
+    fun getUserApps(id: String) {
         viewModelScope.launch {
             repository.getLimitedApps(Pref.userAccessToken, id).collect { appsResponse ->
                 when (appsResponse) {
@@ -72,9 +72,5 @@ class LimitationAppViewModel @Inject constructor(
                 loading.value = ResultStatus.Success(true)
             } else loading.value = ResultStatus.Error("Ошибка авторизации!")
         }
-    }
-
-    fun updateLimits() {
-        getLimited(Pref.childId)
     }
 }

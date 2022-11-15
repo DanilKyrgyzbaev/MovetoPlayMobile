@@ -1,20 +1,18 @@
 package com.movetoplay.screens.applock
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import com.movetoplay.domain.utils.ResultStatus
-import com.movetoplay.screens.SettingTimeActivity
+import com.movetoplay.screens.set_time.SettingTimeActivity
 import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import com.movetoplay.databinding.ActivityLimitationAppBinding
-import com.movetoplay.domain.model.Child
+import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.model.user_apps.UserApp
-import com.movetoplay.pref.Pref
 
 @AndroidEntryPoint
 class LimitationAppActivity : AppCompatActivity() {
@@ -22,7 +20,7 @@ class LimitationAppActivity : AppCompatActivity() {
     private lateinit var adapter: LimitationsAppsAdapter
     private lateinit var binding: ActivityLimitationAppBinding
     private var userApps = ArrayList<UserApp>()
-    private var child = Child()
+    private lateinit var child:ChildInfo
 
     private val vm: LimitationAppViewModel by viewModels()
 
@@ -36,10 +34,10 @@ class LimitationAppActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        val argument = intent.getStringExtra("child")
+        val argument = intent.getStringExtra("childInfo")
         if (!argument.isNullOrEmpty()) {
-            child = Gson().fromJson(argument, Child::class.java)
-            child.id.let { vm.getLimited(it) }
+            child = Gson().fromJson(argument, ChildInfo::class.java)
+            child.id.let { vm.getUserApps(it) }
         } else Toast.makeText(this, "Профиль ребенка не найден!", Toast.LENGTH_LONG).show()
 
         adapter = LimitationsAppsAdapter(userApps)
@@ -54,7 +52,9 @@ class LimitationAppActivity : AppCompatActivity() {
 
             imgTimeSettings.setOnClickListener {
                 val intent = Intent(this@LimitationAppActivity, SettingTimeActivity::class.java)
-                startActivity(intent)
+                startActivity(intent.apply {
+                    putExtra("childInfo", Gson().toJson(child))
+                })
             }
 
             imgSetPin.setOnClickListener {
@@ -125,8 +125,8 @@ class LimitationAppActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         goTo()
+        super.onBackPressed()
     }
 
     private fun goTo() {

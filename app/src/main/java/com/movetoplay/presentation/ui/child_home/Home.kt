@@ -12,10 +12,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.movetoplay.computer_vision.ComputerVisionActivity
 import com.movetoplay.domain.model.TypeExercise
-import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 @Composable
 fun Home(
@@ -28,10 +25,6 @@ fun Home(
         mutableStateOf(false)
     }
     val context = LocalContext.current
-    val remainingTime = AccessibilityPrefs.remainingTime.toInt()
-    val dailyLimit = AccessibilityPrefs.dailyLimit.toInt()
-    val minutesRemainingTime = TimeUnit.MILLISECONDS.toMinutes(remainingTime.toLong())
-    val minutesDailyLimit = TimeUnit.MILLISECONDS.toMinutes(dailyLimit.toLong())
 
     Column(
         modifier = Modifier
@@ -42,7 +35,7 @@ fun Home(
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
             availableForDayMinutes = viewModel.availableForDay.value.toLong(),
-            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60).value.toLong(),
+            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60*60000).value.toLong(),
             addTime = {
                 val addTimePl = 10000
             },
@@ -51,7 +44,8 @@ fun Home(
         Spacer(modifier = Modifier.height(20.dp))
         ExercisesPerformedOnDay(
             sizeButtonAndIndicators,
-            listExercise = viewModel.listExerciseForDay
+            listExercise = viewModel.listExerciseForDay,
+            defExerciseCount = viewModel.defExerciseCount.value
         ) {
             visibleDialog = true
         }
