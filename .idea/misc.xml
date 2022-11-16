@@ -17,6 +17,8 @@
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.102" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_baseline_switch_camera_24.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_cup.xml" value="0.1" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_drop_down_24.xml" value="0.131" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_drop_up_24.xml" value="0.131" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_flip.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_google.xml" value="0.1" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1" />
@@ -41,7 +43,7 @@
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_parrent_settings.xml" value="0.25677083333333334" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_reset_pass.xml" value="0.25677083333333334" />
-        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_setting_time.xml" value="0.176" />
+        <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_setting_time.xml" value="0.2" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_settings.xml" value="0.176" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_setup_profile.xml" value="0.12" />
         <entry key="..\:/Users/insapshion/AndroidStudioProjects/move-to-play-mobile/app/src/main/res/layout/activity_sign_in.xml" value="0.2" />
