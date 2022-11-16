@@ -3,7 +3,7 @@ package com.movetoplay.domain.model.user_apps
 import android.graphics.drawable.Drawable
 
 data class UserApp(
-    val allowTime: Long,
+    var allowTime: Long,
     val createdAt: String,
     val deviceId: String,
     val id: String,

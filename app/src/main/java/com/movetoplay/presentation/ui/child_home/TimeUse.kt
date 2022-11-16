@@ -17,10 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.movetoplay.R
 import com.movetoplay.presentation.ui.component_widgets.Button
+import com.movetoplay.util.toStrTime
+
 @Composable
 fun TimeUse(
-    availableForDayMinutes: Int,
-    remainderMinutes: Int,
+    availableForDayMinutes: Long,
+    remainderMinutes: Long,
     addTime: () -> Unit,
     sizeButton: DpSize
 ) {
@@ -32,7 +34,7 @@ fun TimeUse(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "${stringResource(R.string.available_for_day)}: $remainderMinutes мин",
+            text = "${stringResource(R.string.available_for_day)}: ${availableForDayMinutes.toStrTime()}",
             color = Color.Gray,
             fontSize = 18.sp,
             textAlign = TextAlign.Center
@@ -45,7 +47,7 @@ fun TimeUse(
             fontWeight = FontWeight.W600
         )
         Text(
-            text = "$availableForDayMinutes мин",
+            text = remainderMinutes.toStrTime(),
             color = colorScheme.primary,
             fontSize = 28.sp,
             fontWeight = FontWeight.W600
@@ -53,9 +55,7 @@ fun TimeUse(
         Spacer(modifier = Modifier.height(26.dp))
         Button(
             label = "+ 10 минут",
-            onClick = {
-                addTime()
-            },
+            onClick = addTime,
             size = sizeButton
         )
     }

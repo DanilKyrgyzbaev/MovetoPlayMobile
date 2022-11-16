@@ -56,7 +56,7 @@ class SetupProfileViewModel @Inject constructor(
                             )
                         )
                 } catch (e: Throwable) {
-                    createResultStatus.value = ResultStatus.Error(e.localizedMessage)
+                    createResultStatus.value = ResultStatus.Error(e.message)
                 }
             }
         }
@@ -75,15 +75,13 @@ class SetupProfileViewModel @Inject constructor(
     }
 
     fun syncProfile() {
-        val mac = getMacAddress()
-
         syncProfileStatus.value = ResultStatus.Loading()
 
         viewModelScope.launch {
             when (val it =
                 deviceRepository.getDeviceByMacAddress(
                     Pref.childId,
-                    mac
+                    getMacAddress()
                 )) {
                 is ResultStatus.Loading -> {}
                 is ResultStatus.Error -> {

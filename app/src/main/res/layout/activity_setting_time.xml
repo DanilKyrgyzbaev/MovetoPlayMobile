@@ -1,44 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".screens.SettingTimeActivity">
+    android:paddingHorizontal="16dp"
+    tools:context=".screens.set_time.SettingTimeActivity">
 
- <!--   <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" />-->
-
-    <Button
-        android:id="@+id/buttonAlarm"
+    <TextView
+        android:id="@+id/toolbar_title_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/et_limit"
-        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:text="Настройки"
+        android:textColor="@color/main_value"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!--   <TimePicker
+           android:id="@+id/timePicker"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true" />-->
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:indeterminateTint="@color/main_value"
+        app:layout_constraintBottom_toTopOf="@id/buttonSet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_squeezing" />
+
+    <Button
+        android:id="@+id/buttonSet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
         android:layout_marginTop="20dp"
-        android:background="@color/main_value"
+        android:background="@drawable/btn_bg_colored"
         android:padding="10dp"
-        android:text="Установить время"
+        android:text="Установить"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/et_limit"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:background="@drawable/bg_child_profile"
-        android:hint="Сколько мин?"
-        android:padding="8dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/main_value" />
+        style="@style/set_time_edt_style"
+        android:layout_marginTop="16dp"
+        android:hint="60"
+        app:layout_constraintBottom_toBottomOf="@id/set_time_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/set_time_tv"
+        app:layout_constraintTop_toTopOf="@id/set_time_tv" />
 
-</RelativeLayout>
+    <!--    <ImageView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:id="@+id/time_up_btn"-->
+    <!--        android:src="@drawable/ic_drop_up_24"-->
+    <!--        android:layout_marginEnd="1dp"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/et_limit"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/et_limit"-->
+    <!--        app:layout_constraintBottom_toTopOf="@id/time_down_btn"/>-->
+
+    <!--    <ImageView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:id="@+id/time_down_btn"-->
+    <!--        android:src="@drawable/ic_drop_down_24"-->
+    <!--        android:layout_marginEnd="1dp"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/et_limit"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/time_up_btn"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/et_limit"/>-->
+
+    <TextView
+        android:id="@+id/set_time_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/set_limitation_time"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/et_limit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_title_time" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="16dp"
+        android:background="@color/main_value"
+        app:layout_constraintTop_toBottomOf="@id/set_time_tv" />
+
+    <TextView
+        android:id="@+id/set_repeat_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Установите количество повторений для каждого упражнения для доступа к экранному времени"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider1" />
+
+    <TextView
+        android:id="@+id/set_squats_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/set_squats_def"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/et_squats"
+        app:layout_constraintEnd_toStartOf="@id/et_squats"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/et_squats" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_squats"
+        style="@style/set_time_edt_style"
+        android:layout_marginTop="16dp"
+        android:hint="15"
+        app:layout_constraintBottom_toTopOf="@id/et_jumps"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/set_squats_tv"
+        app:layout_constraintTop_toBottomOf="@id/set_repeat_tv" />
+
+    <TextView
+        android:id="@+id/set_jumps_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/set_jumps_def"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/et_jumps"
+        app:layout_constraintEnd_toStartOf="@id/et_jumps"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/et_jumps" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_jumps"
+        style="@style/set_time_edt_style"
+        android:layout_marginTop="16dp"
+        android:hint="15"
+        app:layout_constraintBottom_toTopOf="@id/et_squeezing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/set_jumps_tv"
+        app:layout_constraintTop_toBottomOf="@id/et_squats" />
+
+    <TextView
+        android:id="@+id/set_squeezing_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/set_squeezing_def"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/et_squeezing"
+        app:layout_constraintEnd_toStartOf="@id/et_squeezing"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/et_squeezing" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_squeezing"
+        style="@style/set_time_edt_style"
+        android:layout_marginTop="16dp"
+        android:hint="15"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/set_squeezing_tv"
+        app:layout_constraintTop_toBottomOf="@id/et_jumps" />
+</androidx.constraintlayout.widget.ConstraintLayout>

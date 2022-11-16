@@ -26,7 +26,6 @@ import com.movetoplay.model.Touch;
 import com.movetoplay.network_api.ApiService;
 import com.movetoplay.network_api.RetrofitClient;
 import com.movetoplay.pref.Pref;
-import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -148,6 +147,7 @@ public class PoseClassifierProcessor {
                     Log.e("ResultNumber",numberOnly);
                     //push_ups.csv  sits.csv
                     long unixTime = Instant.now().getEpochSecond();
+                    Pref.INSTANCE.setUnixTime(unixTime);
 
                     switch (Pref.INSTANCE.getPose()){
                         case "jumps.csv":

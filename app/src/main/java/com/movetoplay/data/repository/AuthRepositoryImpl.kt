@@ -78,4 +78,18 @@ class AuthRepositoryImpl @Inject constructor(
             ResultStatus.Error(e.localizedMessage)
         }
     }
+
+    override suspend fun signViaGoogle(token: String): ResultStatus<TokenResponse> {
+        return try {
+            val response = api.signViaGoogle(
+                "Bearer $token"
+            )
+
+            if (response.isSuccessful) ResultStatus.Success(response.body())
+            else ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message)
+
+        } catch (e: Throwable) {
+            ResultStatus.Error(e.localizedMessage)
+        }
+    }
 }

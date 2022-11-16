@@ -16,7 +16,7 @@ import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivityParent : AppCompatActivity() {
+class MainParentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainParentBinding
     private val vm: SetupProfileViewModel by viewModels()
@@ -26,8 +26,8 @@ class MainActivityParent : AppCompatActivity() {
         binding = ActivityMainParentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initListeners()
         initViews()
+        initListeners()
     }
 
     private fun initViews() {
@@ -67,7 +67,7 @@ class MainActivityParent : AppCompatActivity() {
     }
 
     private fun onItemClick(child: Child) {
-        startActivity(Intent(this, MainActivityChild::class.java).apply {
+        startActivity(Intent(this, MainChildActivity::class.java).apply {
             putExtra("child", Gson().toJson(child))
         })
     }

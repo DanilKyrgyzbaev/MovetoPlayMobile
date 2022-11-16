@@ -6,29 +6,13 @@ object Pref {
     private val sharedPreferences
         get() = App.sharedPrefs
 
-    var localPassword: String
-        get() = sharedPreferences.getString("pin", "") ?: ""
-        set(value) = sharedPreferences.edit().putString("pin", value).apply()
-
     var isFirst: Boolean
-        get() = sharedPreferences.getBoolean("isFir", true)
-        set(value) = sharedPreferences.edit().putBoolean("isFir", value).apply()
-
-    var isFirstDialog: Boolean
         get() = sharedPreferences.getBoolean("isFir", true)
         set(value) = sharedPreferences.edit().putBoolean("isFir", value).apply()
 
     var userLogin: String
         get() = sharedPreferences.getString("login", "").toString()
         set(value) = sharedPreferences.edit().putString("login", value).apply()
-
-    var userLoginPassword: String
-        get() = sharedPreferences.getString("loginPassword", "").toString()
-        set(value) = sharedPreferences.edit().putString("loginPassword", value).apply()
-
-    var parentsLogin: String
-        get() = sharedPreferences.getString("parentsLogin", "").toString()
-        set(value) = sharedPreferences.edit().putString("parentsLogin", value).apply()
 
     var childName: String
         get() = sharedPreferences.getString("childName", "").toString()
@@ -37,10 +21,6 @@ object Pref {
     var childAge: String
         get() = sharedPreferences.getString("childAge", "").toString()
         set(value) = sharedPreferences.edit().putString("childAge", value).apply()
-
-    var playingSports: Boolean
-        get() = sharedPreferences.getBoolean("playingSports", false)
-        set(value) = sharedPreferences.edit().putBoolean("playingSports", value).apply()
 
     var gender: String
         get() = sharedPreferences.getString("gender", "").toString()
@@ -117,4 +97,10 @@ object Pref {
     var userRefreshToken: String
         get() = sharedPreferences.getString("userToken", "").toString()
         set(value) = sharedPreferences.edit().putString("userToken", value).apply()
+
+    var unixTime: Long
+        get() = sharedPreferences.getLong("unix_time", 0)
+        set(value) = sharedPreferences.edit().putLong("unix_time", value).apply()
+
+
 }

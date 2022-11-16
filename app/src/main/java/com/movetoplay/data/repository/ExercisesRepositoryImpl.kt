@@ -3,6 +3,7 @@ package com.movetoplay.data.repository
 import com.movetoplay.data.mapper.toApiError
 import com.movetoplay.data.model.ErrorBody
 import com.movetoplay.data.model.ExerciseResponse
+import com.movetoplay.data.model.TouchBody
 import com.movetoplay.domain.model.DailyExercises
 import com.movetoplay.domain.repository.ExercisesRepository
 import com.movetoplay.domain.utils.ResultStatus
@@ -26,9 +27,9 @@ class ExercisesRepositoryImpl @Inject constructor(private val api: ApiService) :
         }
     }
 
-    override suspend fun getDaily(childToken: String): ResultStatus<DailyExercises> {
+    override suspend fun getDaily(id:String,token: String): ResultStatus<DailyExercises> {
         return try {
-            val res = api.getDaily("Bearer $childToken")
+            val res = api.getDaily("Bearer $token",id)
 
             if (res.isSuccessful) ResultStatus.Success(res.body())
             else ResultStatus.Error(res.errorBody().toApiError<ErrorBody>().message)

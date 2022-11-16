@@ -25,18 +25,14 @@ class AccessibilityService : AccessibilityService() {
     private var timer: CountDownTimer? = null
     private val serviceJob = Job()
 
-    //private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
     private var userApps = ArrayList<UserApp>()
     private lateinit var resetAlarmManager: ResetAlarmManager
 
     override fun onServiceConnected() {
         Log.e("onServiceConnected", "onServiceConnected: " + AccessibilityPrefs.currentDay)
-        // AccessibilityPrefs.currentDay = System.currentTimeMillis()
 
         resetAlarmManager = ResetAlarmManager()
         resetAlarmManager.setAlarm(this.applicationContext)
-
-        updateUserApps()
 
         super.onServiceConnected()
     }
@@ -58,11 +54,11 @@ class AccessibilityService : AccessibilityService() {
             "----------------------------------Start----------------------------------------"
         )
         Log.e("access", "onAccessibilityEvent:  ${event.packageName}")
-        if (event.packageName == null) AccessibilityPrefs.isEventPackageNull = true
 
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             return
         }
+        if (event.packageName == null) AccessibilityPrefs.isEventPackageNull = true
         updateUserApps()
 
         val eventPackage = event.packageName.toString()
@@ -101,6 +97,7 @@ class AccessibilityService : AccessibilityService() {
                 }
                 if (AccessibilityPrefs.isEventPackageNull && AccessibilityPrefs.lastPackage == eventPackage) {
                     AccessibilityPrefs.isEventPackageNull = false
+                    Log.e("access", "isEventpackageNull: false" )
                 }
             }
         }
@@ -116,21 +113,17 @@ class AccessibilityService : AccessibilityService() {
 
     private fun openLockScreen() {
         Log.e("access", "openLockScreen: ")
-//        val intent = Intent(this, ChildLockActivity::class.java)
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//        startActivity(intent)
         val lockIntent = Intent(
-            this.applicationContext,
+            this,
             ChildLockActivity::class.java
         )
         lockIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        this.applicationContext.startActivity(lockIntent)
+        this.startActivity(lockIntent)
     }
 
     private fun startTimer() {
-        val timeDuration = getRemainingTimePrefs()
+        val  timeDuration = AccessibilityPrefs.remainingTime
         timer = object : CountDownTimer(timeDuration, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 AccessibilityPrefs.remainingTime = millisUntilFinished
@@ -162,6 +155,5 @@ class AccessibilityService : AccessibilityService() {
         super.onDestroy()
 
         resetAlarmManager.cancelAlarm(this.applicationContext)
-        serviceJob.cancel()
     }
 }

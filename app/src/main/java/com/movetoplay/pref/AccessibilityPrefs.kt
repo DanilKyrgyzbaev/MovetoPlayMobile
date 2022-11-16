@@ -12,11 +12,11 @@ object AccessibilityPrefs {
         get() = App.sharedPrefs
 
     var dailyLimit: Long
-        get() = sharedPreferences.getLong("daily_limit", 60000)
+        get() = sharedPreferences.getLong("daily_limit", 60)
         set(value) = sharedPreferences.edit().putLong("daily_limit", value).apply()
 
     var remainingTime: Long
-        get() = sharedPreferences.getLong("remaining_limit", dailyLimit)
+        get() = sharedPreferences.getLong("remaining_limit", dailyLimit*60000)
         set(value) = sharedPreferences.edit().putLong("remaining_limit", value).apply()
 
     var currentDay: Long
