@@ -35,7 +35,7 @@ fun Home(
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
             availableForDayMinutes = viewModel.availableForDay.value.toLong(),
-            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60*60000).value.toLong(),
+            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60 * 60000).value.toLong(),
             addTime = {
                 val addTimePl = 10000
             },
@@ -45,7 +45,12 @@ fun Home(
         ExercisesPerformedOnDay(
             sizeButtonAndIndicators,
             listExercise = viewModel.listExerciseForDay,
-            defExerciseCount = viewModel.defExerciseCount.value
+            defExerciseCount = viewModel.defExerciseCount.value,
+            chose = {
+                context.startActivity(Intent(context, ComputerVisionActivity::class.java))
+                visibleDialog = false
+            },
+            sizeButton = sizeButtonAndIndicators
         ) {
             visibleDialog = true
         }

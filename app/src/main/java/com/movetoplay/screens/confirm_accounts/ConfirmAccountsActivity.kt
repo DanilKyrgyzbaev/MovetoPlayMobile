@@ -42,7 +42,7 @@ class ConfirmAccountsActivity : AppCompatActivity() {
 
         binding.btnEnter.setOnClickListener {
             if (ValidationUtil.isValidCode(this, otpCode) && Pref.userAccessToken != "") {
-                Log.e("reg", "initListeners: $otpCode" )
+                Log.e("reg", "initListeners: $otpCode")
                 viewModel.confirmEmail(otpCode!!.toInt())
             }
         }
@@ -68,7 +68,7 @@ class ConfirmAccountsActivity : AppCompatActivity() {
                 is ResultStatus.Error -> {
                     binding.progress.visible(false)
                     binding.btnEnter.isClickable = true
-                    Log.e("reg", "initListeners: ${it.error}", )
+                    Log.e("reg", "initListeners: ${it.error}")
                     Toast.makeText(this, it.error, Toast.LENGTH_SHORT).show()
                 }
             }
