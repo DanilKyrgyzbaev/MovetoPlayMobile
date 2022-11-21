@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.movetoplay.R
 import com.movetoplay.db.UserEntity
+import com.movetoplay.domain.model.DailyExercises
 import com.movetoplay.domain.model.Exercise
 import com.movetoplay.domain.model.TypeExercise
 import com.movetoplay.pref.Pref
@@ -34,6 +35,7 @@ fun ExercisesPerformedOnDay(
     chose: (TypeExercise) -> Unit,
     sizeButton: DpSize,
     defExerciseCount: HashMap<String, Int>,
+    dailyExercises: DailyExercises,
     performExercise: () -> Unit
 ) {
     val list = remember {
@@ -79,8 +81,8 @@ fun ExercisesPerformedOnDay(
                         .width(220.dp)
                         .height(40.dp)
                         .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
-                ) {
-                    val jumps = Pref.jumps
+                ) { // val jumps = Pref.jumps
+                    val jumps = dailyExercises.jumps?.count ?: Pref.jumps
                     val defJumps = defExerciseCount["jump"]
                     Box(
                         modifier = Modifier
@@ -153,7 +155,7 @@ fun ExercisesPerformedOnDay(
                         .height(40.dp)
                         .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
                 ) {
-                    val squeezing = Pref.push_ups
+                    val squeezing = dailyExercises.squeezing?.count ?: Pref.push_ups
                     val defSqueezing = defExerciseCount["squeezing"]
                     Box(
                         modifier = Modifier
@@ -226,7 +228,8 @@ fun ExercisesPerformedOnDay(
                         .height(40.dp)
                         .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
                 ) {
-                    val squats = Pref.sits
+                    val squats = dailyExercises.squats?.count ?: Pref.sits
+                    Log.e("Test", dailyExercises.squats?.count.toString())
                     val defSquats = defExerciseCount["squat"]
                     Box(
                         modifier = Modifier

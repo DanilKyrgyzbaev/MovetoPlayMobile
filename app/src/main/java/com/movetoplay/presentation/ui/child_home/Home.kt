@@ -20,12 +20,12 @@ fun Home(
     openCameraForExercise: (TypeExercise) -> Unit
 ) {
     val sizeButtonAndIndicators = DpSize(300.dp, 40.dp)
+    viewModel.getDailyExercises()
     val stateScroll = rememberScrollState()
     var visibleDialog by remember {
         mutableStateOf(false)
     }
     val context = LocalContext.current
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -50,7 +50,8 @@ fun Home(
                 context.startActivity(Intent(context, ComputerVisionActivity::class.java))
                 visibleDialog = false
             },
-            sizeButton = sizeButtonAndIndicators
+            sizeButton = sizeButtonAndIndicators,
+            dailyExercises = viewModel.dailyExercises.value
         ) {
             visibleDialog = true
         }

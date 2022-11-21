@@ -7,14 +7,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.movetoplay.data.model.TouchBody
 import com.movetoplay.domain.model.DailyExercises
 import com.movetoplay.domain.model.Exercise
 import com.movetoplay.domain.repository.ExercisesRepository
 import com.movetoplay.domain.repository.ProfilesRepository
 import com.movetoplay.domain.utils.ResultStatus
-import com.movetoplay.model.ErrorResponse
 import com.movetoplay.model.Touch
 import com.movetoplay.network_api.ApiService
 import com.movetoplay.network_api.RetrofitClient
@@ -23,10 +20,6 @@ import com.movetoplay.pref.Pref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -147,5 +140,4 @@ class ProfileChildVM @Inject constructor(
 //        return data
 //    }
 //
-
 }

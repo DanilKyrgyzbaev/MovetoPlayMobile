@@ -34,8 +34,9 @@ class GetSmsActivity : AppCompatActivity() {
 
     private fun initListeners() {
         binding.btnEnter.setOnClickListener {
-            if (ValidationUtil.isValidCode(this, otpCode.toString()))
+            if (ValidationUtil.isValidCode(this, otpCode.toString())) {
                 viewModel.getJwtSessionToken(JwtSessionToken(Pref.accountId, otpCode!!.toInt()))
+            }
         }
         viewModel.mutableLiveDataJwtSessionToken.observe(this) {
             if (it) {
