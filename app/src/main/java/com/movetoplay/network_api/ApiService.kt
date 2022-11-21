@@ -12,14 +12,13 @@ import retrofit2.http.*
 
 interface ApiService {
 
-    //-------------- Auth ----------------------//
+    // -------------- Auth ----------------------//
 
     @POST("/auth/login")
     suspend fun login(@Body user: User): Response<TokenResponse>
 
     @POST("/auth/registration")
     suspend fun register(@Body registration: Registration): Response<TokenResponse>
-
 
     @POST("/google/auth")
     suspend fun signViaGoogle(
@@ -38,6 +37,10 @@ interface ApiService {
         @Body confirmBody: ConfirmBody
     ): Response<Unit>
 
+    @GET("/accounts/resendConfirmCode")
+    suspend fun resendConfirmCode(
+        @Header("Authorization") token: String
+    ): Response<Unit>
 
     @GET("/auth/rememberPassword")
     fun rememberPassword(
@@ -55,7 +58,7 @@ interface ApiService {
         @Body changePasswordByCode: ChangePasswordByCode
     ): Call<ChangePasswordByCode>
 
-    //--------------Exercises--------------------------//
+    // --------------Exercises--------------------------//
 
     @POST("/exercises/touch")
     fun sendTouch(
@@ -75,7 +78,7 @@ interface ApiService {
         @Query("profileId") profileId: String
     ): Response<DailyExercises>
 
-    //-------------- Profiles ----------------------//
+    // -------------- Profiles ----------------------//
 
     @POST("/profiles/create")
     suspend fun postChildProfile(
@@ -85,7 +88,7 @@ interface ApiService {
 
     @GET("/profiles/getList")
     suspend fun getChildes(
-        @Header("Authorization") token: String,
+        @Header("Authorization") token: String
     ): Response<List<Child>>
 
     @GET("/profiles/getInfo")
@@ -100,34 +103,34 @@ interface ApiService {
         @Query("id") id: String,
         @Body limitSettingsBody: LimitSettingsBody
     ): Response<Unit>
-    //-------------- Account ----------------------//
+    // -------------- Account ----------------------//
 
     @GET("/accounts/getInfo")
     suspend fun geInfo(
         @Header("Authorization") token: String
     ): Response<Parent>
 
-    //-------------- Apps ----------------------//
+    // -------------- Apps ----------------------//
     @POST("/apps/sync")
     suspend fun postUserApps(
         @Header("Authorization") token: String,
-        @Body apps: UserAppsBody,
+        @Body apps: UserAppsBody
     ): Response<ErrorBody>
 
     @GET("/apps/getList")
     suspend fun getUserApps(
         @Header("Authorization") token: String,
-        @Query("profileId") id: String,
+        @Query("profileId") id: String
     ): Response<List<UserApp>>
 
     @PATCH("/apps/setLimit")
     suspend fun onLimit(
         @Header("Authorization") token: String,
         @Query("id") id: String,
-        @Body limited: Limited,
+        @Body limited: Limited
     ): Response<Limited>
 
-    //-------------- Device ----------------------//
+    // -------------- Device ----------------------//
 
     @POST("/devices/create")
     suspend fun createDevice(
