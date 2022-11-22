@@ -3,13 +3,17 @@ package com.movetoplay.screens.applock
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.movetoplay.data.model.user_apps.PinBody
+import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.domain.repository.AuthRepository
+import com.movetoplay.domain.repository.ProfilesRepository
 import com.movetoplay.domain.repository.UserAppsRepository
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.pref.Pref
+import com.yandex.metrica.impl.ob.id
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,11 +21,14 @@ import javax.inject.Inject
 @HiltViewModel
 class LimitationAppViewModel @Inject constructor(
     val repository: UserAppsRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val profilesRepository: ProfilesRepository
 ) : ViewModel() {
 
     var userApps = MutableLiveData<ResultStatus<List<UserApp>>>()
     val loading = MutableLiveData<ResultStatus<Boolean>>()
+    val childInfoResult = MutableLiveData<ResultStatus<ChildInfo>>()
+
 
     fun getUserApps(id: String) {
         viewModelScope.launch {
@@ -40,10 +47,11 @@ class LimitationAppViewModel @Inject constructor(
                                         uApp.profileId,
                                         uApp.deviceId
                                     )
-                                    if (res is ResultStatus.Success)
+                                    if (res is ResultStatus.Success) {
                                         res.data?.accessToken?.let { token ->
                                             Pref.childToken = token
                                         }
+                                    }
                                 }
                             }
                         }
@@ -65,12 +73,24 @@ class LimitationAppViewModel @Inject constructor(
                         id.key,
                         Limited(AccessibilityPrefs.dailyLimit, id.value)
                     ).collect {
-                        if (it is ResultStatus.Error)
+                        if (it is ResultStatus.Error) {
                             loading.value = ResultStatus.Error(it.error)
+                        }
                     }
                 }
                 loading.value = ResultStatus.Success(true)
             } else loading.value = ResultStatus.Error("Ошибка авторизации!")
+        }
+    }
+    fun getChildInfo() {
+        childInfoResult.value = ResultStatus.Loading()
+        viewModelScope.launch {
+            try {
+                childInfoResult.value =
+                    ResultStatus.Success(profilesRepository.getInfo(Pref.childId))
+            } catch (e: Throwable) {
+                childInfoResult.value = ResultStatus.Error(e.message)
+            }
         }
     }
 }

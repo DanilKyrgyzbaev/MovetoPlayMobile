@@ -3,6 +3,7 @@ package com.movetoplay.data.repository
 import com.movetoplay.data.mapper.toApiError
 import com.movetoplay.data.model.ErrorBody
 import com.movetoplay.data.model.LimitSettingsBody
+import com.movetoplay.data.model.user_apps.PinBody
 import com.movetoplay.domain.model.Child
 import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.repository.ProfilesRepository
@@ -10,6 +11,11 @@ import com.movetoplay.domain.model.CreateProfile
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.network_api.ApiService
 import com.movetoplay.pref.Pref
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withTimeout
 import java.util.*
 
 class ProfilesRepositoryImpl(
@@ -70,5 +76,18 @@ class ProfilesRepositoryImpl(
             ResultStatus.Error(e.message)
         }
     }
+
+    override suspend fun setPinCode(id: String, pinBody: PinBody): Flow<Boolean> =
+        flow {
+            try {
+                withTimeout(NETWORK_TIMEOUT) {
+                    val response = api.setPinCode("Bearer ${Pref.childToken}", id, pinBody)
+                    if (response.isSuccessful) emit(true)
+                    else emit(false)
+                }
+            } catch (throwable: Throwable) {
+                emit(false)
+            }
+        }.flowOn(Dispatchers.IO)
 
 }

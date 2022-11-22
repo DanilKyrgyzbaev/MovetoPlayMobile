@@ -2,6 +2,7 @@ package com.movetoplay.data.repository
 
 import com.movetoplay.data.mapper.toApiError
 import com.movetoplay.data.model.ErrorBody
+import com.movetoplay.data.model.user_apps.PinBody
 import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
@@ -71,5 +72,4 @@ class UserAppsRepositoryImpl @Inject constructor(private val client: ApiService)
                 emit(ResultStatus.Error(throwable.message))
             }
         }.flowOn(Dispatchers.IO)
-
 }

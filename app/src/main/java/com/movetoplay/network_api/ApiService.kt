@@ -1,6 +1,7 @@
 package com.movetoplay.network_api
 
 import com.movetoplay.data.model.*
+import com.movetoplay.data.model.user_apps.PinBody
 import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.*
 import com.movetoplay.domain.model.user_apps.Limited
@@ -150,4 +151,11 @@ interface ApiService {
         @Query("profileId") profileId: String,
         @Query("macAddress") macAddress: String
     ): Response<ChildDevice>
+
+    @PATCH("/profiles/setPin")
+    suspend fun setPinCode(
+        @Header("Authorization") token: String,
+        @Query("id") id: String,
+        @Body pinCode: PinBody
+    ): Response<Unit>
 }

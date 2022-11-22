@@ -1,18 +1,21 @@
 package com.movetoplay.screens.applock
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
+import com.movetoplay.databinding.ActivityLimitationAppBinding
+import com.movetoplay.domain.model.ChildInfo
+import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.screens.set_time.SettingTimeActivity
 import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
-import com.movetoplay.databinding.ActivityLimitationAppBinding
-import com.movetoplay.domain.model.ChildInfo
-import com.movetoplay.domain.model.user_apps.UserApp
 
 @AndroidEntryPoint
 class LimitationAppActivity : AppCompatActivity() {
@@ -20,7 +23,8 @@ class LimitationAppActivity : AppCompatActivity() {
     private lateinit var adapter: LimitationsAppsAdapter
     private lateinit var binding: ActivityLimitationAppBinding
     private var userApps = ArrayList<UserApp>()
-    private lateinit var child:ChildInfo
+    private lateinit var child: ChildInfo
+    private var pinCode: String = ""
 
     private val vm: LimitationAppViewModel by viewModels()
 
@@ -47,19 +51,26 @@ class LimitationAppActivity : AppCompatActivity() {
     private fun initListeners() {
         binding.apply {
             btnFinish.setOnClickListener {
-                saveBeforeFinish()
+                if (pinCode.isNullOrEmpty() && pinCode == "") {
+                    Toast.makeText(this@LimitationAppActivity, "Установите пин код", Toast.LENGTH_SHORT).show()
+                } else {
+                    saveBeforeFinish()
+                }
             }
 
             imgTimeSettings.setOnClickListener {
                 val intent = Intent(this@LimitationAppActivity, SettingTimeActivity::class.java)
-                startActivity(intent.apply {
-                    putExtra("childInfo", Gson().toJson(child))
-                })
+                startActivity(
+                    intent.apply {
+                        putExtra("childInfo", Gson().toJson(child))
+                    }
+                )
             }
 
             imgSetPin.setOnClickListener {
-                val intent = Intent(this@LimitationAppActivity, LockScreenActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(this@LimitationAppActivity, LockScreenActivity::class.java)
+//                startActivity(intent)
+                openPinActivity()
             }
         }
 
@@ -75,9 +86,9 @@ class LimitationAppActivity : AppCompatActivity() {
                 is ResultStatus.Success -> {
                     binding.pbLimitation.visible(false)
                     userApps = it.data as ArrayList<UserApp>
-                    if (userApps.isNotEmpty())
+                    if (userApps.isNotEmpty()) {
                         setData(userApps)
-                    else Toast.makeText(
+                    } else Toast.makeText(
                         this,
                         "Список пуст! Сделайте вход с устройства ребенка",
                         Toast.LENGTH_LONG
@@ -85,6 +96,10 @@ class LimitationAppActivity : AppCompatActivity() {
                 }
             }
         }
+
+//        vm.childInfoResult.observe(this){
+//
+//        }
 
         vm.loading.observe(this) {
             when (it) {
@@ -109,19 +124,30 @@ class LimitationAppActivity : AppCompatActivity() {
             }
         }
     }
+    fun openPinActivity() {
+        val intent = Intent(this, LockScreenActivity::class.java)
+        resultLauncher.launch(intent)
+    }
+
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            pinCode = result.data?.getStringExtra("PIN").toString()
+            Log.e("pin", "Пин: $pinCode")
+        }
+    }
 
     private fun setData(userApps: ArrayList<UserApp>) {
         userApps.forEachIndexed { index, app ->
             userApps[index].drawable = ApkInfoExtractor(this).getAppIconByPackageName(app.packageName)
         }
-       adapter.updateList(userApps)
+        adapter.updateList(userApps)
     }
 
     private fun saveBeforeFinish() {
         val appsLimit = adapter.getBlockedApps()
-        if (appsLimit.isNotEmpty())
+        if (appsLimit.isNotEmpty()) {
             vm.setLimits(appsLimit)
-        else goTo()
+        } else goTo()
     }
 
     override fun onBackPressed() {

@@ -1,8 +1,9 @@
 package com.movetoplay.screens.applock;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
 import com.movetoplay.R;
+import com.movetoplay.data.model.user_apps.PinBody;
 
 public class LockScreenActivity extends AppCompatActivity {
 
@@ -19,12 +21,17 @@ public class LockScreenActivity extends AppCompatActivity {
     private String correctPin = "";
     private Boolean isPinConfirm = false;
     private TextView textView;
+    public LockScreenViewModel lockScreenViewModel;
+    //by viewModels()
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lock_screen);
 
+        lockScreenViewModel = new ViewModelProvider(LockScreenActivity.this).get(LockScreenViewModel.class);
+
+        //
         textView = findViewById(R.id.tv_alert);
         Button button = findViewById(R.id.btn_cancel);
         mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
@@ -34,6 +41,13 @@ public class LockScreenActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED);
             finish();
         });
+
+        lockScreenViewModel.getPinResult().observe(this,result ->{
+            if (result){
+                finish();
+            }
+        });
+
     }
 
     private final PinLockListener mPinLockListener = new PinLockListener() {
@@ -45,14 +59,15 @@ public class LockScreenActivity extends AppCompatActivity {
                     setResult(RESULT_OK);
                     String setPin = correctPin;
 
-                    SharedPreferences sharedPreferences = getSharedPreferences("pin_code", MODE_PRIVATE);
-                    SharedPreferences.Editor edit = sharedPreferences.edit();
-                    edit.putString("PIN", setPin);
-                    edit.apply();
+                    Intent intent = new Intent();
+                    intent.putExtra("PIN", setPin);
+                    setResult(RESULT_OK,intent);
 
+                    if (!setPin.isEmpty()){
+                        lockScreenViewModel.setPinCode(new PinBody(Integer.parseInt(setPin)));
+                    }
                     Log.e("PIN", "onComplete: " + pin);
 
-                    finish();
                 } else {
                     textView.setText("Введите пин");
                     mPinLockView.resetPinLockView();
