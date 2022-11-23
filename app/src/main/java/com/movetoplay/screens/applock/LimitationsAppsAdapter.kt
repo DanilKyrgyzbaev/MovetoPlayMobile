@@ -51,7 +51,7 @@ class LimitationsAppsAdapter(
 
         fun onBind(app: UserApp) {
             title.text = app.name
-            usedTime.text =itemView.context.getString(R.string.min_day, (app.time?:0))
+            usedTime.text =itemView.context.getString(R.string.min_day, (app.time?:0).toString())
             status.isChecked = app.type == "unallowed"
 
             app.drawable?.let { image.load(it) }

@@ -45,7 +45,6 @@ class LimitationAppActivity : AppCompatActivity() {
             AccessibilityPrefs.childInfo = child
             child.id.let { vm.getUserApps(it) }
         } else child = AccessibilityPrefs.childInfo
-
         adapter = LimitationsAppsAdapter(ArrayList())
         binding.rvLimitations.adapter = adapter
     }
@@ -53,7 +52,7 @@ class LimitationAppActivity : AppCompatActivity() {
     private fun initListeners() {
         binding.apply {
             btnFinish.setOnClickListener {
-                if (child.pinCode != null  && child.pinCode.toString().isNotEmpty()) {
+                if (child.pinCode == null || child.pinCode.toString().isEmpty()) {
                     Toast.makeText(
                         this@LimitationAppActivity,
                         "Установите пин код",
@@ -109,42 +108,44 @@ class LimitationAppActivity : AppCompatActivity() {
                     binding.pbLimitation.visible(false)
                     Toast.makeText(
                         this,
-                        " Ошибка при сохранении, попробуйте еще раз",
+                        "Ошибка при сохранении, попробуйте еще раз",
                         Toast.LENGTH_SHORT
                     ).show()
-                    goTo()
                 }
                 is ResultStatus.Success -> {
                     binding.pbLimitation.visible(false)
-                    Toast.makeText(this, "Данные успешно сохранились!", Toast.LENGTH_SHORT).show()
                     goTo()
                 }
             }
         }
     }
 
-    private fun openPinActivity(tag:String) {
-        val intent = Intent(this, LockScreenActivity::class.java).
-            apply {
-                putExtra("tag",tag)
-            }
+    private fun openPinActivity(tag: String) {
+        val intent = Intent(this, LockScreenActivity::class.java).apply {
+            putExtra("tag", tag)
+        }
         resultLauncher.launch(intent)
     }
 
     private var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                pinCode = result.data?.getStringExtra("PIN").toString()
-                Log.e("pin", "Пин: $pinCode")
+                Log.e("pin", "child: ${AccessibilityPrefs.childInfo}", )
                 val confirm = result.data?.getStringExtra("confirm")
                 val edit = result.data?.getStringExtra("edit")
                 if (!confirm.isNullOrEmpty()) {
                     if (confirm.toBoolean())
-                      vm.setLimits(AccessibilityPrefs.limitedApps)
-                    else Toast.makeText(this, "Подтвердите пин, чтобы сохранить изменения!", Toast.LENGTH_LONG).show()
+                        vm.setLimits(AccessibilityPrefs.limitedApps)
+                    else Toast.makeText(
+                        this,
+                        "Подтвердите пин, чтобы сохранить изменения!",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 if (!edit.isNullOrEmpty()) {
-
+                    if (!edit.toBoolean()) {
+                        Toast.makeText(this, "Установите пин!", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
@@ -162,9 +163,7 @@ class LimitationAppActivity : AppCompatActivity() {
         if (appsLimit.isNotEmpty()) {
             AccessibilityPrefs.limitedApps = appsLimit
             openPinActivity("confirm")
-        }
-        else {
-            AccessibilityPrefs.limitedApps = HashMap()
+        } else {
             goTo()
         }
     }
@@ -175,6 +174,7 @@ class LimitationAppActivity : AppCompatActivity() {
     }
 
     private fun goTo() {
+        AccessibilityPrefs.limitedApps = HashMap()
         finish()
     }
 }
