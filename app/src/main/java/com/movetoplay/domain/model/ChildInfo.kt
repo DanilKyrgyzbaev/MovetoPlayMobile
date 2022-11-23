@@ -5,6 +5,7 @@ data class ChildInfo(
     val createdAt: String = "",
     val fullName: String = "",
     val id: String = "",
+    val pinCode: Int? = 0,
     val isEnjoySport: Boolean = false,
     val needJumpCount: Int? = null,
     val needSeconds: String? = null,

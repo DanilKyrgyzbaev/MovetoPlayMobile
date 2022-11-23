@@ -127,6 +127,13 @@ interface ApiService {
         @Body limited: Limited,
     ): Response<Limited>
 
+    @PATCH("/apps/setUsedTime")
+    suspend fun onAppUsedTime(
+        @Header("Authorization") token: String,
+        @Query("id") id: String,
+        @Body limited: Limited,
+    ): Response<Unit>
+
     //-------------- Device ----------------------//
 
     @POST("/devices/create")

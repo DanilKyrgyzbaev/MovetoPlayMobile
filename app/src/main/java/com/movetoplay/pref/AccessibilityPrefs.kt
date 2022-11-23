@@ -2,6 +2,7 @@ package com.movetoplay.pref
 
 import com.google.gson.Gson
 import com.movetoplay.App
+import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.model.user_apps.UserApp
 import java.util.*
 import kotlin.collections.ArrayList
@@ -12,11 +13,11 @@ object AccessibilityPrefs {
         get() = App.sharedPrefs
 
     var dailyLimit: Long
-        get() = sharedPreferences.getLong("daily_limit", 60)
+        get() = sharedPreferences.getLong("daily_limit", 60000)
         set(value) = sharedPreferences.edit().putLong("daily_limit", value).apply()
 
     var remainingTime: Long
-        get() = sharedPreferences.getLong("remaining_limit", dailyLimit*60000)
+        get() = sharedPreferences.getLong("remaining_limit", dailyLimit)
         set(value) = sharedPreferences.edit().putLong("remaining_limit", value).apply()
 
     var currentDay: Long
@@ -44,4 +45,11 @@ object AccessibilityPrefs {
     var isEventPackageNull: Boolean
         get() = sharedPreferences.getBoolean("is_package_null", false)
         set(value) = sharedPreferences.edit().putBoolean("is_package_null", value).apply()
+
+    var childInfo: ChildInfo
+        get() = Gson().fromJson(
+            sharedPreferences.getString("child-info", ""),
+            ChildInfo::class.java
+        )
+        set(value) = sharedPreferences.edit().putString("child-info", Gson().toJson(value)).apply()
 }

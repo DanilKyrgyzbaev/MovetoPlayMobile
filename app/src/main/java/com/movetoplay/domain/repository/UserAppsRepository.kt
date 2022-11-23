@@ -11,4 +11,5 @@ interface UserAppsRepository {
     suspend fun postLimitedApps(token: String, apps: UserAppsBody): Flow<ResultStatus<ErrorBody>>
     suspend fun getLimitedApps(token: String, id: String): Flow<ResultStatus<List<UserApp>>>
     suspend fun setLimitedApp(id: String, limited: Limited): Flow<ResultStatus<Boolean>>
+    suspend fun setAppUsedTime(id: String, limited: Limited): Boolean
 }

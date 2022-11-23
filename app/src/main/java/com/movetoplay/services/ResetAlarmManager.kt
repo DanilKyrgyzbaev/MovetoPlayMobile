@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -26,7 +27,7 @@ abstract class HiltBroadcastReceiver : BroadcastReceiver() {
 class ResetAlarmManager : HiltBroadcastReceiver() {
 
     private val job = Job()
-    private val serviceScope = CoroutineScope(Dispatchers.Main + job)
+    private val serviceScope = CoroutineScope(Dispatchers.IO + job)
 
     lateinit var api: UserAppsRepository
 
@@ -34,14 +35,17 @@ class ResetAlarmManager : HiltBroadcastReceiver() {
         super.onReceive(context, intent)
         when (intent.action) {
             Intent.ACTION_DATE_CHANGED -> {
+                resetData()
             }
             Intent.ACTION_BOOT_COMPLETED -> {
             }
         }
-        resetData()
     }
 
     private fun resetData() {
+        serviceScope.launch {
+
+        }
         Log.e("alarm", "resetData: ${System.currentTimeMillis()}")
         AccessibilityPrefs.remainingTime = AccessibilityPrefs.dailyLimit
         Log.e("alarm", "remaining time: ${AccessibilityPrefs.remainingTime}")
@@ -64,12 +68,17 @@ class ResetAlarmManager : HiltBroadcastReceiver() {
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
 
-        am.setInexactRepeating(
-            AlarmManager.RTC,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pi
-        )
+        with(am) {
+            calendar.set(Calendar.HOUR_OF_DAY, 0)
+            calendar.set(Calendar.MINUTE, 0)
+
+            setInexactRepeating(
+                AlarmManager.RTC,
+                calendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                pi
+            )
+        }
     }
 
     fun cancelAlarm(context: Context) {

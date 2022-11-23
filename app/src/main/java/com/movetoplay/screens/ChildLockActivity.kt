@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.movetoplay.R
-import com.movetoplay.screens.applock.LockScreenActivity
 
 class ChildLockActivity : AppCompatActivity() {
 
@@ -25,7 +24,9 @@ class ChildLockActivity : AppCompatActivity() {
 
     private fun initListeners() {
         btnStartExercise.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java).apply {
+                putExtra("GetRemainingTime", true)
+            }
             startActivity(intent)
             finish()
         }

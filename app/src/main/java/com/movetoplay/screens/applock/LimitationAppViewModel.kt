@@ -1,5 +1,6 @@
 package com.movetoplay.screens.applock
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,8 @@ class LimitationAppViewModel @Inject constructor(
 
     var userApps = MutableLiveData<ResultStatus<List<UserApp>>>()
     val loading = MutableLiveData<ResultStatus<Boolean>>()
+    private val _setLimitAppCount = MutableLiveData(0)
+    val setLimitAppCount: LiveData<Int> = _setLimitAppCount
 
     fun getUserApps(id: String) {
         viewModelScope.launch {
@@ -70,6 +73,22 @@ class LimitationAppViewModel @Inject constructor(
                     }
                 }
                 loading.value = ResultStatus.Success(true)
+            } else loading.value = ResultStatus.Error("Ошибка авторизации!")
+        }
+    }
+    fun setLimit(app: UserApp) {
+        viewModelScope.launch {
+            loading.value = ResultStatus.Loading()
+            if (Pref.childToken != "") {
+                    repository.setLimitedApp(
+                        app.id,
+                        Limited(AccessibilityPrefs.dailyLimit, app.type)
+                    ).collect {
+                        if (it is ResultStatus.Error)
+                            loading.value = ResultStatus.Error(it.error)
+                    }
+                loading.value = ResultStatus.Success(true)
+                _setLimitAppCount.value = _setLimitAppCount.value?.plus(1)
             } else loading.value = ResultStatus.Error("Ошибка авторизации!")
         }
     }

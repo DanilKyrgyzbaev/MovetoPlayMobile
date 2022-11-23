@@ -110,7 +110,8 @@ class MainActivity : ComponentActivity() {
 
     private fun isAccessibilityGranted(context: Context): Boolean {
         var accessibilityEnabled = 0
-        val service = context.packageName + "/" + AccessibilityService::class.java.canonicalName
+        val service =
+            context.packageName + "/" + AccessibilityService::class.java.canonicalName
         try {
             accessibilityEnabled = Settings.Secure.getInt(
                 context.applicationContext.contentResolver,

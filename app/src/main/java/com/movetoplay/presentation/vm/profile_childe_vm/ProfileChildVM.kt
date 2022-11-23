@@ -18,6 +18,7 @@ import com.movetoplay.model.ErrorResponse
 import com.movetoplay.model.Touch
 import com.movetoplay.network_api.ApiService
 import com.movetoplay.network_api.RetrofitClient
+import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.pref.ExercisesPref
 import com.movetoplay.pref.Pref
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,6 +71,7 @@ class ProfileChildVM @Inject constructor(
                 profilesRepository.getInfo(Pref.childId).let { info ->
                     info.needSeconds?.let { min ->
                         _availableForDay.value = min.toInt() * 60000
+                        AccessibilityPrefs.dailyLimit = _availableForDay.value.toLong()
                     }
                     info.needJumpCount?.let {
                         _defExerciseCount.value["jump"] = it

@@ -11,19 +11,20 @@ import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.util.load
 
 class LimitationsAppsAdapter(
-    list: ArrayList<UserApp>
+    private val list: ArrayList<UserApp>,
+    private val listener:(UserApp)->Unit
 ) :
     RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
-    private var list: ArrayList<UserApp>
+    //private var list: ArrayList<UserApp>
 
-    init {
-        this.list = list
-    }
-
-    fun updateList(list: ArrayList<UserApp>) {
-        this.list = list
-        notifyDataSetChanged()
-    }
+//    init {
+//        this.list = list
+//    }
+//
+//    fun updateList(list: ArrayList<UserApp>) {
+//        this.list = list
+//        notifyDataSetChanged()
+//    }
 
     private val blockedList = HashMap<String, String>()
 
@@ -47,20 +48,24 @@ class LimitationsAppsAdapter(
         private var title = itemView.findViewById<TextView>(R.id.tv_limitations)
         internal var image = itemView.findViewById<ImageView>(R.id.img_app_icon)
         private var status = itemView.findViewById<ToggleButton>(R.id.toggle_button)
+        private var usedTime = itemView.findViewById<TextView>(R.id.used_time_tv)
 
         fun onBind(app: UserApp) {
             title.text = app.name
-
+            usedTime.text =itemView.context.getString(R.string.min_day, (app.time?:0))
             status.isChecked = app.type == "unallowed"
 
             app.drawable?.let { image.load(it) }
 
             status.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    blockedList[app.id] = "unallowed"
+                  //  blockedList[app.id] = "unallowed"
+                    app.type = "unallowed"
                 } else {
-                    blockedList[app.id] = "allowed"
+                   // blockedList[app.id] = "allowed"
+                    app.type = "allowed"
                 }
+                listener(app)
             }
         }
     }

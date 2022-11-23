@@ -72,4 +72,16 @@ class UserAppsRepositoryImpl @Inject constructor(private val client: ApiService)
             }
         }.flowOn(Dispatchers.IO)
 
+    override suspend fun setAppUsedTime(id: String, limited: Limited): Boolean {
+        return    try {
+            withTimeout(NETWORK_TIMEOUT) {
+                val response = client.onAppUsedTime("Bearer ${Pref.childToken}", id, limited)
+                if (response.isSuccessful) true
+                else throw Throwable(response.errorBody().toApiError<ErrorBody>().message)
+            }
+        } catch (throwable: Throwable) {
+            throw throwable
+        }
+    }
+
 }
