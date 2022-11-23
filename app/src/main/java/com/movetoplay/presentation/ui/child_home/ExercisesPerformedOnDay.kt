@@ -56,7 +56,6 @@ fun ExercisesPerformedOnDay(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.W600
         )
-        Log.e("Pref", Pref.userLogin)
         Spacer(modifier = Modifier.height(26.dp))
         for (exercise in list) {
             ExercisesPerformedIndicator(

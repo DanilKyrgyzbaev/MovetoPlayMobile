@@ -101,6 +101,4 @@ object Pref {
     var unixTime: Long
         get() = sharedPreferences.getLong("unix_time", 0)
         set(value) = sharedPreferences.edit().putLong("unix_time", value).apply()
-
-
 }

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andrognito.pinlockview.IndicatorDots;
 import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
 import com.movetoplay.R;
@@ -98,4 +99,32 @@ public class LockScreenActivity extends AppCompatActivity {
             Log.d("TAG", "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_lock_screen);
+
+        lockScreenViewModel = new ViewModelProvider(LockScreenActivity.this).get(LockScreenViewModel.class);
+
+        //
+        textView = findViewById(R.id.tv_alert);
+        Button button = findViewById(R.id.btn_cancel);
+        mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
+        IndicatorDots mIndicatorDots = (IndicatorDots) findViewById(R.id.indicator_dots);
+        mPinLockView.attachIndicatorDots(mIndicatorDots);
+        mPinLockView.setPinLockListener(mPinLockListener);
+
+        button.setOnClickListener(view -> {
+            setResult(RESULT_CANCELED);
+            finish();
+        });
+
+        lockScreenViewModel.getPinResult().observe(this,result ->{
+            if (result){
+                finish();
+            }
+        });
+
+    }
 }
