@@ -11,20 +11,19 @@ import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.util.load
 
 class LimitationsAppsAdapter(
-    private val list: ArrayList<UserApp>,
-    private val listener:(UserApp)->Unit
+    list: ArrayList<UserApp>
 ) :
     RecyclerView.Adapter<LimitationsAppsAdapter.ViewHolder>() {
-    //private var list: ArrayList<UserApp>
+    private var list: ArrayList<UserApp>
 
-//    init {
-//        this.list = list
-//    }
-//
-//    fun updateList(list: ArrayList<UserApp>) {
-//        this.list = list
-//        notifyDataSetChanged()
-//    }
+    init {
+        this.list = list
+    }
+
+    fun updateList(list: ArrayList<UserApp>) {
+        this.list = list
+        notifyDataSetChanged()
+    }
 
     private val blockedList = HashMap<String, String>()
 
@@ -59,13 +58,10 @@ class LimitationsAppsAdapter(
 
             status.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                  //  blockedList[app.id] = "unallowed"
-                    app.type = "unallowed"
+                    blockedList[app.id] = "unallowed"
                 } else {
-                   // blockedList[app.id] = "allowed"
-                    app.type = "allowed"
+                   blockedList[app.id] = "allowed"
                 }
-                listener(app)
             }
         }
     }

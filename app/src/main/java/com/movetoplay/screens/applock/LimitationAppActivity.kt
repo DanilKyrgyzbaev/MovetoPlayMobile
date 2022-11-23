@@ -22,6 +22,7 @@ import com.movetoplay.pref.AccessibilityPrefs
 class LimitationAppActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLimitationAppBinding
+    private lateinit var adapter: LimitationsAppsAdapter
     private var userApps = ArrayList<UserApp>()
     private lateinit var child: ChildInfo
     private var pinCode: String = ""
@@ -44,24 +45,22 @@ class LimitationAppActivity : AppCompatActivity() {
             AccessibilityPrefs.childInfo = child
             child.id.let { vm.getUserApps(it) }
         } else child = AccessibilityPrefs.childInfo
-    }
 
-    private fun onItemClick(app: UserApp) {
-        if (vm.setLimitAppCount.value!! <= 3 && child.pinCode!=null) {
-            vm.setLimit(app)
-        }
-        else if(child.pinCode == null) startActivity(Intent(this, LockScreenActivity::class.java).apply {
-            putExtra("pin_type", "set")
-        })
+        adapter = LimitationsAppsAdapter(ArrayList())
+        binding.rvLimitations.adapter = adapter
     }
 
     private fun initListeners() {
         binding.apply {
             btnFinish.setOnClickListener {
-                if (pinCode.isNullOrEmpty() && pinCode == "") {
-                    Toast.makeText(this@LimitationAppActivity, "Установите пин код", Toast.LENGTH_SHORT).show()
+                if (child.pinCode != null  && child.pinCode.toString().isNotEmpty()) {
+                    Toast.makeText(
+                        this@LimitationAppActivity,
+                        "Установите пин код",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    goTo()
+                    saveBeforeFinish()
                 }
             }
 
@@ -73,19 +72,10 @@ class LimitationAppActivity : AppCompatActivity() {
             }
 
             imgSetPin.setOnClickListener {
-//                val intent = Intent(this@LimitationAppActivity, LockScreenActivity::class.java)
-//                startActivity(intent)
-                openPinActivity()
+                openPinActivity("edit")
             }
         }
-        vm.setLimitAppCount.observe(this) {
-            if (it == 3) {
-                startActivity(Intent(this, LockScreenActivity::class.java).apply {
-                    putExtra("pin", child.pinCode)
-                    putExtra("pin_type", "check")
-                })
-            }
-        }
+
         vm.userApps.observe(this) {
             when (it) {
                 is ResultStatus.Loading -> {
@@ -113,8 +103,7 @@ class LimitationAppActivity : AppCompatActivity() {
             when (it) {
                 is ResultStatus.Loading -> {
                     binding.pbLimitation.visible(true)
-                    binding.viewFocus.visible(true)
-                        //  Toast.makeText(this, "Данные сохраняются...", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Данные сохраняются...", Toast.LENGTH_SHORT).show()
                 }
                 is ResultStatus.Error -> {
                     binding.pbLimitation.visible(false)
@@ -123,42 +112,61 @@ class LimitationAppActivity : AppCompatActivity() {
                         " Ошибка при сохранении, попробуйте еще раз",
                         Toast.LENGTH_SHORT
                     ).show()
-                    binding.viewFocus.visible(false)
-                   // goTo()
+                    goTo()
                 }
                 is ResultStatus.Success -> {
                     binding.pbLimitation.visible(false)
-                    binding.viewFocus.visible(false)
-                 //   Toast.makeText(this, "Данные успешно сохранились!", Toast.LENGTH_SHORT).show()
-                  //  goTo()
+                    Toast.makeText(this, "Данные успешно сохранились!", Toast.LENGTH_SHORT).show()
+                    goTo()
                 }
             }
         }
     }
-    fun openPinActivity() {
-        val intent = Intent(this, LockScreenActivity::class.java)
+
+    private fun openPinActivity(tag:String) {
+        val intent = Intent(this, LockScreenActivity::class.java).
+            apply {
+                putExtra("tag",tag)
+            }
         resultLauncher.launch(intent)
     }
 
-    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            pinCode = result.data?.getStringExtra("PIN").toString()
-            Log.e("pin", "Пин: $pinCode")
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                pinCode = result.data?.getStringExtra("PIN").toString()
+                Log.e("pin", "Пин: $pinCode")
+                val confirm = result.data?.getStringExtra("confirm")
+                val edit = result.data?.getStringExtra("edit")
+                if (!confirm.isNullOrEmpty()) {
+                    if (confirm.toBoolean())
+                      vm.setLimits(AccessibilityPrefs.limitedApps)
+                    else Toast.makeText(this, "Подтвердите пин, чтобы сохранить изменения!", Toast.LENGTH_LONG).show()
+                }
+                if (!edit.isNullOrEmpty()) {
+
+                }
+            }
         }
-    }
 
     private fun setData(userApps: ArrayList<UserApp>) {
         userApps.forEachIndexed { index, app ->
-            userApps[index].drawable = ApkInfoExtractor(this).getAppIconByPackageName(app.packageName)
+            userApps[index].drawable =
+                ApkInfoExtractor(this).getAppIconByPackageName(app.packageName)
         }
-        binding.rvLimitations.adapter = LimitationsAppsAdapter(userApps, this::onItemClick)
+        adapter.updateList(userApps)
     }
 
     private fun saveBeforeFinish() {
-//        val appsLimit = adapter.getBlockedApps()
-//        if (appsLimit.isNotEmpty())
-//            vm.setLimits(appsLimit)
-//        else goTo()
+        val appsLimit = adapter.getBlockedApps().ifEmpty { AccessibilityPrefs.limitedApps }
+        if (appsLimit.isNotEmpty()) {
+            AccessibilityPrefs.limitedApps = appsLimit
+            openPinActivity("confirm")
+        }
+        else {
+            AccessibilityPrefs.limitedApps = HashMap()
+            goTo()
+        }
     }
 
     override fun onBackPressed() {

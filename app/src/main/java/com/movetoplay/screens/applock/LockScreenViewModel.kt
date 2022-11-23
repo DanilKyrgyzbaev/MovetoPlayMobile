@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 class LockScreenViewModel() : ViewModel() {
 
     val pinResult = MutableLiveData<Boolean>()
+
     private val profilesRepositoryImpl = ProfilesRepositoryImpl(
         provideApi(
             provideRetrofit(

@@ -1,6 +1,5 @@
 package com.movetoplay.screens.applock
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +12,6 @@ import com.movetoplay.domain.repository.UserAppsRepository
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.pref.Pref
-import com.yandex.metrica.impl.ob.id
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,8 +25,6 @@ class LimitationAppViewModel @Inject constructor(
 
     var userApps = MutableLiveData<ResultStatus<List<UserApp>>>()
     val loading = MutableLiveData<ResultStatus<Boolean>>()
-    private val _setLimitAppCount = MutableLiveData(0)
-    val setLimitAppCount: LiveData<Int> = _setLimitAppCount
     val childInfoResult = MutableLiveData<ResultStatus<ChildInfo>>()
 
 
@@ -82,22 +78,7 @@ class LimitationAppViewModel @Inject constructor(
             } else loading.value = ResultStatus.Error("Ошибка авторизации!")
         }
     }
-    fun setLimit(app: UserApp) {
-        viewModelScope.launch {
-            loading.value = ResultStatus.Loading()
-            if (Pref.childToken != "") {
-                    repository.setLimitedApp(
-                        app.id,
-                        Limited(AccessibilityPrefs.dailyLimit, app.type)
-                    ).collect {
-                        if (it is ResultStatus.Error)
-                            loading.value = ResultStatus.Error(it.error)
-                    }
-                loading.value = ResultStatus.Success(true)
-                _setLimitAppCount.value = _setLimitAppCount.value?.plus(1)
-            } else loading.value = ResultStatus.Error("Ошибка авторизации!")
-        }
-    }
+
     fun getChildInfo() {
         childInfoResult.value = ResultStatus.Loading()
         viewModelScope.launch {

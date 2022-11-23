@@ -22,6 +22,7 @@ public class LockScreenActivity extends AppCompatActivity {
     private Boolean isPinConfirm = false;
     private TextView textView;
     public LockScreenViewModel lockScreenViewModel;
+    private String tag;
     //by viewModels()
 
     @Override
@@ -31,21 +32,26 @@ public class LockScreenActivity extends AppCompatActivity {
 
         lockScreenViewModel = new ViewModelProvider(LockScreenActivity.this).get(LockScreenViewModel.class);
 
-        //
+        tag = getIntent().getStringExtra("tag");
+
         textView = findViewById(R.id.tv_alert);
         Button button = findViewById(R.id.btn_cancel);
         mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
         mPinLockView.setPinLockListener(mPinLockListener);
 
         button.setOnClickListener(view -> {
-            setResult(RESULT_CANCELED);
+            Intent intent = new Intent();
+            if (tag.equals("confirm")) {
+                intent.putExtra("confirm", "false");
+            } else intent.putExtra("edit", "false");
+            setResult(RESULT_OK, intent);
             finish();
         });
 
-        lockScreenViewModel.getPinResult().observe(this,result ->{
-            if (result){
+        lockScreenViewModel.getPinResult().observe(this, result -> {
+            if (result) {
                 finish();
-            }
+            } else  Toast.makeText(LockScreenActivity.this, "Ошибка отправки. Попробуйте ещё раз", Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -61,9 +67,9 @@ public class LockScreenActivity extends AppCompatActivity {
 
                     Intent intent = new Intent();
                     intent.putExtra("PIN", setPin);
-                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_OK, intent);
 
-                    if (!setPin.isEmpty()){
+                    if (!setPin.isEmpty()) {
                         lockScreenViewModel.setPinCode(new PinBody(Integer.parseInt(setPin)));
                     }
                     Log.e("PIN", "onComplete: " + pin);

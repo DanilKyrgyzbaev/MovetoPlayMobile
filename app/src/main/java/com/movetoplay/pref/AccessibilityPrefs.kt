@@ -1,11 +1,14 @@
 package com.movetoplay.pref
 
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.movetoplay.App
 import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.model.user_apps.UserApp
+import com.movetoplay.util.parseArray
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
 object AccessibilityPrefs {
@@ -25,9 +28,13 @@ object AccessibilityPrefs {
         set(value) = sharedPreferences.edit()
             .putLong("current_day", Calendar.getInstance().timeInMillis).apply()
 
-    var limitedApps: HashSet<String>
-        get() = sharedPreferences.getStringSet("limited_apps", HashSet<String>()) as HashSet<String>
-        set(value) = sharedPreferences.edit().putStringSet("limited_apps", value).apply()
+    var limitedApps: HashMap<String, String>
+        get() = parseArray(
+            sharedPreferences.getString("limited_apps", ""),
+            object : TypeToken<HashMap<String, String>>() {}.type
+        ) ?: HashMap()
+        set(value) = sharedPreferences.edit().putString("limited_apps", Gson().toJson(value))
+            .apply()
 
     fun getLimitedAppsById(id: String) = sharedPreferences.getString(id, "")
 
