@@ -26,14 +26,14 @@ class AuthViewModel : ViewModel() {
     val signViaGoogleResult = MutableLiveData<HashMap<String, String>>()
 
     fun signViaGoogle(token: String) {
-      Log.e("auth", token)
+        Log.e("auth", token)
         signViaGoogleResult.value = hashMapOf("loading" to "yes")
 
         val credential = GoogleAuthProvider.getCredential(token, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful)
-               auth()
-            else signViaGoogleResult.value =
+            if (it.isSuccessful) {
+                auth()
+            } else signViaGoogleResult.value =
                 hashMapOf("error" to "Error: " + it.exception?.localizedMessage)
         }
     }

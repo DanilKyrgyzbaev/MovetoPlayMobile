@@ -151,25 +151,17 @@ public class PoseClassifierProcessor {
 
                     switch (Pref.INSTANCE.getPose()){
                         case "jumps.csv":
-                            int jump = Pref.INSTANCE.getJumps();
-                            int jumpResult = jump + number;
-                            Pref.INSTANCE.setJumps(jumpResult);
                             Pref.INSTANCE.setCountTouch(number);
                             Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
                             break;
                         case "sits.csv":
-                            int sits = Pref.INSTANCE.getSits();
-                            int sitResult = sits + number;
-                            Pref.INSTANCE.setSits(sitResult);
                             Pref.INSTANCE.setCountTouch(number);
-                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661595525);
+
                             break;
                         case "push_ups.csv":
-                            int push_ups = Pref.INSTANCE.getPush_ups();
-                            int push_upsResult = push_ups + number;
-                            Pref.INSTANCE.setPush_ups(push_upsResult);
                             Pref.INSTANCE.setCountTouch(number);
-                            Pref.INSTANCE.setStartUnixTimestampTouch(1661597525);
+                            Pref.INSTANCE.setStartUnixTimestampTouch(1661397525);
                             break;
                     }
                     UserEntity userEntity = new UserEntity();
