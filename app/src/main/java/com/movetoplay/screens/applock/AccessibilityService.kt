@@ -6,6 +6,7 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import com.google.gson.reflect.TypeToken
+import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.domain.repository.UserAppsRepository
 import com.movetoplay.pref.AccessibilityPrefs
@@ -14,7 +15,11 @@ import com.movetoplay.screens.ChildLockActivity
 import com.movetoplay.services.ResetAlarmManager
 import com.movetoplay.util.parseArray
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -24,6 +29,10 @@ class AccessibilityService : AccessibilityService() {
     lateinit var apiRepository: UserAppsRepository
     private var timer: CountDownTimer? = null
     private val serviceJob = Job()
+    private val usedTimeDay = 24 * 60 * 60L
+    private var usedTime = 0L
+    private var runningApp: UserApp = UserApp()
+    private val serviceCoroutineScope = CoroutineScope(Dispatchers.IO + serviceJob)
 
     private var userApps = ArrayList<UserApp>()
     private lateinit var resetAlarmManager: ResetAlarmManager
@@ -33,7 +42,6 @@ class AccessibilityService : AccessibilityService() {
 
         resetAlarmManager = ResetAlarmManager()
         resetAlarmManager.setAlarm(this.applicationContext)
-
         super.onServiceConnected()
     }
 
@@ -58,7 +66,10 @@ class AccessibilityService : AccessibilityService() {
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             return
         }
-        if (event.packageName == null) AccessibilityPrefs.isEventPackageNull = true
+        if (event.packageName == null) {
+            Log.e("access", "Event package is NULL")
+            return
+        }
         updateUserApps()
 
         val eventPackage = event.packageName.toString()
@@ -68,36 +79,29 @@ class AccessibilityService : AccessibilityService() {
                 ignoreCase = true
             )
         ) {
-            if (AccessibilityPrefs.lastPackage == "") {
-                userApps.forEach { app ->
+            if (eventPackage != runningApp.packageName) {
+                timer?.cancel()
+                if (runningApp.packageName != "") syncData(runningApp)
+                Log.e("access", "runningApp: $runningApp")
+                userApps.map { app ->
                     Log.e("access", "Event app package: ${app.packageName} type: ${app.type}")
-                    if (app.packageName == eventPackage && app.type == "allowed") return
-                    if (app.packageName == eventPackage && app.type == "unallowed") {
-                        Log.e("access", "Is timer running: ${AccessibilityPrefs.isTimerRunning}")
-                        if (!AccessibilityPrefs.isTimerRunning) {
-                            AccessibilityPrefs.isTimerRunning = true
-                            AccessibilityPrefs.lastPackage = eventPackage
-                            startTimer()
-                        }
+                    if (app.packageName == eventPackage && app.type == "allowed") {
+                        startTimer(
+                            false,
+                            remainTime = null,
+                            usedTimeDay = usedTimeDay
+                        )
+                        runningApp = app
                         return
                     }
-                }
-            } else {
-                Log.e("access", "Event lastPackage: ${AccessibilityPrefs.lastPackage}")
-                Log.e("access", "isEventPackageNull: ${AccessibilityPrefs.isEventPackageNull}")
-
-                if (AccessibilityPrefs.lastPackage != eventPackage && !AccessibilityPrefs.isEventPackageNull) {
-                    Log.e("access", "Is timer running: ${AccessibilityPrefs.isTimerRunning}")
-                    if (AccessibilityPrefs.isTimerRunning) {
-                        AccessibilityPrefs.lastPackage = ""
-                        AccessibilityPrefs.isTimerRunning = false
-                        timer?.cancel()
-                        Log.e("accessTime", "Remaining time: " + getRemainingTimePrefs().toString())
+                    if (app.packageName == eventPackage && app.type == "unallowed") {
+                        startTimer(
+                            true,
+                            AccessibilityPrefs.remainingTime
+                        )
+                        runningApp = app
+                        return
                     }
-                }
-                if (AccessibilityPrefs.isEventPackageNull && AccessibilityPrefs.lastPackage == eventPackage) {
-                    AccessibilityPrefs.isEventPackageNull = false
-                    Log.e("access", "isEventpackageNull: false" )
                 }
             }
         }
@@ -111,6 +115,22 @@ class AccessibilityService : AccessibilityService() {
         )
     }
 
+    private fun syncData(app: UserApp) {
+        val min: Long = TimeUnit.MILLISECONDS.toMinutes(usedTime)
+        Log.e("access", "syncData appName = ${app.name} usedTime:$min, sec:$usedTime")
+        if (min != 0L)
+            serviceCoroutineScope.launch {
+                try {
+                    val result = apiRepository.setAppUsedTime(app.id, Limited(min, app.type))
+                    Log.e("access", "syncData: $result")
+                    runningApp = UserApp()
+                    usedTime = 0L
+                } catch (e: Throwable) {
+                    Log.e("access", "syncData error: ${e.message}")
+                }
+            }
+    }
+
     private fun openLockScreen() {
         Log.e("access", "openLockScreen: ")
         val lockIntent = Intent(
@@ -122,24 +142,30 @@ class AccessibilityService : AccessibilityService() {
         this.startActivity(lockIntent)
     }
 
-    private fun startTimer() {
-        val  timeDuration = AccessibilityPrefs.remainingTime
-        timer = object : CountDownTimer(timeDuration, 1000) {
+    private fun startTimer(
+        isCountDown: Boolean,
+        remainTime: Long? = null,
+        usedTimeDay: Long? = null
+    ) {
+        val timeDuration = remainTime ?: usedTimeDay
+        Log.e(
+            "access",
+            "startTimer:$timeDuration, remainingTime:$remainTime, isCountDown:$isCountDown"
+        )
+        timer = object : CountDownTimer(timeDuration!!, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                AccessibilityPrefs.remainingTime = millisUntilFinished
+                if (isCountDown)
+                    AccessibilityPrefs.remainingTime = millisUntilFinished
+
+                usedTime += 1000
             }
 
             override fun onFinish() {
-                AccessibilityPrefs.isTimerRunning = false
-                AccessibilityPrefs.lastPackage = ""
+                syncData(runningApp)
                 openLockScreen()
             }
         }
         timer?.start()
-    }
-
-    private fun getRemainingTimePrefs(): Long {
-        return AccessibilityPrefs.remainingTime
     }
 
     private fun blockGooglePlay() {
@@ -149,11 +175,13 @@ class AccessibilityService : AccessibilityService() {
         startActivity(intent)
     }
 
-    override fun onInterrupt() {}
+    override fun onInterrupt() {
+        serviceJob.cancel()
+    }
 
     override fun onDestroy() {
         super.onDestroy()
-
+        serviceJob.cancel()
         resetAlarmManager.cancelAlarm(this.applicationContext)
     }
 }

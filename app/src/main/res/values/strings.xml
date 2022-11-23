@@ -249,5 +249,6 @@
     <string name="set_jumps_def">Прыжки вверх (По умолчанию 15)</string>
     <string name="set_squeezing_def">Отжимание (По умолчанию 15)</string>
     <string name="set_squats_def">Приседания (По умолчанию 15)</string>
+    <string name="min_day">%1$d min/day</string>
 
 </resources>

@@ -1,9 +1,9 @@
 package com.movetoplay.screens.applock
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.movetoplay.data.model.user_apps.PinBody
 import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
@@ -27,6 +27,8 @@ class LimitationAppViewModel @Inject constructor(
 
     var userApps = MutableLiveData<ResultStatus<List<UserApp>>>()
     val loading = MutableLiveData<ResultStatus<Boolean>>()
+    private val _setLimitAppCount = MutableLiveData(0)
+    val setLimitAppCount: LiveData<Int> = _setLimitAppCount
     val childInfoResult = MutableLiveData<ResultStatus<ChildInfo>>()
 
 
@@ -47,11 +49,10 @@ class LimitationAppViewModel @Inject constructor(
                                         uApp.profileId,
                                         uApp.deviceId
                                     )
-                                    if (res is ResultStatus.Success) {
+                                    if (res is ResultStatus.Success)
                                         res.data?.accessToken?.let { token ->
                                             Pref.childToken = token
                                         }
-                                    }
                                 }
                             }
                         }
@@ -73,12 +74,27 @@ class LimitationAppViewModel @Inject constructor(
                         id.key,
                         Limited(AccessibilityPrefs.dailyLimit, id.value)
                     ).collect {
-                        if (it is ResultStatus.Error) {
+                        if (it is ResultStatus.Error)
                             loading.value = ResultStatus.Error(it.error)
-                        }
                     }
                 }
                 loading.value = ResultStatus.Success(true)
+            } else loading.value = ResultStatus.Error("Ошибка авторизации!")
+        }
+    }
+    fun setLimit(app: UserApp) {
+        viewModelScope.launch {
+            loading.value = ResultStatus.Loading()
+            if (Pref.childToken != "") {
+                    repository.setLimitedApp(
+                        app.id,
+                        Limited(AccessibilityPrefs.dailyLimit, app.type)
+                    ).collect {
+                        if (it is ResultStatus.Error)
+                            loading.value = ResultStatus.Error(it.error)
+                    }
+                loading.value = ResultStatus.Success(true)
+                _setLimitAppCount.value = _setLimitAppCount.value?.plus(1)
             } else loading.value = ResultStatus.Error("Ошибка авторизации!")
         }
     }

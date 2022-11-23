@@ -24,7 +24,7 @@
     <Button
         android:id="@+id/google"
         android:layout_width="255dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="17dp"
         android:background="@drawable/btn_bg_colored"
         android:text="Войти через Google"
@@ -40,7 +40,7 @@
     <Button
         android:id="@+id/email_btn"
         android:layout_width="255dp"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/btn_bg_white"
         android:text="Войти по эл. почте"

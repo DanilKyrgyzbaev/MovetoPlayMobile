@@ -1,40 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:paddingVertical="12dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/img_app_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/ic_baseline_image_not_supported_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/tv_limitations"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/img_app_icon"
-        android:layout_alignBottom="@+id/img_app_icon"
-        android:layout_marginLeft="10dp"
-        android:layout_toStartOf="@+id/toggle_button"
-        android:layout_toEndOf="@id/img_app_icon"
-        android:layout_toRightOf="@+id/img_app_icon"
+        android:layout_marginStart="10dp"
         android:gravity="center_vertical"
-        android:text="Instagram"
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/img_app_icon"
+        app:layout_constraintEnd_toStartOf="@id/toggle_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/used_time_tv"/>
 
     <ToggleButton
         android:id="@+id/toggle_button"
         android:layout_width="80dp"
         android:layout_height="30dp"
-        android:layout_alignTop="@id/img_app_icon"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
         android:background="@drawable/bg_on_off_toggle"
         android:checked="false"
-        android:textColor="@color/white" />
-
-</RelativeLayout>
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/used_time_tv"
+        app:layout_constraintTop_toBottomOf="@id/tv_limitations"
+        app:layout_constraintStart_toStartOf="@id/tv_limitations"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

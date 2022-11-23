@@ -22,7 +22,6 @@ import com.movetoplay.util.permissionAccessibilityAlert
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.reflect.Method
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -44,7 +43,7 @@ class MainActivity : ComponentActivity() {
             val c = cl.loadClass("android.os.SystemProperties")
             val get: Method = c.getMethod("get", String::class.java)
             val miui = get.invoke(c, "ro.miui.ui.version.name") as String
-            if (miui.isNotEmpty() && miui.contains("11.0.3.0")) {
+            if (miui.isNotEmpty() && miui.contains("11")) {
                 val intent = Intent()
                 intent.apply {
                     action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -107,7 +106,8 @@ class MainActivity : ComponentActivity() {
 
     private fun isAccessibilityGranted(context: Context): Boolean {
         var accessibilityEnabled = 0
-        val service = context.packageName + "/" + AccessibilityService::class.java.canonicalName
+        val service =
+            context.packageName + "/" + AccessibilityService::class.java.canonicalName
         try {
             accessibilityEnabled = Settings.Secure.getInt(
                 context.applicationContext.contentResolver,
