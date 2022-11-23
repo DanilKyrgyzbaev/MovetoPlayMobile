@@ -6,11 +6,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.model.TypeExercise
 import com.movetoplay.presentation.ui.camera_for_exercise.CameraForExercise
 import com.movetoplay.presentation.ui.select_profile_child.SelectProfileChild
 import com.movetoplay.presentation.vm.execution_of_exercise.EventExecutionOfExercise
 import com.movetoplay.presentation.vm.execution_of_exercise.ExecutionOfExerciseVM
+import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
 
 @Composable
 fun ChildMainNav(

@@ -83,5 +83,4 @@ class UserAppsRepositoryImpl @Inject constructor(private val client: ApiService)
             throw throwable
         }
     }
-
 }

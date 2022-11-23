@@ -20,12 +20,12 @@ fun Home(
     openCameraForExercise: (TypeExercise) -> Unit
 ) {
     val sizeButtonAndIndicators = DpSize(300.dp, 40.dp)
+    viewModel.getDailyExercises()
     val stateScroll = rememberScrollState()
     var visibleDialog by remember {
         mutableStateOf(false)
     }
     val context = LocalContext.current
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,7 +35,7 @@ fun Home(
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
             availableForDayMinutes = viewModel.availableForDay.value.toLong(),
-            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60*60000).value.toLong(),
+            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60 * 60000).value.toLong(),
             addTime = {
                 val addTimePl = 10000
             },
@@ -45,7 +45,13 @@ fun Home(
         ExercisesPerformedOnDay(
             sizeButtonAndIndicators,
             listExercise = viewModel.listExerciseForDay,
-            defExerciseCount = viewModel.defExerciseCount.value
+            defExerciseCount = viewModel.defExerciseCount.value,
+            chose = {
+                context.startActivity(Intent(context, ComputerVisionActivity::class.java))
+                visibleDialog = false
+            },
+            sizeButton = sizeButtonAndIndicators,
+            dailyExercises = viewModel.dailyExercises.value
         ) {
             visibleDialog = true
         }

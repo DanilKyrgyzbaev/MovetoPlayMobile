@@ -8,5 +8,6 @@
     android:text="@string/select_gender"
     android:textColor="@color/main_value"
     android:textSize="18sp"
+    android:background="@color/white"
     tools:ignore="RtlHardcoded" />
 

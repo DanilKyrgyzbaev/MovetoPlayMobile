@@ -22,7 +22,6 @@ class AuthRepositoryImpl @Inject constructor(
             )
             if (response.isSuccessful) ResultStatus.Success(response.body())
             else ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message)
-
         } catch (e: Throwable) {
             ResultStatus.Error(e.localizedMessage)
         }
@@ -40,7 +39,6 @@ class AuthRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) ResultStatus.Success(response.body())
             else ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message)
-
         } catch (e: Throwable) {
             ResultStatus.Error(e.localizedMessage)
         }
@@ -58,7 +56,6 @@ class AuthRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) ResultStatus.Success(response.body())
             else ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message)
-
         } catch (e: Throwable) {
             ResultStatus.Error(e.localizedMessage)
         }
@@ -73,7 +70,19 @@ class AuthRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) ResultStatus.Success(true)
             else ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message)
+        } catch (e: Throwable) {
+            ResultStatus.Error(e.localizedMessage)
+        }
+    }
 
+    override suspend fun resendConfirmCode(): ResultStatus<Boolean> {
+        return try {
+            val response = api.resendConfirmCode(
+                "Bearer ${Pref.userRefreshToken}"
+            )
+
+            if (response.isSuccessful) ResultStatus.Success(true)
+            else ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message)
         } catch (e: Throwable) {
             ResultStatus.Error(e.localizedMessage)
         }
@@ -87,7 +96,6 @@ class AuthRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) ResultStatus.Success(response.body())
             else ResultStatus.Error(response.errorBody().toApiError<ErrorBody>().message)
-
         } catch (e: Throwable) {
             ResultStatus.Error(e.localizedMessage)
         }

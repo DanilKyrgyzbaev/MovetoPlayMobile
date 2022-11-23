@@ -10,4 +10,5 @@ interface AuthRepository {
     suspend fun authorizeProfile(childId: String, deviceId: String): ResultStatus<TokenResponse>
     suspend fun confirm(code: Int): ResultStatus<Boolean>
     suspend fun signViaGoogle(token: String): ResultStatus<TokenResponse>
+    suspend fun resendConfirmCode(): ResultStatus<Boolean>
 }

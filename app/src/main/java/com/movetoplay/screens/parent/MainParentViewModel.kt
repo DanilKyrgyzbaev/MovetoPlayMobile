@@ -11,7 +11,6 @@ import com.movetoplay.domain.repository.ExercisesRepository
 import com.movetoplay.domain.repository.ProfilesRepository
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
-import com.movetoplay.util.getMacAddress
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

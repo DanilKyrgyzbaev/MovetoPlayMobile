@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-enum class TypeButton{
+enum class TypeButton {
     Outline,
     Pouring
 }
@@ -30,29 +30,34 @@ enum class TypeButton{
 @Composable
 fun Button(
     label: String,
-    onClick: ()-> Unit,
+    onClick: () -> Unit,
     size: DpSize,
-    textSize: TextUnit = 18.sp,
+    textSize: TextUnit = 16.sp,
     enabled: Boolean = true,
     typeButton: TypeButton = TypeButton.Pouring,
-    shape : RoundedCornerShape = RoundedCornerShape(10.dp)
+    shape: RoundedCornerShape = RoundedCornerShape(10.dp)
 ) {
-    val contentColor =  if (typeButton == TypeButton.Outline)
-        colorScheme.primary else Color.White
-    val colorBackground = if (typeButton == TypeButton.Outline)
-        colorScheme.background else colorScheme.primary
+    val contentColor = if (typeButton == TypeButton.Outline) {
+        colorScheme.primary
+    } else Color.White
+    val colorBackground = if (typeButton == TypeButton.Outline) {
+        colorScheme.background
+    } else colorScheme.primary
 
-    val modifier = when(typeButton){
-        TypeButton.Outline ->{
+    val modifier = when (typeButton) {
+        TypeButton.Outline -> {
             Modifier
                 .size(size)
                 .clip(shape)
                 .background(colorBackground)
                 .border(
-                    BorderStroke(1.5.dp,
-                        if(enabled) colorScheme.primary
+                    BorderStroke(
+                        1.5.dp,
+                        if (enabled) colorScheme.primary
                         else colorScheme.primary.copy(0.8f)
-                    ),shape)
+                    ),
+                    shape
+                )
                 .clickable(enabled = enabled, onClick = onClick)
                 .padding(8.dp)
         }
@@ -61,10 +66,11 @@ fun Button(
                 .size(size)
                 .clip(shape)
                 .background(
-                    if(enabled)
+                    if (enabled) {
                         colorBackground
-                    else
+                    } else {
                         colorBackground.copy(0.8f)
+                    }
                 ).clickable(enabled = enabled, onClick = onClick)
                 .padding(8.dp)
         }
@@ -72,15 +78,14 @@ fun Button(
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Text(
             text = label,
-            color = if(enabled) contentColor else contentColor.copy(0.8f),
+            color = if (enabled) contentColor else contentColor.copy(0.8f),
             fontSize = textSize,
             fontWeight = FontWeight.W600
         )
     }
-
 }
 
 @Preview
@@ -88,7 +93,7 @@ fun Button(
 fun PreviewButton() {
     Button(
         label = "Вход",
-        onClick= {},
+        onClick = {},
         typeButton = TypeButton.Outline,
         size = DpSize(300.dp, 40.dp)
     )

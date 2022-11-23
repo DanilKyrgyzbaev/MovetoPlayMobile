@@ -1,18 +1,21 @@
 package com.movetoplay.screens.applock
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
+import com.movetoplay.databinding.ActivityLimitationAppBinding
+import com.movetoplay.domain.model.ChildInfo
+import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.screens.set_time.SettingTimeActivity
 import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
-import com.movetoplay.databinding.ActivityLimitationAppBinding
-import com.movetoplay.domain.model.ChildInfo
-import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.pref.AccessibilityPrefs
 
 @AndroidEntryPoint
@@ -21,6 +24,7 @@ class LimitationAppActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLimitationAppBinding
     private var userApps = ArrayList<UserApp>()
     private lateinit var child: ChildInfo
+    private var pinCode: String = ""
 
     private val vm: LimitationAppViewModel by viewModels()
 
@@ -54,7 +58,11 @@ class LimitationAppActivity : AppCompatActivity() {
     private fun initListeners() {
         binding.apply {
             btnFinish.setOnClickListener {
-                goTo()
+                if (pinCode.isNullOrEmpty() && pinCode == "") {
+                    Toast.makeText(this@LimitationAppActivity, "Установите пин код", Toast.LENGTH_SHORT).show()
+                } else {
+                    goTo()
+                }
             }
 
             imgTimeSettings.setOnClickListener {
@@ -65,8 +73,9 @@ class LimitationAppActivity : AppCompatActivity() {
             }
 
             imgSetPin.setOnClickListener {
-                val intent = Intent(this@LimitationAppActivity, LockScreenActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(this@LimitationAppActivity, LockScreenActivity::class.java)
+//                startActivity(intent)
+                openPinActivity()
             }
         }
         vm.setLimitAppCount.observe(this) {
@@ -125,13 +134,22 @@ class LimitationAppActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+    fun openPinActivity() {
+        val intent = Intent(this, LockScreenActivity::class.java)
+        resultLauncher.launch(intent)
+    }
 
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            pinCode = result.data?.getStringExtra("PIN").toString()
+            Log.e("pin", "Пин: $pinCode")
+        }
     }
 
     private fun setData(userApps: ArrayList<UserApp>) {
         userApps.forEachIndexed { index, app ->
-            userApps[index].drawable =
-                ApkInfoExtractor(this).getAppIconByPackageName(app.packageName)
+            userApps[index].drawable = ApkInfoExtractor(this).getAppIconByPackageName(app.packageName)
         }
         binding.rvLimitations.adapter = LimitationsAppsAdapter(userApps, this::onItemClick)
     }

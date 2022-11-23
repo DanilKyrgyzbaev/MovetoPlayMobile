@@ -4,13 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.domain.repository.AuthRepository
+import com.movetoplay.domain.repository.ProfilesRepository
 import com.movetoplay.domain.repository.UserAppsRepository
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.pref.Pref
+import com.yandex.metrica.impl.ob.id
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,13 +21,16 @@ import javax.inject.Inject
 @HiltViewModel
 class LimitationAppViewModel @Inject constructor(
     val repository: UserAppsRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val profilesRepository: ProfilesRepository
 ) : ViewModel() {
 
     var userApps = MutableLiveData<ResultStatus<List<UserApp>>>()
     val loading = MutableLiveData<ResultStatus<Boolean>>()
     private val _setLimitAppCount = MutableLiveData(0)
     val setLimitAppCount: LiveData<Int> = _setLimitAppCount
+    val childInfoResult = MutableLiveData<ResultStatus<ChildInfo>>()
+
 
     fun getUserApps(id: String) {
         viewModelScope.launch {
@@ -90,6 +96,17 @@ class LimitationAppViewModel @Inject constructor(
                 loading.value = ResultStatus.Success(true)
                 _setLimitAppCount.value = _setLimitAppCount.value?.plus(1)
             } else loading.value = ResultStatus.Error("Ошибка авторизации!")
+        }
+    }
+    fun getChildInfo() {
+        childInfoResult.value = ResultStatus.Loading()
+        viewModelScope.launch {
+            try {
+                childInfoResult.value =
+                    ResultStatus.Success(profilesRepository.getInfo(Pref.childId))
+            } catch (e: Throwable) {
+                childInfoResult.value = ResultStatus.Error(e.message)
+            }
         }
     }
 }

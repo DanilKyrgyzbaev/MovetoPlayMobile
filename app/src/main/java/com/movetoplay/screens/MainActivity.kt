@@ -9,14 +9,11 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.movetoplay.R
 import com.movetoplay.presentation.app_nav.AppNav
 import com.movetoplay.presentation.child_main_nav.ChildMainNav
 import com.movetoplay.presentation.theme.MoveToPlayTheme
@@ -61,7 +58,6 @@ class MainActivity : ComponentActivity() {
         } catch (e: Exception) {
             Log.e("main", "isMiUi: ${e.localizedMessage}")
         }
-
     }
 
     private fun initViews() {
