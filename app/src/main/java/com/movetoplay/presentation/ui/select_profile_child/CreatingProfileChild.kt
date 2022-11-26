@@ -46,7 +46,7 @@ fun CreatingProfileChild(
         mutableStateOf(child.age)
     }
     var isEngagedSports by remember{
-        mutableStateOf(child.isEngagedSports)
+        mutableStateOf(child.isEnjoySport)
     }
     EditText(
         text = name ,

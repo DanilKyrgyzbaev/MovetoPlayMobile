@@ -67,7 +67,7 @@ class MainParentActivity : AppCompatActivity() {
     }
 
     private fun onItemClick(child: Child) {
-        startActivity(Intent(this, MainChildActivity::class.java).apply {
+        startActivity(Intent(this, ChildInfoActivity::class.java).apply {
             putExtra("child", Gson().toJson(child))
         })
     }

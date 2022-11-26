@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
 
     private fun initViews() {
         cont = this
+        vm.getChildInfo(this)
         vm.syncApps(this)
         setContent {
             MoveToPlayTheme(false) {

@@ -25,8 +25,6 @@ class LimitationAppActivity : AppCompatActivity() {
     private lateinit var adapter: LimitationsAppsAdapter
     private var userApps = ArrayList<UserApp>()
     private lateinit var child: ChildInfo
-    private var pinCode: String = ""
-
     private val vm: LimitationAppViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,6 +109,7 @@ class LimitationAppActivity : AppCompatActivity() {
                         "Ошибка при сохранении, попробуйте еще раз",
                         Toast.LENGTH_SHORT
                     ).show()
+                    goTo()
                 }
                 is ResultStatus.Success -> {
                     binding.pbLimitation.visible(false)
@@ -130,17 +129,20 @@ class LimitationAppActivity : AppCompatActivity() {
     private var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                Log.e("pin", "child: ${AccessibilityPrefs.childInfo}", )
+                Log.e("pin", "child: ${AccessibilityPrefs.childInfo}")
                 val confirm = result.data?.getStringExtra("confirm")
                 val edit = result.data?.getStringExtra("edit")
                 if (!confirm.isNullOrEmpty()) {
                     if (confirm.toBoolean())
                         vm.setLimits(AccessibilityPrefs.limitedApps)
-                    else Toast.makeText(
-                        this,
-                        "Подтвердите пин, чтобы сохранить изменения!",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    else {
+                        Toast.makeText(
+                            this,
+                            "Подтвердите пин, чтобы сохранить изменения!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        adapter.notifyDataSetChanged()
+                    }
                 }
                 if (!edit.isNullOrEmpty()) {
                     if (!edit.toBoolean()) {

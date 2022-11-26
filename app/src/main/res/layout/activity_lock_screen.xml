@@ -7,17 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".screens.applock.LockScreenActivity">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pb_lock"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:indeterminateTint="@color/main_value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <TextView
         android:id="@+id/tv_alert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="300dp"
-        android:text="Установите пин код!"
+        android:text="Установите пин!"
         android:textColor="@color/main_value"
-        android:textSize="40sp"
+        android:textAlignment="center"
+        android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@id/btn_cancel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/pin_lock_view"
+        app:layout_constraintStart_toStartOf="@id/pin_lock_view"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.andrognito.pinlockview.IndicatorDots

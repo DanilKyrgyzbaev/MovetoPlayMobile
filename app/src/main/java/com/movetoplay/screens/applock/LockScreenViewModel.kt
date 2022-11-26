@@ -8,12 +8,14 @@ import com.movetoplay.data.repository.ProfilesRepositoryImpl
 import com.movetoplay.depen_inject.RemoteClientModule.provideApi
 import com.movetoplay.depen_inject.RemoteClientModule.provideOkHttpClient
 import com.movetoplay.depen_inject.RemoteClientModule.provideRetrofit
+import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LockScreenViewModel() : ViewModel() {
 
-    val pinResult = MutableLiveData<Boolean>()
+    val pinResult = MutableLiveData<HashMap<String, String>>()
 
     private val profilesRepositoryImpl = ProfilesRepositoryImpl(
         provideApi(
@@ -24,12 +26,17 @@ class LockScreenViewModel() : ViewModel() {
     )
 
     fun setPinCode(pinBody: PinBody) {
-        viewModelScope.launch {
+        pinResult.value = hashMapOf("load" to "")
+        viewModelScope.launch(Dispatchers.IO) {
             if (Pref.childToken != "") {
-                profilesRepositoryImpl.setPinCode(Pref.childId, pinBody).collect{
-                    pinResult.value = it
+                try {
+                    pinResult.postValue(hashMapOf(
+                        "success" to "${profilesRepositoryImpl.setPinCode(pinBody)}"
+                    ))
+                } catch (e: Throwable) {
+                    pinResult.postValue(hashMapOf("error" to e.message.toString()))
                 }
-            } else pinResult.value = false
+            } else pinResult.postValue(hashMapOf("error" to "Ошибка авторизации"))
         }
     }
 }

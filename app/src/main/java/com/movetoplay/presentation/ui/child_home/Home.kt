@@ -1,6 +1,8 @@
 package com.movetoplay.presentation.ui.child_home
 
 import android.content.Intent
+import android.content.SharedPreferences
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,7 +14,10 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.movetoplay.computer_vision.ComputerVisionActivity
 import com.movetoplay.domain.model.TypeExercise
+import com.movetoplay.pref.AccessibilityPrefs
+import com.movetoplay.pref.ExercisesPref
 import com.movetoplay.presentation.vm.profile_childe_vm.ProfileChildVM
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun Home(
@@ -20,12 +25,12 @@ fun Home(
     openCameraForExercise: (TypeExercise) -> Unit
 ) {
     val sizeButtonAndIndicators = DpSize(300.dp, 40.dp)
-    viewModel.getDailyExercises()
     val stateScroll = rememberScrollState()
     var visibleDialog by remember {
         mutableStateOf(false)
     }
     val context = LocalContext.current
+    viewModel.checkIsExercisesDone(context,"check")
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,10 +39,11 @@ fun Home(
     ) {
         Spacer(modifier = Modifier.height(46.dp))
         TimeUse(
-            availableForDayMinutes = viewModel.availableForDay.value.toLong(),
-            remainderMinutes = viewModel.flowRemainingTime.collectAsState(initial = 60 * 60000).value.toLong(),
+            availableForDayMinutes = viewModel.availableForDay.value,
+            remainderMinutes = viewModel.remainingTime.value,
+            ExercisesPref.seconds,
             addTime = {
-                val addTimePl = 10000
+                viewModel.checkIsExercisesDone(context,"click")
             },
             sizeButton = sizeButtonAndIndicators
         )

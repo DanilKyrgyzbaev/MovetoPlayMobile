@@ -1,14 +1,16 @@
 package com.movetoplay.screens.applock;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.andrognito.pinlockview.IndicatorDots;
 import com.andrognito.pinlockview.PinLockListener;
@@ -26,6 +28,7 @@ public class LockScreenActivity extends AppCompatActivity {
     private TextView textView;
     public LockScreenViewModel lockScreenViewModel;
     private String tag;
+    private ProgressBar progress;
     String setPin = "";
 
     @Override
@@ -38,32 +41,40 @@ public class LockScreenActivity extends AppCompatActivity {
         tag = getIntent().getStringExtra("tag");
 
         textView = findViewById(R.id.tv_alert);
+        progress = findViewById(R.id.pb_lock);
         Button button = findViewById(R.id.btn_cancel);
         mPinLockView = findViewById(R.id.pin_lock_view);
         IndicatorDots mIndicatorDots = findViewById(R.id.indicator_dots);
         mPinLockView.attachIndicatorDots(mIndicatorDots);
         mPinLockView.setPinLockListener(mPinLockListener);
 
-        if (tag.equals("confirm"))
-            textView.setText("Подтвердите пин код");
+        if (tag.equals("confirm") || tag.equals("check"))
+            textView.setText("Подтвердите пин");
 
 
         button.setOnClickListener(view -> {
-            saveBeforeFinish(false);
+            if (!tag.equals("check"))
+                saveBeforeFinish(false);
+            else finishAffinity();
         });
 
         lockScreenViewModel.getPinResult().observe(this, result -> {
-            if (result) {
+            if (result.containsKey("success")) {
                 ChildInfo child = AccessibilityPrefs.INSTANCE.getChildInfo();
-                child.setPinCode(setPin);
+                child.setPinCode(correctPin);
                 AccessibilityPrefs.INSTANCE.setChildInfo(child);
                 saveBeforeFinish(true);
-            } else {
-                Toast.makeText(LockScreenActivity.this, "Ошибка отправки. Попробуйте ещё раз", Toast.LENGTH_SHORT).show();
+            } else if (result.containsKey("error")) {
+                Toast.makeText(
+                        this,
+                        result.get("error"),
+                        Toast.LENGTH_SHORT
+                ).show();
                 saveBeforeFinish(false);
+            } else {
+                progress.setVisibility(View.VISIBLE);
             }
         });
-
     }
 
     private void saveBeforeFinish(Boolean isCorrect) {
@@ -78,33 +89,18 @@ public class LockScreenActivity extends AppCompatActivity {
     private final PinLockListener mPinLockListener = new PinLockListener() {
         @Override
         public void onComplete(String pin) {
-            if (isPinConfirm) {
-                isPinConfirm = false;
-                if (correctPin.equalsIgnoreCase(pin)) {
-                    setResult(RESULT_OK);
-                  setPin = correctPin;
-
-                    if (!setPin.isEmpty()) {
-                        lockScreenViewModel.setPinCode(new PinBody(Integer.parseInt(setPin)));
-                    }
-
-                    Log.e("PIN", "onComplete: " + pin);
-
-                } else {
-                    textView.setText("Введите пин");
-                    mPinLockView.resetPinLockView();
-                    Toast.makeText(LockScreenActivity.this, "Попробуйте ещё раз", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                if (tag.equals("confirm")) {
-                    if (AccessibilityPrefs.INSTANCE.getChildInfo().getPinCode().equals(pin)) {
-                        isPinConfirm = false;
-                        saveBeforeFinish(true);
-                        Log.e("pin", "PIN confirm: ");
+            if (tag.equals("edit")) {
+                if (isPinConfirm) {
+                    isPinConfirm = false;
+                    if (correctPin.equalsIgnoreCase(pin)) {
+                        if (!correctPin.isEmpty()) {
+                            lockScreenViewModel.setPinCode(new PinBody(correctPin));
+                        }
                     } else {
                         mPinLockView.resetPinLockView();
-                        Toast.makeText(LockScreenActivity.this,"Неправильный пин код",Toast.LENGTH_SHORT).show();
+                        textView.setText("Устонавите пин");
                         isPinConfirm = false;
+                        Toast.makeText(LockScreenActivity.this, "Пин не совпадает!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     correctPin = pin;
@@ -113,11 +109,31 @@ public class LockScreenActivity extends AppCompatActivity {
                     textView.setText("Подтвердите пин");
                 }
             }
+
+            if (tag.equals("confirm") || tag.equals("check")) {
+                ChildInfo confirmPin = AccessibilityPrefs.INSTANCE.getChildInfo();
+                Log.e("pin", "onComplete: " + confirmPin);
+                if (confirmPin.getPinCode() != null) {
+                    Log.e("pin", "onComplete: confirm pin=" + confirmPin + ", entered pin=" + pin);
+                    if (confirmPin.getPinCode().equals(pin)) {
+                        isPinConfirm = false;
+                        if (tag.equals("confirm")) saveBeforeFinish(true);
+                        else {
+                            AccessibilityPrefs.INSTANCE.setPinConfirmed(true);
+                            finishAffinity();
+                        }
+                    } else {
+                        mPinLockView.resetPinLockView();
+                        Toast.makeText(LockScreenActivity.this, "Неправильный пин", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(LockScreenActivity.this, "Установите пин с родительского устройства", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
 
         @Override
         public void onEmpty() {
-           // if (tag.equals("confirm"))
         }
 
         @Override
@@ -125,4 +141,10 @@ public class LockScreenActivity extends AppCompatActivity {
             Log.d("TAG", "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        if (!tag.equals("check"))
+            super.onBackPressed();
+    }
 }

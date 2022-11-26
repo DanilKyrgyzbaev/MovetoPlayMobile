@@ -1,5 +1,6 @@
 package com.movetoplay.presentation.ui.child_home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +24,7 @@ import com.movetoplay.util.toStrTime
 fun TimeUse(
     availableForDayMinutes: Long,
     remainderMinutes: Long,
+    needSeconds: Int,
     addTime: () -> Unit,
     sizeButton: DpSize
 ) {
@@ -33,6 +35,7 @@ fun TimeUse(
             .padding(18.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Log.e("timeUse", "TimeUse: ${availableForDayMinutes.toStrTime()}", )
         Text(
             text = "${stringResource(R.string.available_for_day)}: ${availableForDayMinutes.toStrTime()}",
             color = Color.Gray,
@@ -54,7 +57,7 @@ fun TimeUse(
         )
         Spacer(modifier = Modifier.height(26.dp))
         Button(
-            label = "+ 10 минут",
+            label = "+ ${needSeconds/60} минут",
             onClick = addTime,
             size = sizeButton
         )

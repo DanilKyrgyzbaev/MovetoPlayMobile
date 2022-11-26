@@ -47,11 +47,9 @@ class LimitationsAppsAdapter(
         private var title = itemView.findViewById<TextView>(R.id.tv_limitations)
         internal var image = itemView.findViewById<ImageView>(R.id.img_app_icon)
         private var status = itemView.findViewById<ToggleButton>(R.id.toggle_button)
-        private var usedTime = itemView.findViewById<TextView>(R.id.used_time_tv)
 
         fun onBind(app: UserApp) {
             title.text = app.name
-            usedTime.text =itemView.context.getString(R.string.min_day, (app.time?:0).toString())
             status.isChecked = app.type == "unallowed"
 
             app.drawable?.let { image.load(it) }

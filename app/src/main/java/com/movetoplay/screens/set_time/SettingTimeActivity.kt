@@ -8,7 +8,6 @@ import com.google.gson.Gson
 import com.movetoplay.databinding.ActivitySettingTimeBinding
 import com.movetoplay.domain.model.ChildInfo
 import com.movetoplay.domain.utils.ResultStatus
-import com.movetoplay.pref.AccessibilityPrefs
 import com.movetoplay.pref.ExercisesPref
 import com.movetoplay.util.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,30 +35,36 @@ class SettingTimeActivity : AppCompatActivity() {
             ui.etJumps.hint = (childInfo.needJumpCount?: ExercisesPref.jumps).toString()
             ui.etSquats.hint = (childInfo.needSquatsCount?:ExercisesPref.squats).toString()
             ui.etSqueezing.hint = (childInfo.needSqueezingCount?:ExercisesPref.squeezing).toString()
-            ui.etLimit.hint = childInfo.needSeconds?: ExercisesPref.seconds.toString()
+            ui.etLimit.hint =(childInfo.extraTime?:ExercisesPref.extraTime).toString()
+            ui.etNeedSeconds.hint = ((childInfo.needSeconds?: ExercisesPref.seconds).div(60)).toString()
         }
     }
 
     private fun initListeners() {
         ui.apply {
             buttonSet.setOnClickListener {
-                val timeStr: String = etLimit.text.toString()
-                val time = timeStr.ifEmpty { (childInfo.needSeconds
+                val timeStr: String = etNeedSeconds.text.toString().toInt().times(60).toString()
+                val needSeconds = timeStr.ifEmpty { (childInfo.needSeconds
                     ?: ExercisesPref.seconds).toString() }
                 val jumps = etJumps.text.toString()
                 val squats = etSquats.text.toString()
                 val squeezing = etSqueezing.text.toString()
+                val extraTime = etLimit.text.toString().ifEmpty {
+                    (childInfo.extraTime
+                        ?: ExercisesPref.extraTime).toString()
+                }
 
-                if (squats.isEmpty() && jumps.isEmpty() && squeezing.isEmpty()) goTo()
+                if (needSeconds.isEmpty() && squats.isEmpty() && jumps.isEmpty() && squeezing.isEmpty() && extraTime.isEmpty()) goTo()
                 else {
                     vm.updateLimitations(
-                        time.toInt(),
+                        needSeconds.toInt(),
                         if (squats.isEmpty()) (childInfo.needSquatsCount?:ExercisesPref.squats)
                         else squats.toInt(),
                         if (jumps.isEmpty()) (childInfo.needJumpCount?: ExercisesPref.jumps)
                         else jumps.toInt(),
                         if (squeezing.isEmpty()) childInfo.needSqueezingCount?:ExercisesPref.squeezing
-                        else squeezing.toInt()
+                        else squeezing.toInt(),
+                        extraTime.toInt()
                     )
                 }
             }

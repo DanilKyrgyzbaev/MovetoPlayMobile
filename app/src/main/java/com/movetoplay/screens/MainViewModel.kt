@@ -2,6 +2,7 @@ package com.movetoplay.screens
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.movetoplay.data.model.user_apps.AppBody
@@ -9,6 +10,7 @@ import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.domain.repository.AuthRepository
 import com.movetoplay.domain.repository.DeviceRepository
+import com.movetoplay.domain.repository.ProfilesRepository
 import com.movetoplay.domain.repository.UserAppsRepository
 import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.AccessibilityPrefs
@@ -16,6 +18,7 @@ import com.movetoplay.pref.Pref
 import com.movetoplay.screens.applock.ApkInfoExtractor
 import com.movetoplay.util.getMacAddress
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +27,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val userAppsRepository: UserAppsRepository,
     private val deviceRepository: DeviceRepository,
+    private val profilesRepository: ProfilesRepository,
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -48,10 +52,10 @@ class MainViewModel @Inject constructor(
                     }
                 }
             }
-        } else authorizeProfile()
+        } else authorizeProfile(context)
     }
 
-    private fun authorizeProfile() {
+    private fun authorizeProfile(context: Context) {
         viewModelScope.launch {
             val result = deviceRepository.getDeviceByMacAddress(Pref.childId, getMacAddress())
             if (result is ResultStatus.Success) {
@@ -61,6 +65,7 @@ class MainViewModel @Inject constructor(
                             auth.data?.let { response ->
                                 Pref.childToken = response.accessToken
                             }
+                            syncApps(context)
                         }
                         is ResultStatus.Error -> {
                             Log.e("main", "authorizeProfile error: " + auth.error)
@@ -75,22 +80,29 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun compareLists(listDto: List<UserApp>?, context: Context) {
-        val listLoc = getApps(context)
-        if (listDto?.isNotEmpty() == true) {
-            val postList = ArrayList<AppBody>()
-
-            listDto.forEach { dto ->
-                val app = AppBody(dto.name, dto.packageName)
-                if (listLoc.apps?.contains(app) != true) {
-                    postList.add(app)
+    private  fun compareLists(listDto: List<UserApp>?, context: Context) {
+        viewModelScope.launch(Dispatchers.Main) {
+            val listLoc = getApps(context)
+            val appsDto = ArrayList<AppBody>()
+            listDto?.map {
+                appsDto.add(AppBody(it.name,it.packageName))
+            }
+            if (appsDto.isNotEmpty()) {
+                val postList = ArrayList<AppBody>()
+                if (appsDto.size != listLoc.apps?.size) {
+                      listLoc.apps?.map{
+                          if (!appsDto.contains(it)){
+                              postList.add(it)
+                          }
+                      }
                 }
-            }
-            if (postList.isNotEmpty()) {
-                Log.e("main", "compareLists diff: $postList")
-                postApps(UserAppsBody(postList))
-            }
-        } else postApps(listLoc)
+
+                if (postList.isNotEmpty()) {
+                    Log.e("main", "compareLists diff: $postList")
+                    postApps(UserAppsBody(postList))
+                }
+            } else postApps(listLoc)
+        }
     }
 
     private fun postApps(apps: UserAppsBody) {
@@ -124,5 +136,20 @@ class MainViewModel @Inject constructor(
             apps.add(AppBody(extractor.GetAppName(it), it))
         }
         return UserAppsBody(apps)
+    }
+
+    fun getChildInfo(context:Context) {
+        if (Pref.childToken != "") {
+            viewModelScope.launch {
+                try {
+                    AccessibilityPrefs.childInfo = profilesRepository.getInfo(Pref.childId)
+                    Log.e("main", "getChildInfo: pref" + AccessibilityPrefs.childInfo)
+                } catch (e: Throwable) {
+                    Log.e("main", "getChildInfo: ${e.message}",)
+                }
+            }
+        } else {
+            Toast.makeText(context, "Ошибка авторизации!", Toast.LENGTH_SHORT).show()
+        }
     }
 }

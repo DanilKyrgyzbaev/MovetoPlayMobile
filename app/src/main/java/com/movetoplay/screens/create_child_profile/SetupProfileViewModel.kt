@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.movetoplay.data.model.DeviceBody
+import com.movetoplay.data.model.ChildBody
 import com.movetoplay.domain.model.Child
 import com.movetoplay.domain.model.Gender
 import com.movetoplay.domain.repository.AuthRepository
@@ -15,9 +15,7 @@ import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.pref.Pref
 import com.movetoplay.util.ValidationUtil.isValidAge
 import com.movetoplay.util.ValidationUtil.isValidName
-import com.movetoplay.util.getDeviceName
 import com.movetoplay.util.getMacAddress
-import com.movetoplay.util.isValidDeviceName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -47,11 +45,11 @@ class SetupProfileViewModel @Inject constructor(
                     createResultStatus.value =
                         ResultStatus.Success(
                             profileRepository.createProfileChild(
-                                Child(
-                                    fullName,
-                                    gender,
-                                    age.toInt(),
-                                    isSport
+                                ChildBody(
+                                    fullName = fullName,
+                                    sex = gender.name,
+                                    age = age.toInt(),
+                                    isEnjoySport = isSport
                                 )
                             )
                         )

@@ -19,20 +19,21 @@ class SetTimeViewModel @Inject constructor(private val profilesRepository: Profi
 
     val updateResultStatus = MutableLiveData<ResultStatus<Boolean>>()
 
-    fun updateLimitations(time: Int, squats: Int, jumps: Int, squeezing: Int) {
+    fun updateLimitations(time: Int, squats: Int, jumps: Int, squeezing: Int,extraTime:Int) {
         updateResultStatus.value = ResultStatus.Loading()
 
         viewModelScope.launch {
             when (val result = profilesRepository.updateLimitations(
                 Pref.childId,
-                LimitSettingsBody(jumps, time, squats, squeezing)
+                LimitSettingsBody(jumps, time, squats, squeezing,extraTime)
             )) {
                 is ResultStatus.Success -> {
-                    AccessibilityPrefs.dailyLimit = time.toLong()
+                    AccessibilityPrefs.dailyLimit = extraTime.toLong().times(60)
                     ExercisesPref.seconds = time
                     ExercisesPref.jumps = jumps
                     ExercisesPref.squats = squats
                     ExercisesPref.squeezing = squeezing
+                    ExercisesPref.extraTime = extraTime
                     updateResultStatus.value = ResultStatus.Success(true)
                 }
                 is ResultStatus.Error -> updateResultStatus.value = ResultStatus.Error(result.error)

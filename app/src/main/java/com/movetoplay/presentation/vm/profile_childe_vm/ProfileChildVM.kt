@@ -1,6 +1,9 @@
 package com.movetoplay.presentation.vm.profile_childe_vm
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -21,21 +24,25 @@ import com.movetoplay.pref.Pref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileChildVM @Inject constructor(
     private val profilesRepository: ProfilesRepository,
     private val exercisesRepository: ExercisesRepository
-) : ViewModel() {
-    private val _availableForDay = mutableStateOf(60 * 60000)
-    val availableForDay: State<Int> get() = _availableForDay
+) : ViewModel(), SharedPreferences.OnSharedPreferenceChangeListener {
+    private val _availableForDay = mutableStateOf(60 * 60000L)
+    val availableForDay: State<Long> get() = _availableForDay
+
+    private val _remainingTime = mutableStateOf(AccessibilityPrefs.remainingTime)
+    val remainingTime: State<Long> get() = _remainingTime
+
     private val _getDailyExercises = mutableStateOf(DailyExercises())
     val dailyExercises: State<DailyExercises> get() = _getDailyExercises
-    val flowRemainingTime = flow<Int> {
-        emit(25 * 60000)
+    var flowRemainingTime = flow<Long> {
+        emit(AccessibilityPrefs.remainingTime)
     }
-    val errorHandle = MutableLiveData<String>()
     var api: ApiService = RetrofitClient().getApi()
     val mutableLiveData = MutableLiveData<Boolean>()
 
@@ -55,25 +62,37 @@ class ProfileChildVM @Inject constructor(
     val defExerciseCount: State<HashMap<String, Int>> get() = _defExerciseCount
 
     init {
+        AccessibilityPrefs.getSharedPreferences.registerOnSharedPreferenceChangeListener(this)
         getChildInfo()
+        getDailyExercises()
     }
 
     private fun getChildInfo() {
         viewModelScope.launch {
             try {
                 profilesRepository.getInfo(Pref.childId).let { info ->
-                    info.needSeconds?.let { min ->
-                        _availableForDay.value = min.toInt() * 60000
-                        AccessibilityPrefs.dailyLimit = _availableForDay.value.toLong()
+                    info.needSeconds?.let {
+                        ExercisesPref.seconds = it
+                    }
+                    info.extraTime?.let { min ->
+                        _availableForDay.value = min * 60000L
+                        AccessibilityPrefs.dailyLimit = _availableForDay.value
+                        if (Pref.isFirst) {
+                            AccessibilityPrefs.remainingTime = AccessibilityPrefs.dailyLimit
+                            Pref.isFirst = false
+                        }
                     }
                     info.needJumpCount?.let {
                         _defExerciseCount.value["jump"] = it
+                        ExercisesPref.jumps = it
                     }
                     info.needSquatsCount?.let {
                         _defExerciseCount.value["squat"] = it
+                        ExercisesPref.squats = it
                     }
                     info.needSqueezingCount?.let {
                         _defExerciseCount.value["squeezing"] = it
+                        ExercisesPref.squeezing = it
                     }
                 }
             } catch (e: Throwable) {
@@ -87,6 +106,7 @@ class ProfileChildVM @Inject constructor(
             when (val result = exercisesRepository.postTouch(touch)) {
                 is ResultStatus.Success -> {
                     Log.e("childVm", "sendTouch success: " + result.data)
+                    getDailyExercises()
                 }
                 is ResultStatus.Error -> {
                     Log.e("childVm", "sendTouch error: " + result.error)
@@ -96,7 +116,34 @@ class ProfileChildVM @Inject constructor(
         }
     }
 
-    fun getDailyExercises() {
+    fun checkIsExercisesDone(context: Context,tag:String) {
+        val daily = dailyExercises.value
+        val defExercise = defExerciseCount.value
+
+        if (!ExercisesPref.isExtraTimeUsed) {
+            if ((daily.jumps?.count ?: 0) >= (defExercise["jumps"] ?: ExercisesPref.jumps)
+                && (daily.squats?.count ?: 0) >= (defExercise["squats"] ?: ExercisesPref.squats)
+                && (daily.squeezing?.count ?: 0) >= (defExercise["squeezing"]
+                    ?: ExercisesPref.squeezing)
+            ) {
+                AccessibilityPrefs.remainingTime =
+                    AccessibilityPrefs.remainingTime.plus(TimeUnit.SECONDS.toMillis(ExercisesPref.seconds.toLong()))
+                ExercisesPref.isExtraTimeUsed = true
+                Toast.makeText(context, "Время успешно добавлено", Toast.LENGTH_SHORT).show()
+            } else {
+               if (tag == "click") Toast.makeText(
+                    context,
+                    "Выполните все оставшиеся упражнения",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        } else {
+            if (tag == "click") Toast.makeText(context, "Вы уже воспользовались доп. временем", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    private fun getDailyExercises() {
         viewModelScope.launch {
             when (val result = exercisesRepository.getDaily(Pref.childId, Pref.childToken)) {
                 is ResultStatus.Success -> {
@@ -109,37 +156,15 @@ class ProfileChildVM @Inject constructor(
             }
         }
     }
-//
-//    fun sendTouch(touch: Touch) {
-//        api.sendTouch("Bearer ${Pref.userAccessToken}", touch).enqueue(object : Callback<Touch> {
-//            override fun onResponse(call: Call<Touch>, response: Response<Touch>) {
-//                if (response.isSuccessful) {
-//                    response.body()
-//                    mutableLiveData.value = true
-//                } else {
-//                    response.errorBody()
-//                    val error = response.errorBody().toApiError<ErrorResponse>().message
-//                    errorHandle.value = error
-//                    Log.e("ResponseError", error.toString())
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Touch>, t: Throwable) {
-//                errorHandle.postValue(t.message)
-//                Log.e("onFailure", "${t.message}")
-//                errorHandle.value = t.message
-//            }
-//        })
-//    }
-//    private inline fun <reified ErrorType> ResponseBody?.toApiError(): ErrorType {
-//        val errorJson = this?.string()
-//        Log.e("retrying", "to api error body $errorJson")
-//        val data = Gson().fromJson(
-//            errorJson,
-//            ErrorType::class.java
-//        )
-//        Log.e("retrying", "to api error ${Gson().toJson(data)})")
-//        return data
-//    }
-//
+
+    override fun onSharedPreferenceChanged(p0: SharedPreferences?, p1: String?) {
+        if (p1 != null && p1 == AccessibilityPrefs.remainingTimeKey) {
+            _remainingTime.value = AccessibilityPrefs.remainingTime
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        AccessibilityPrefs.getSharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
 }

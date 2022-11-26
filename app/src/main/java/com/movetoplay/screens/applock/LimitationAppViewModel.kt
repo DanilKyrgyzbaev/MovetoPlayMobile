@@ -25,8 +25,6 @@ class LimitationAppViewModel @Inject constructor(
 
     var userApps = MutableLiveData<ResultStatus<List<UserApp>>>()
     val loading = MutableLiveData<ResultStatus<Boolean>>()
-    val childInfoResult = MutableLiveData<ResultStatus<ChildInfo>>()
-
 
     fun getUserApps(id: String) {
         viewModelScope.launch {
@@ -63,6 +61,7 @@ class LimitationAppViewModel @Inject constructor(
 
     fun setLimits(blockedApps: HashMap<String, String>) {
         viewModelScope.launch {
+            var success = 0
             loading.value = ResultStatus.Loading()
             if (Pref.childToken != "") {
                 blockedApps.forEach { id ->
@@ -72,22 +71,15 @@ class LimitationAppViewModel @Inject constructor(
                     ).collect {
                         if (it is ResultStatus.Error)
                             loading.value = ResultStatus.Error(it.error)
+                        if (it is ResultStatus.Success){
+                            ++success
+                        }
                     }
                 }
-                loading.value = ResultStatus.Success(true)
+                if (success==blockedApps.size){
+                    loading.value = ResultStatus.Success(true)
+                }
             } else loading.value = ResultStatus.Error("Ошибка авторизации!")
-        }
-    }
-
-    fun getChildInfo() {
-        childInfoResult.value = ResultStatus.Loading()
-        viewModelScope.launch {
-            try {
-                childInfoResult.value =
-                    ResultStatus.Success(profilesRepository.getInfo(Pref.childId))
-            } catch (e: Throwable) {
-                childInfoResult.value = ResultStatus.Error(e.message)
-            }
         }
     }
 }

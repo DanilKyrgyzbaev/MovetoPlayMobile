@@ -9,7 +9,15 @@ object ExercisesPref {
     var jumps: Int
         get() = sharedPreferences.getInt("daily_exercise_count_jumps", 15)
         set(value) = sharedPreferences.edit().putInt("daily_exercise_count_jumps", value).apply()
+
+    var isExtraTimeUsed: Boolean
+        get() = sharedPreferences.getBoolean("is_extra_time_used", false)
+        set(value) = sharedPreferences.edit().putBoolean("is_extra_time_used", value).apply()
+
     var seconds: Int
+        get() = sharedPreferences.getInt("need_seconds", 15*60)
+        set(value) = sharedPreferences.edit().putInt("need_seconds", value).apply()
+    var extraTime: Int
         get() = sharedPreferences.getInt("daily_exercise_seconds", 60)
         set(value) = sharedPreferences.edit().putInt("daily_exercise_seconds", value).apply()
     var squats: Int

@@ -43,9 +43,7 @@ class ResetAlarmManager : HiltBroadcastReceiver() {
     }
 
     private fun resetData() {
-        serviceScope.launch {
-
-        }
+        serviceScope.launch {}
         Log.e("alarm", "resetData: ${System.currentTimeMillis()}")
         AccessibilityPrefs.remainingTime = AccessibilityPrefs.dailyLimit
         Log.e("alarm", "remaining time: ${AccessibilityPrefs.remainingTime}")
@@ -67,18 +65,12 @@ class ResetAlarmManager : HiltBroadcastReceiver() {
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
-
-        with(am) {
-            calendar.set(Calendar.HOUR_OF_DAY, 0)
-            calendar.set(Calendar.MINUTE, 0)
-
-            setInexactRepeating(
-                AlarmManager.RTC,
-                calendar.timeInMillis,
-                AlarmManager.INTERVAL_DAY,
-                pi
-            )
-        }
+        am.setRepeating(
+            AlarmManager.ELAPSED_REALTIME,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pi
+        )
     }
 
     fun cancelAlarm(context: Context) {

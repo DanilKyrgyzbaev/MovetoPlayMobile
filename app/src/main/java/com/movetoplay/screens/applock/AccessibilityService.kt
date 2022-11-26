@@ -6,15 +6,17 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import com.google.gson.reflect.TypeToken
-import com.movetoplay.domain.model.user_apps.Limited
+import com.movetoplay.data.model.user_apps.UsedTimeBody
 import com.movetoplay.domain.model.user_apps.UserApp
 import com.movetoplay.domain.repository.UserAppsRepository
+import com.movetoplay.model.UsedTime
 import com.movetoplay.pref.AccessibilityPrefs
+import com.movetoplay.pref.ExercisesPref
 import com.movetoplay.pref.Pref
 import com.movetoplay.screens.ChildLockActivity
-import com.movetoplay.services.ResetAlarmManager
 import com.movetoplay.util.parseArray
 import dagger.hilt.android.AndroidEntryPoint
+import io.ktor.util.date.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,23 +27,20 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AccessibilityService : AccessibilityService() {
 
-    @Inject
-    lateinit var apiRepository: UserAppsRepository
-    private var timer: CountDownTimer? = null
-    private val serviceJob = Job()
-    private val usedTimeDay = 24 * 60 * 60L
     private var usedTime = 0L
+    private val usedTimeDay = 24 * 60 * 60L
+    private var timer: CountDownTimer? = null
     private var runningApp: UserApp = UserApp()
-    private val serviceCoroutineScope = CoroutineScope(Dispatchers.IO + serviceJob)
-
     private var userApps = ArrayList<UserApp>()
-    private lateinit var resetAlarmManager: ResetAlarmManager
+    private val job = Job()
+    private val serviceScope = CoroutineScope(Dispatchers.IO + job)
+
+    @Inject
+    lateinit var api: UserAppsRepository
 
     override fun onServiceConnected() {
         Log.e("onServiceConnected", "onServiceConnected: " + AccessibilityPrefs.currentDay)
-
-        resetAlarmManager = ResetAlarmManager()
-        resetAlarmManager.setAlarm(this.applicationContext)
+        AccessibilityPrefs.currentDay = getTimeMillis()
         super.onServiceConnected()
     }
 
@@ -62,6 +61,7 @@ class AccessibilityService : AccessibilityService() {
             "----------------------------------Start----------------------------------------"
         )
         Log.e("access", "onAccessibilityEvent:  ${event.packageName}")
+        Log.e("access", "Event: ${event.action}, ${event.eventType}" )
 
         if (event.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             return
@@ -70,8 +70,21 @@ class AccessibilityService : AccessibilityService() {
             Log.e("access", "Event package is NULL")
             return
         }
-        updateUserApps()
+        if ("com.android.vending" == event.packageName && !AccessibilityPrefs.isPinConfirmed) {
+            blockGooglePlay()
+            return
+        } else if ("com.android.vending" != event.packageName) {
+            AccessibilityPrefs.isPinConfirmed = false
+        }
 
+        if ("com.android.packageinstaller"==event.packageName && !AccessibilityPrefs.isPinConfirmed){
+            blockGooglePlay()
+            return
+        } else if ("com.android.packageinstaller" != event.packageName) {
+            AccessibilityPrefs.isPinConfirmed = false
+        }
+        checkDay()
+        updateUserApps()
         val eventPackage = event.packageName.toString()
         Log.e("access", "eventPackageName  $eventPackage")
         if (!eventPackage.equals(
@@ -105,9 +118,6 @@ class AccessibilityService : AccessibilityService() {
                 }
             }
         }
-        if ("com.android.vending" == packageName) {
-            blockGooglePlay()
-        }
 
         Log.e(
             "access",
@@ -116,19 +126,31 @@ class AccessibilityService : AccessibilityService() {
     }
 
     private fun syncData(app: UserApp) {
-        val min: Long = TimeUnit.MILLISECONDS.toMinutes(usedTime)
-        Log.e("access", "syncData appName = ${app.name} usedTime:$min, sec:$usedTime")
-        if (min != 0L)
-            serviceCoroutineScope.launch {
-                try {
-                    val result = apiRepository.setAppUsedTime(app.id, Limited(min, app.type))
-                    Log.e("access", "syncData: $result")
-                    runningApp = UserApp()
-                    usedTime = 0L
-                } catch (e: Throwable) {
-                    Log.e("access", "syncData error: ${e.message}")
+        Log.e("access", "syncData appName = ${app.name} usedTime: $usedTime")
+        val localUsedTime = AccessibilityPrefs.getUsedTimeById(app.id)
+        if (localUsedTime != null) {
+            localUsedTime.usedTime += usedTime
+            AccessibilityPrefs.setUsedTimeById(app.id, localUsedTime)
+        } else AccessibilityPrefs.setUsedTimeById(app.id, UsedTime(app.id, usedTime))
+        usedTime = 0L
+        runningApp = UserApp()
+        serviceScope.launch {
+            val usedApp = AccessibilityPrefs.getUsedTimeById(app.id)
+            if (usedApp != null) {
+                val min: Long = TimeUnit.MILLISECONDS.toMinutes(usedApp.usedTime)
+                if (min != 0L) {
+                    try {
+                        val result = api.setAppUsedTime(app.id, UsedTimeBody(min.toInt()))
+                        if (result) {
+                            AccessibilityPrefs.clearUsedTimeById(app.id)
+                        }
+                        Log.e("access", "syncData: $result")
+                    } catch (e: Throwable) {
+                        Log.e("access", "syncData error: ${e.message}")
+                    }
                 }
             }
+        }
     }
 
     private fun openLockScreen() {
@@ -169,19 +191,33 @@ class AccessibilityService : AccessibilityService() {
     }
 
     private fun blockGooglePlay() {
-        val intent = Intent(this, LockScreenChildActivity::class.java)
+        Log.e("access", "blockGooglePlay: ")
+        val intent = Intent(this, LockScreenActivity::class.java)
+        intent.putExtra("tag", "check")
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
 
-    override fun onInterrupt() {
-        serviceJob.cancel()
+    private fun checkDay() {
+        val diff = AccessibilityPrefs.currentDay - getTimeMillis()
+        if (TimeUnit.MILLISECONDS.toDays(diff) < 0 || TimeUnit.MILLISECONDS.toDays(diff) > 0) {
+            Log.e("TAG", "checkDay: DNI OTLICHAYUTSYA : " + TimeUnit.MILLISECONDS.toDays(diff))
+            AccessibilityPrefs.currentDay = getTimeMillis()
+            AccessibilityPrefs.remainingTime = AccessibilityPrefs.dailyLimit
+            ExercisesPref.isExtraTimeUsed = false
+        } else Log.e(
+            "TAG",
+            "DAY IS SAME : " + TimeUnit.MILLISECONDS.toDays(diff) + " second: " + TimeUnit.MILLISECONDS.toSeconds(
+                diff
+            )
+        )
     }
+
+    override fun onInterrupt() {}
 
     override fun onDestroy() {
         super.onDestroy()
-        serviceJob.cancel()
-        resetAlarmManager.cancelAlarm(this.applicationContext)
+        job.cancel()
     }
 }

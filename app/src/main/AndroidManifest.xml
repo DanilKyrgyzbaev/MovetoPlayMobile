@@ -38,6 +38,7 @@
     <uses-permission
         android:name="android.permission.BROADCAST_PACKAGE_REMOVED"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 
     <application
         android:name=".App"
@@ -56,7 +57,7 @@
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar"/>
         <activity
-            android:name=".screens.parent.MainChildActivity"
+            android:name=".screens.parent.ChildInfoActivity"
             android:exported="false"
             android:theme="@style/Theme.Design.NoActionBar" />
         <activity
@@ -178,6 +179,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.DATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.movetoplay.services.PeriodicSyncAlarmManager"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>

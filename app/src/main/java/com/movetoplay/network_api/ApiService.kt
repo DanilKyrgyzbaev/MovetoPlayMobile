@@ -2,6 +2,7 @@ package com.movetoplay.network_api
 
 import com.movetoplay.data.model.*
 import com.movetoplay.data.model.user_apps.PinBody
+import com.movetoplay.data.model.user_apps.UsedTimeBody
 import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.*
 import com.movetoplay.domain.model.user_apps.Limited
@@ -84,7 +85,7 @@ interface ApiService {
     @POST("/profiles/create")
     suspend fun postChildProfile(
         @Header("Authorization") token: String,
-        @Body createProfile: CreateProfile
+        @Body createProfile: ChildBody
     ): Response<Child>
 
     @GET("/profiles/getList")
@@ -135,7 +136,7 @@ interface ApiService {
     suspend fun onAppUsedTime(
         @Header("Authorization") token: String,
         @Query("id") id: String,
-        @Body limited: Limited,
+        @Body usedTime: UsedTimeBody,
     ): Response<Unit>
 
     //-------------- Device ----------------------//
@@ -162,7 +163,6 @@ interface ApiService {
     @PATCH("/profiles/setPin")
     suspend fun setPinCode(
         @Header("Authorization") token: String,
-        @Query("id") id: String,
         @Body pinCode: PinBody
     ): Response<Unit>
 }

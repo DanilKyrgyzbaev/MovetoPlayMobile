@@ -2,6 +2,7 @@ package com.movetoplay.data.repository
 
 import com.movetoplay.data.mapper.toApiError
 import com.movetoplay.data.model.ErrorBody
+import com.movetoplay.data.model.user_apps.UsedTimeBody
 import com.movetoplay.data.model.user_apps.UserAppsBody
 import com.movetoplay.domain.model.user_apps.Limited
 import com.movetoplay.domain.model.user_apps.UserApp
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
 
-const val NETWORK_TIMEOUT = 6000L
+const val NETWORK_TIMEOUT = 30000L
 
 class UserAppsRepositoryImpl @Inject constructor(private val client: ApiService) :
     UserAppsRepository {
@@ -72,10 +73,10 @@ class UserAppsRepositoryImpl @Inject constructor(private val client: ApiService)
             }
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun setAppUsedTime(id: String, limited: Limited): Boolean {
+    override suspend fun setAppUsedTime(id: String, usedTime: UsedTimeBody): Boolean {
         return    try {
             withTimeout(NETWORK_TIMEOUT) {
-                val response = client.onAppUsedTime("Bearer ${Pref.childToken}", id, limited)
+                val response = client.onAppUsedTime("Bearer ${Pref.childToken}", id, usedTime)
                 if (response.isSuccessful) true
                 else throw Throwable(response.errorBody().toApiError<ErrorBody>().message)
             }

@@ -246,6 +246,7 @@
     <string name="description_password">* Введите эл. почту к который был привязан Ваш аккаунт, на неё прийдёт письмо с кодом подтверждения</string>
     <string name="parent_device">Устройство родителя</string>
     <string name="set_limitation_time">Установите количество минут экранного времени для всех приложений <font size="12">(По умолчанию 60 мин)</font></string>
+    <string name="set_extra_time">Установите доп. время за выполнения всех упражнений <font size="12">(По умолчанию 15 мин)</font></string>
     <string name="set_jumps_def">Прыжки вверх (По умолчанию 15)</string>
     <string name="set_squeezing_def">Отжимание (По умолчанию 15)</string>
     <string name="set_squats_def">Приседания (По умолчанию 15)</string>

@@ -20,11 +20,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <!--   <TimePicker
-           android:id="@+id/timePicker"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_centerHorizontal="true" />-->
 
     <ProgressBar
         android:id="@+id/progress"
@@ -65,28 +60,6 @@
         app:layout_constraintStart_toEndOf="@id/set_time_tv"
         app:layout_constraintTop_toTopOf="@id/set_time_tv" />
 
-    <!--    <ImageView-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:id="@+id/time_up_btn"-->
-    <!--        android:src="@drawable/ic_drop_up_24"-->
-    <!--        android:layout_marginEnd="1dp"-->
-    <!--        app:layout_constraintStart_toEndOf="@id/et_limit"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="@id/et_limit"-->
-    <!--        app:layout_constraintBottom_toTopOf="@id/time_down_btn"/>-->
-
-    <!--    <ImageView-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:id="@+id/time_down_btn"-->
-    <!--        android:src="@drawable/ic_drop_down_24"-->
-    <!--        android:layout_marginEnd="1dp"-->
-    <!--        app:layout_constraintStart_toEndOf="@id/et_limit"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@id/time_up_btn"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@id/et_limit"/>-->
-
     <TextView
         android:id="@+id/set_time_tv"
         android:layout_width="0dp"
@@ -106,6 +79,28 @@
         android:layout_margin="16dp"
         android:background="@color/main_value"
         app:layout_constraintTop_toBottomOf="@id/set_time_tv" />
+
+    <TextView
+        android:id="@+id/need_seconds"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/set_extra_time"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/et_limit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/set_repeat_tv" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_need_seconds"
+        style="@style/set_time_edt_style"
+        android:hint="15"
+        app:layout_constraintBottom_toBottomOf="@id/need_seconds"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/set_time_tv"
+        app:layout_constraintTop_toTopOf="@id/need_seconds" />
+
 
     <TextView
         android:id="@+id/set_repeat_tv"
@@ -140,7 +135,7 @@
         app:layout_constraintBottom_toTopOf="@id/et_jumps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/set_squats_tv"
-        app:layout_constraintTop_toBottomOf="@id/set_repeat_tv" />
+        app:layout_constraintTop_toBottomOf="@id/need_seconds" />
 
     <TextView
         android:id="@+id/set_jumps_tv"
@@ -184,4 +179,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/set_squeezing_tv"
         app:layout_constraintTop_toBottomOf="@id/et_jumps" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
