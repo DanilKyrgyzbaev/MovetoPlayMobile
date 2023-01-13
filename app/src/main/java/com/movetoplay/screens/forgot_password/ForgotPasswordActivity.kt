@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.movetoplay.databinding.ActivityForgotPasswordBinding
@@ -12,6 +13,7 @@ import com.movetoplay.pref.Pref
 class ForgotPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityForgotPasswordBinding
     lateinit var viewModel: ForgotPasswordViewModel
+    //private val viewModel: ConfirmAccountsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

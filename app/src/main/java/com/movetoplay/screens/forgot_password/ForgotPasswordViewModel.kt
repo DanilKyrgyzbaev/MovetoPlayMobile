@@ -3,7 +3,10 @@ package com.movetoplay.screens.forgot_password // ktlint-disable package-name
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.movetoplay.domain.repository.AuthRepository
+import com.movetoplay.domain.utils.ResultStatus
 import com.movetoplay.model.ChangePasswordByCode
 import com.movetoplay.model.ErrorResponse
 import com.movetoplay.model.JwtSessionToken
@@ -11,14 +14,18 @@ import com.movetoplay.model.RememberPassword
 import com.movetoplay.network_api.ApiService
 import com.movetoplay.network_api.RetrofitClient
 import com.movetoplay.pref.Pref
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class ForgotPasswordViewModel : ViewModel() {
     val errorHandle = MutableLiveData<String>()
     var api: ApiService = RetrofitClient().getApi()
+    val resultStatusResendConfirmCode = MutableLiveData<ResultStatus<Boolean>>()
     val mutableLiveDataAccountId = MutableLiveData<Boolean>()
     val mutableLiveDataJwtSessionToken = MutableLiveData<Boolean>()
     val mutableLiveDataPasswordByCode = MutableLiveData<Boolean>()

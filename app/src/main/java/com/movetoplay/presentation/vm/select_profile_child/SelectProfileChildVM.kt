@@ -39,7 +39,7 @@ class SelectProfileChildVM @Inject constructor(
                     )
                 } ?: StateSelectProfileChild(
                     isEdit = true,
-                    child = Child(fullName = "", sex = Gender.MAN, age = 0),
+                    child = Child(fullName = "", sex = Gender.man, age = 0),
                     index = -1
                 )
             }
@@ -58,7 +58,7 @@ class SelectProfileChildVM @Inject constructor(
             EventSelectProfileChild.AddNewProfileChild -> {
                 _state.value = StateSelectProfileChild(
                     isEdit = true,
-                    child = Child(fullName = "", sex = Gender.MAN, age = 0),
+                    child = Child(fullName = "", sex = Gender.man, age = 0),
                     index = -1
                 )
             }

@@ -28,7 +28,7 @@ class SetupProfileActivity : AppCompatActivity() {
     private val viewModel: SetupProfileViewModel by viewModels()
     private var statusArr = arrayOf("Создать новый", "Импортировать старый")
     private var genderArr = arrayOf("Мужской", "Женский")
-    private var gender: Gender = Gender.MAN
+    private var gender: Gender = Gender.man
     private lateinit var childesAdapter: ListChildesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,8 +76,8 @@ class SetupProfileActivity : AppCompatActivity() {
                 id: Long
             ) {
                 gender = if (position == 1) {
-                    Gender.WOMAN
-                } else Gender.MAN
+                    Gender.woman
+                } else Gender.man
                 genderArr.getPosition(id.toString())
                 Pref.gender = genderArr.getPosition(id.toString()).toString()
                 Log.e("genderArr", genderArr.getItem(position).toString())

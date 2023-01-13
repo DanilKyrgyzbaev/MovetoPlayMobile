@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -70,6 +71,36 @@
         app:layout_constraintLeft_toLeftOf="@id/tv_enter"
         app:layout_constraintTop_toBottomOf="@+id/sms_code_viewGetSms" />
 
+
+    <TextView
+        android:id="@+id/countDownTimer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/main_value"
+        android:visibility="visible"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        app:layout_constraintRight_toRightOf="@id/tv_enter"
+        app:layout_constraintLeft_toLeftOf="@id/tv_enter"
+        app:layout_constraintTop_toBottomOf="@+id/hint_text" />
+
+    <TextView
+        android:id="@+id/sendConfCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Получить новый код"
+        android:textColor="@color/main_value"
+        android:textSize="14sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/btn_enter"
+        app:layout_constraintEnd_toEndOf="@+id/hint_text"
+        app:layout_constraintStart_toStartOf="@+id/hint_text"
+        app:layout_constraintTop_toBottomOf="@+id/hint_text" />
+
     <Button
         android:id="@+id/btn_enter"
         android:layout_width="match_parent"
@@ -82,6 +113,6 @@
         android:textAllCaps="false"
         android:textColor="@color/ic_launcher_background"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@+id/hint_text" />
+        app:layout_constraintTop_toBottomOf="@+id/sendConfCode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

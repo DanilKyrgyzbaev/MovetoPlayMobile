@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Child(
     var fullName: String = "",
-    var sex: Gender = Gender.MAN,
+    var sex: Gender = Gender.man,
     var age: Int = 0,
     var needSeconds: String = "",
     var needJumpCount: Int = 0,

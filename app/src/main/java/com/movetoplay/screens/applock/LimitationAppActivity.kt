@@ -56,6 +56,8 @@ class LimitationAppActivity : AppCompatActivity() {
                         "Установите пин код",
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    Log.e("Pin-code", AccessibilityPrefs.isPinConfirmed.toString())
                 } else {
                     saveBeforeFinish()
                 }
